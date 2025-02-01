@@ -1,8 +1,3 @@
----
-layout: home
-title: "Fast Robots 2025 Webpage"
----
-
 # Fast Robots (ECE 4160)
 ![profile pic](images/Nita_headshot.jpg)  
 
