@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Fast Robots
+title: Fast Robots Spring 2025
 ---
 
 ![profile pic](images/Nita_headshot.jpg)  
