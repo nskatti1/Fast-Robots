@@ -1,9 +1,7 @@
 ---
 layout: home
-title: "Home Page"
+title: Welcome to my Fast Robots Webpage!
 ---
-
-# Fast Robots Webpage
 
 ![profile pic](images/Nita_headshot.jpg)  
 
