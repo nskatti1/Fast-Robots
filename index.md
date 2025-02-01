@@ -4,9 +4,8 @@ title: "Fast Robots 2025 Webpage"
 ---
 
 # Fast Robots (ECE 4160)
-![profile pic](images/Nita_headshot.jpg)
+![profile pic](images/Nita_headshot.jpg)  
 
-#
 Hi, My name is Nita Kattimani, and this is the webpage for all my work from Fast Robots (ECE 4160)
 
 ## About Me
