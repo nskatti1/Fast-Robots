@@ -16,7 +16,7 @@ theme:
 
 navigation:
   - name: "Home"
-    url: "index.html"
+    url: "index.md"
   - name: "About"
     url: "#about"
   # You can add additional navigation items here as needed.
