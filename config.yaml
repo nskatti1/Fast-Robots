@@ -1,0 +1,22 @@
+# config.yaml
+
+site:
+  title: "Fast Robots (ECE 4160)"
+  logo: "images/Nita_headshot.jpg"
+  description: "A webpage for all my work from Fast Robots (ECE 4160)"
+  author: "Nita Kattimani"
+
+theme:
+  name: "fast-robots"
+  colors:
+    primary: "#3498db"      # Primary color (used for buttons, links, etc.)
+    secondary: "#2ecc71"    # Secondary color for accents
+  fonts:
+    base: "Arial, sans-serif"
+
+navigation:
+  - name: "Home"
+    url: "index.html"
+  - name: "About"
+    url: "#about"
+  # You can add additional navigation items here as needed.
