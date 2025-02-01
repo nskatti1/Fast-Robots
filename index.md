@@ -1,6 +1,6 @@
 ---
 layout: home
-title: "Home Page"
+title: "Fast Robots 2025"
 ---
 
 # Fast Robots (ECE 4160)
