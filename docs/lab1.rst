@@ -47,9 +47,10 @@ Microphone
 
 Additionally, the "Microphone" example showed how I could access and process microphone data for frequency analysis.
 
-.. youtube:: 
+.. image:: images/Micvideo.jpg
    :align: center
-   :width: 70%
+   :width: 50%
+   :class: bottompadding image-border
 
 Lab 1B
 --------------------------------------------------------------------------
