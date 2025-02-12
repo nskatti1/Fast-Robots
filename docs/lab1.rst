@@ -19,6 +19,7 @@ Blink
 
 I started with the example "Blink" program to confirm that I could successfully program the board and control the on-board LED.
 
+
 .. youtube:: kqe2E2l-K2k
    :align: center
    :width: 70%
@@ -38,7 +39,8 @@ Temperature
 
 The "Analog Read" example demonstrated that sensor data, specifically from the temperature sensor, could be collected. 
 
-.. youtube:: WJK9mvbasgg
+
+.. youtube::  WJK9mvbasgg
    :align: center
    :width: 70%
 
