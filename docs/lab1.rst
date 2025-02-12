@@ -45,7 +45,7 @@ The "Analog Read" example demonstrated that sensor data, specifically from the t
 Microphone
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Additionally, the "Microphone" example showed how I could access and process microphone data for frequency analysis.
+Additionally, the "Microphone" example showed how I could access and process microphone data for frequency analysis. My video kept getting corrupted upon Youtube upload, so I took a screenshot instead.
 
 .. image:: images/Micvideo.png
    :align: center
