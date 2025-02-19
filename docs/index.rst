@@ -24,4 +24,5 @@ I am studying Electrical and Computer Engineering(ECE). A couple fun facts about
 
    index.rst
    lab1.rst
+   lab2.rst
 
