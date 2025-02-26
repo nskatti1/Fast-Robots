@@ -22,7 +22,7 @@ I think I am going to place one TOF sensor at the front of the car and another o
 Lab
 --------------------------------------------------------------------------
 
-1. Power up your Artemis with a battery
+Task 1: Power up your Artemis with a battery
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 To allow the robot to move freely, the Artemis should powered independently; if not, the wire will limit its movement.
 
@@ -40,7 +40,7 @@ To allow the robot to move freely, the Artemis should powered independently; if 
    :width: 50%
    :alt: Battery-Powered Artemis
 
-2. Using the Arduino library manager, install the SparkFun VL53L1X 4m laser distance sensor library
+Task 2:  Using the Arduino library manager, install the SparkFun VL53L1X 4m laser distance sensor library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  I followed the directions opened **Sketch → Include Library → Manage Libraries** in the Arduino IDE and 
  searched for **SparkFun VL53L1X 4m** to install it
@@ -50,12 +50,12 @@ To allow the robot to move freely, the Artemis should powered independently; if 
    :width: 50%
    :alt: Library Look Up
 
-3. Connect the QWIIC breakout board to the Artemis
+Task 3: Connect the QWIIC breakout board to the Artemis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Attach the Qwiic breakout board to the Artemis using a Qwiic cable.
 - Ensure correct orientation (SDA to SDA, SCL to SCL).
 
-4. Connect the first ToF sensor to the QWIIC breakout board
+Task 4: Connect the first ToF sensor to the QWIIC breakout board
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Solder a Qwiic cable (one end cut) to the TOF sensor.
 - Decide which cable lengths (two long, two short) best fit your setup.
@@ -66,7 +66,7 @@ To allow the robot to move freely, the Artemis should powered independently; if 
    :width: 50%
    :alt: Soldering TOF Sensors and XSHUT Connection
 
-5. Scan the I2C channel to find the sensor
+Task 5: Scan the I2C channel to find the sensor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 I opened **File → Examples → Apollo3 → Wire → Example1_wire_I2C**.
 
@@ -77,7 +77,7 @@ The TOF sensor showed up at 0x29, which is the 7-bit representation of 0x52.
    :width: 50%
    :alt: I2C Scan Output
 
-6. The ToF sensor has three modes (Short, Medium, and Long)
+Task 6: The ToF sensor has three modes (Short, Medium, and Long)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 These modes optimize performance given the expected range:
 
@@ -89,7 +89,7 @@ These modes optimize performance given the expected range:
 
 I chose **Short Mode** for close-range obstacle avoidance, though it sacrifices maximum range.
 
-7. Test your chosen mode & Evaluate Performance
+Task 7: Test your chosen mode & Evaluate Performance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Testing the Mode:**  
   Use the SparkFun library’s example:
@@ -106,7 +106,7 @@ I chose **Short Mode** for close-range obstacle avoidance, though it sacrifices 
      :alt: Experimental Setup
 
 
-8. Using notes from the pre-lab, hook up both ToF sensors simultaneously and demonstrate that both work
+Task 8: Using notes from the pre-lab, hook up both ToF sensors simultaneously and demonstrate that both work
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 I modified the code to disable one sensor using the XSHUT pin and changed its I2C address to 0x54. This way I could
 read from both sensors without dealing with conflicts.
@@ -116,7 +116,7 @@ read from both sensors without dealing with conflicts.
    :width: 50%
    :alt: Dual TOF Sensor Setup
 
-9. In future labs, the code must run quickly (no hanging)
+Task 9: In future labs, the code must run quickly (no hanging)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  **Non-Blocking Measurements:**  
   I wrote code to continuously print the Artemis clock to Serial and only print new data from each sensor when it’s available:
@@ -132,20 +132,20 @@ read from both sensors without dealing with conflicts.
   - ~110 ms between sensor measurements
   - The sensor’s effective ranging time is ~70 ms, giving a max sampling rate of ~15 Hz
 
-10. Finally, edit your work from Lab 1
+Task 10: Finally, edit your work from Lab 1
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Time-Stamped Data & Bluetooth:**  
   I added a couple functions to my lab1 framework, but I did not update my notification handler, since I made it vague enought splice the first time around.
  **Bluetooth Transmission:**  
   Similar to Lab 2, I implemeted start and stop commands to start/stop data collection and transmit over BLE.
 
-11. Plot of ToF data against Time
+Task 11: Plot of ToF data against Time
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: images/l3_tof.png
    :align: center
    :width: 50%
 
-11. Plot of IMU data against Time
+Task 12: Plot of IMU data against Time
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: images/l3_imu.png
    :align: center
