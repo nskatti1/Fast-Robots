@@ -100,15 +100,16 @@ Task 7: Test your chosen mode & Evaluate Performance
 Task 8: Using notes from the pre-lab, hook up both ToF sensors simultaneously and demonstrate that both work
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 I modified the code to disable one sensor using the XSHUT pin and changed its I2C address to 0x54. This way I could
-read from both sensors without dealing with conflicts.
+read from both sensors without dealing with conflicts. I messed up due to a minor typo during this part and it took me a really long time to find it. 
+Here is a code block of how I changed the address of a TOF sensor.
 
 .. code-block:: c
 
     pinMode(XSHUT_PIN, OUTPUT);
-    digitalWrite(XSHUT_PIN, LOW); // low => off
+    digitalWrite(XSHUT_PIN, LOW); // low => off 
 
 
-    distanceSensor.setI2CAddress(tof_0_addr);
+    distanceSensor.setI2CAddress(tof_0_addr); // change addr
     digitalWrite(XSHUT_PIN, HIGH); //high => on
 
 
