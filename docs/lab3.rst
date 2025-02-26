@@ -118,19 +118,10 @@ read from both sensors without dealing with conflicts.
 
 Task 9: In future labs, the code must run quickly (no hanging)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- **Non-Blocking Measurements:**  
-  I wrote code to continuously print the Artemis clock to Serial and only print new data from each sensor when it’s available:
-  
-  .. code-block:: cpp
 
-     if(distanceSensor.checkForDataReady()) {
-         // Read and store data
-     }
+  I wrote code to continuously print the Artemis clock to Serial and only print new data from each sensor when it’s availablem utilizing the distanceSensor.checkForDataReady(). 
 
-**Sampling Speed Findings:**  
-  - ~15 ms between loop iterations
-  - ~110 ms between sensor measurements
-  - The sensor’s effective ranging time is ~70 ms, giving a max sampling rate of ~15 Hz
+ In terms of sampling speed findings, it took around 15 ms between loop iterations, 110 ms between sensor measurements, and the sensor’s effective ranging time is ~70 ms, giving a max sampling rate of ~15 Hz.
 
 Task 10: Finally, edit your work from Lab 1
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
