@@ -108,7 +108,7 @@ read from both sensors without dealing with conflicts.
     digitalWrite(XSHUT_PIN, LOW); // low => off
 
 
-    distanceSensor.setI2CAddress(TOF1_ADDRESS);
+    distanceSensor.setI2CAddress(tof_0_addr);
     digitalWrite(XSHUT_PIN, HIGH); //high => on
 
 
