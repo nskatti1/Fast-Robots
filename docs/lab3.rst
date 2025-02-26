@@ -50,17 +50,9 @@ Task 2:  Using the Arduino library manager, install the SparkFun VL53L1X 4m lase
    :width: 50%
    :alt: Library Look Up
 
-Task 3: Connect the QWIIC breakout board to the Artemis
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Attach the Qwiic breakout board to the Artemis using a Qwiic cable.
-- Ensure correct orientation (SDA to SDA, SCL to SCL).
-
-Task 4: Connect the first ToF sensor to the QWIIC breakout board
+Task 3/4: Connect the QWIIC breakout board to the Artemis/Connect the first ToF sensor to the QWIIC breakout board
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Solder a Qwiic cable (one end cut) to the TOF sensor.
-- Decide which cable lengths (two long, two short) best fit your setup.
-- Double-check the color coding for SDA and SCL lines.
-
+ Here is a photo of my soldering work for the TOF sensor.
 .. image:: images/l3_tof_pic.jpg
    :align: center
    :width: 50%
@@ -110,6 +102,16 @@ Task 8: Using notes from the pre-lab, hook up both ToF sensors simultaneously an
 I modified the code to disable one sensor using the XSHUT pin and changed its I2C address to 0x54. This way I could
 read from both sensors without dealing with conflicts.
 
+.. code-block:: c
+
+    pinMode(XSHUT_PIN, OUTPUT);
+    digitalWrite(XSHUT_PIN, LOW); // low => off
+
+
+    distanceSensor.setI2CAddress(TOF1_ADDRESS);
+    digitalWrite(XSHUT_PIN, HIGH); //high => on
+
+
 .. image:: images/l3_serial.png
    :align: center
    :width: 50%
@@ -135,7 +137,7 @@ Task 11: Plot of ToF data against Time
    :align: center
    :width: 50%
 
-I decided not to do anything fancy with my TOF sensors and just focused on collected data at the same time.
+I decided not to do anything fancy with my TOF sensors and just focused on collected data at the same time. I placed them away from one another facing a wall.
 
 Task 12: Plot of IMU data against Time
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -148,6 +150,8 @@ I decided not to do anything fancy with my IMU and just focused on collected dat
 Reflection
 --------------------------------------------------------------------------
 I learned a lot about soldering this lab mainly because I soldered for the first time in 4 years. I feel like I lack confidence, but I definitely have a lot more thanks to this lab. I messed up at least 3 times and had to redo it. I worry that some of my wires may be short now :(we will see how that impacts me as the labs progress.
+
+Sometimes the wires I soldered on to the TOF sensors got in the way and I had to redo data. I initially did not change the address of the one of the TOF sensors properly and it caused me some issues when debugging.
 
 
 Acknowledgments
