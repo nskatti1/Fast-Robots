@@ -119,7 +119,7 @@ read from both sensors without dealing with conflicts.
 Task 9: In future labs, the code must run quickly (no hanging)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  I wrote code to continuously print the Artemis clock to Serial and only print new data from each sensor when it’s availablem utilizing the distanceSensor.checkForDataReady(). 
+I wrote code to continuously print the Artemis clock to Serial and only print new data from each sensor when it’s availablem utilizing the distanceSensor.checkForDataReady(). 
 
  In terms of sampling speed findings, it took around 15 ms between loop iterations, 110 ms between sensor measurements, and the sensor’s effective ranging time is ~70 ms, giving a max sampling rate of ~15 Hz.
 
