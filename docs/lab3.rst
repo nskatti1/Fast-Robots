@@ -45,7 +45,7 @@ Task 2:  Using the Arduino library manager, install the SparkFun VL53L1X 4m lase
  I followed the directions opened **Sketch → Include Library → Manage Libraries** in the Arduino IDE and 
  searched for **SparkFun VL53L1X 4m** to install it
 
-.. image:: images/l3_library.jpg
+.. image:: images/l3_library.png
    :align: center
    :width: 50%
    :alt: Library Look Up
@@ -72,7 +72,7 @@ I opened **File → Examples → Apollo3 → Wire → Example1_wire_I2C**.
 
 The TOF sensor showed up at 0x29, which is the 7-bit representation of 0x52.
 
-.. image:: images/l3_scan.png
+.. image:: images/l3_scanner.png
    :align: center
    :width: 50%
    :alt: I2C Scan Output
