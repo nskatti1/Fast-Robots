@@ -11,7 +11,7 @@ Prelab
 I began by planning the overall circuit for my sensors. I had two long and two short I2C cables. I figured the TOF sensors would be mounted outside the car, so I used the long I2C cables for them.
 These cables connect to a SparkFun Qwiic MultiPort, which then links to the Artemis with a short I2C cable. I used th second short I2C cable to connect the IMU to the Qwiic MultiPort. All the sensors were wired together :)
 
-.. image:: l3_diagram.png
+.. image:: images/l3_diagram.png
    :align: center
    :width: 50%
    :alt: Wiring Diagram (1)
@@ -32,7 +32,7 @@ To allow the robot to move freely, the Artemis should powered independently; if 
 **Verification:**  
   Afterwards, I powered up the Artemis solely from the battery and confirmed connection vs BLE messages.
 
-.. image:: l3_battery.jpg
+.. image:: images/l3_battery.jpg
    :align: center
    :width: 50%
    :alt: Battery-Powered Artemis
@@ -42,7 +42,7 @@ To allow the robot to move freely, the Artemis should powered independently; if 
  I followed the directions opened **Sketch → Include Library → Manage Libraries** in the Arduino IDE and 
  searched for **SparkFun VL53L1X 4m** to install it
 
-.. image:: l3_library.jpg
+.. image:: images/l3_library.jpg
    :align: center
    :width: 50%
    :alt: Library Look Up
@@ -58,7 +58,7 @@ To allow the robot to move freely, the Artemis should powered independently; if 
 - Decide which cable lengths (two long, two short) best fit your setup.
 - Double-check the color coding for SDA and SCL lines.
 
-.. image:: l3_tof_pic.jpg
+.. image:: images/l3_tof_pic.jpg
    :align: center
    :width: 50%
    :alt: Soldering TOF Sensors and XSHUT Connection
@@ -69,7 +69,7 @@ I opened **File → Examples → Apollo3 → Wire → Example1_wire_I2C**.
 
 The TOF sensor showed up at 0x29, which is the 7-bit representation of 0x52.
 
-.. image:: l3_scan.png
+.. image:: images/l3_scan.png
    :align: center
    :width: 50%
    :alt: I2C Scan Output
@@ -97,7 +97,7 @@ I chose **Short Mode** for close-range obstacle avoidance, though it sacrifices 
   **Range, Accuracy, Repeatability:**  
     I tested distances from 0 in to 150 cm, collecting samples around every 10 cm.
 
-  .. image:: l3_true_act.png
+  .. image:: images/l3_true_act.png
      :align: center
      :width: 50%
      :alt: Experimental Setup
@@ -138,13 +138,13 @@ read from both sensors without dealing with conflicts.
 
 11. Plot of ToF data against Time
 
-.. image:: l3_tof.png
+.. image:: images/l3_tof.png
    :align: center
    :width: 50%
 
 11. Plot of IMU data against Time
 
-.. image:: l3_imu.png
+.. image:: images/l3_imu.png
    :align: center
    :width: 50%
 
