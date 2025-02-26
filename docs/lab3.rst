@@ -92,13 +92,12 @@ I chose **Short Mode** for close-range obstacle avoidance, though it sacrifices 
 Task 7: Test your chosen mode & Evaluate Performance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Testing the Mode:**  
-  Use the SparkFun library’s example:
+ I use the SparkFun library’s example:
   ``...\SparkFun_VL53L1X_4m_Laser_Distance_Sensor\examples\Example1_ReadDistance``  
   to verify distance readings in short mode.
 
 **Performance Experiments:**  
-  **Range, Accuracy, Repeatability:**  
-    I tested distances from 0 in to 150 cm, collecting samples around every 10 cm.
+   I tested distances from 0 in to 150 cm, collecting samples around every 10 cm.
 
   .. image:: images/l3_true_act.png
      :align: center
