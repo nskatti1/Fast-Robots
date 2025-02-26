@@ -110,7 +110,7 @@ Task 8: Using notes from the pre-lab, hook up both ToF sensors simultaneously an
 I modified the code to disable one sensor using the XSHUT pin and changed its I2C address to 0x54. This way I could
 read from both sensors without dealing with conflicts.
 
-.. image:: dual_sensor.png
+.. image:: l3_serial.png
    :align: center
    :width: 50%
    :alt: Dual TOF Sensor Setup
