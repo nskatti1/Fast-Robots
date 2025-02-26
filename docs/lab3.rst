@@ -145,15 +145,20 @@ Task 11: Plot of ToF data against Time
    :align: center
    :width: 50%
 
+I decided not to do anything fancy with my TOF sensors and just focused on collected data at the same time.
+
 Task 12: Plot of IMU data against Time
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: images/l3_imu.png
    :align: center
    :width: 50%
 
+I decided not to do anything fancy with my IMU and just focused on collected data at the same time.
+
 Reflection
 --------------------------------------------------------------------------
 I learned a lot about soldering this lab mainly because I soldered for the first time in 4 years. I feel like I lack confidence, but I definitely have a lot more thanks to this lab. I messed up at least 3 times and had to redo it. I worry that some of my wires may be short now :(we will see how that impacts me as the labs progress.
+
 
 Acknowledgments
 --------------------------------------------------------------------------
