@@ -127,7 +127,7 @@ Task 9: In future labs, the code must run quickly (no hanging)
          // Read and store data
      }
 
-- **Sampling Speed Findings:**  
+**Sampling Speed Findings:**  
   - ~15 ms between loop iterations
   - ~110 ms between sensor measurements
   - The sensor’s effective ranging time is ~70 ms, giving a max sampling rate of ~15 Hz
