@@ -151,6 +151,10 @@ Task 12: Plot of IMU data against Time
    :align: center
    :width: 50%
 
+Reflection
+--------------------------------------------------------------------------
+I learned a lot about soldering this lab mainly because I soldered for the first time in 4 years. I feel like I lack confidence, but I definitely have a lot more thanks to this lab. I messed up at least 3 times and had to redo it. I worry that some of my wires may be short now :(we will see how that impacts me as the labs progress.
+
 Acknowledgments
 --------------------------------------------------------------------------
 
