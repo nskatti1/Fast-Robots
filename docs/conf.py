@@ -13,7 +13,12 @@ author = 'Nita Kattimani'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx_rtd_theme']
+extensions = [
+    "sphinx_rtd_theme",
+    "sphinxcontrib.youtube"
+]
+
+
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
