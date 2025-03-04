@@ -143,11 +143,25 @@ tezr
    :width: 50%
    :alt: Oscop 3
 
-Taking the Car Apart
+Taking the Car Apart and Powering the Motors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+I took the car apart. Here is a photo of me saving the screws. I used an old open pouch for it.
 
-Power the Motors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+l4_screw.jpg
+.. image:: images/l4_screw.jpg
+   :align: center
+   :width: 50%
+   :alt: Screws Storage
+
+
+Here is a video of me testing my motor controller/motor functionality before installing the car.
+
+.. youtube:: https://youtube.com/shorts/FDdRFmgxxyc
+   :width: 560
+   :height: 315
+
+Afterwards, I repeated this with the battery.
+
 
 Installing the Car
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -166,3 +180,4 @@ Reflection
 
 Acknowledgements
 -----------------------------
+Thank you to Anunth Ramaswami for sitting with me while I soldered and for bringing me a power supply for when I tested powering my motors and letting me use your lab to save walking time. Thank you to Aravind Ramaswami for bringing the power supply for when I was using the oscillosope and letting me use your lab to save walking time. Thank you to Sabian Grier, Becky Lee, Aidan McNay, Paige Shelton, and Annabel Lian for hyping me up and making sure I ate enough food to fuel me through working on this lab. I used ChatGPT to help figure grid images and edit my conf.py file in regards to my website. Turns out videos were not appearing because I did not edit my extensions.
