@@ -39,6 +39,7 @@ First thing I did was solder my motor controllers. I soldered them according to 
           :width: 200px
      - .. image:: images/l4_pic_3.jpg
           :width: 200px
+
 .. list-table::
    :widths: auto
    :align: center
@@ -49,38 +50,32 @@ First thing I did was solder my motor controllers. I soldered them according to 
           :width: 200px
      - .. image:: images/l4_pic_7.jpg
           :width: 200px
-test
-
-.. raw:: html
-
-   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-       <img src="images/l4_pic_1.jpg" width="30%">
-       <img src="images/l4_pic_2.jpg" width="30%">
-       <img src="images/l4_pic_3.jpg" width="30%">
-       <img src="images/l4_pic_5.jpg" width="30%">
-       <img src="images/l4_pic_6.jpg" width="30%">
-       <img src="images/l4_pic_7.jpg" width="30%">
-   </div>
-
 
 After soldering, I took my Artemis with the motor controllers, and time of flight sensor(not currently used in this lab as of this task, but still soldered on) to go hook up to an oscilloscope.
 I hooked it my wiring to an oscilloscope by probing the output pins of one motor driver. I then provided power with a power supply. I ran some code on my Artemis to produce PWM signals.
 
-.. code-block:: C
-const int pwmPinB = 3;  
+.. code-block:: cpp
 
-void setup() {
-    // set outputs
-    pinMode(pwmPinA, OUTPUT);
-    pinMode(pwmPinB, OUTPUT);
-}
+   const int pwmPinA = 4;  
+   const int pwmPinB = 3;  
 
-void loop() {
-    analogWrite(pwmPinA, 150); // the value 150 was changed when I was playing with the oscilloscope see below
-    analogWrite(pwmPinB, 0);
-}
+   void setup() {
+       // set outputs
+       pinMode(pwmPinA, OUTPUT);
+       pinMode(pwmPinB, OUTPUT);
+   }
+
+   void loop() {
+       int speed = 200;  
+
+       analogWrite(pwmPinA, 150);
+       analogWrite(pwmPinB, 0);
+   }
+
 
 Here are the different signals I generated with different speeds set.
+
+
 .. list-table::
    :widths: auto
    :align: center
