@@ -40,19 +40,6 @@ First thing I did was solder my motor controllers. I soldered them according to 
      - .. image:: images/l4_pic_3.jpg
           :width: 200px
 
-.. image:: images/l4_pic_1.jpg
-   :align: left
-   :width: 25%
-   :alt: Pics
-.. image:: images/l4_pic_2.jpg
-   :align: center
-   :width: 25%
-   :alt: Pics
-.. image:: images/l4_pic_3.jpg
-   :align: right
-   :width: 25%
-   :alt: Pics
-
 
 .. image:: images/l4_pic_5.jpg
    :align: center
@@ -70,7 +57,74 @@ First thing I did was solder my motor controllers. I soldered them according to 
    :alt: Pics
 
 
+.. list-table::
+   :widths: auto
+   :align: center
 
+   * - .. image:: images/l4_pic_1.jpg
+          :width: 50%
+          :alt: Pic 1
+     - .. image:: images/l4_pic_2.jpg
+          :width: 50%
+          :alt: Pic 2
+     - .. image:: images/l4_pic_3.jpg
+          :width: 50%
+          :alt: Pic 3
+   * - .. image:: images/l4_pic_5.jpg
+          :width: 50%
+          :alt: Pic 5
+     - .. image:: images/l4_pic_6.jpg
+          :width: 50%
+          :alt: Pic 6
+     - .. image:: images/l4_pic_7.jpg
+          :width: 50%
+          :alt: Pic 7
+
+.. grid:: 3
+   :gutter: 1
+
+   .. grid-item::
+      .. image:: images/l4_pic_1.jpg
+         :width: 100%
+         :alt: Pic 1
+
+   .. grid-item::
+      .. image:: images/l4_pic_2.jpg
+         :width: 100%
+         :alt: Pic 2
+
+   .. grid-item::
+      .. image:: images/l4_pic_3.jpg
+         :width: 100%
+         :alt: Pic 3
+
+.. grid:: 3
+   :gutter: 1
+
+   .. grid-item::
+      .. image:: images/l4_pic_5.jpg
+         :width: 100%
+         :alt: Pic 5
+
+   .. grid-item::
+      .. image:: images/l4_pic_6.jpg
+         :width: 100%
+         :alt: Pic 6
+
+   .. grid-item::
+      .. image:: images/l4_pic_7.jpg
+         :width: 100%
+         :alt: Pic 7
+.. raw:: html
+
+   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+       <img src="images/l4_pic_1.jpg" width="30%">
+       <img src="images/l4_pic_2.jpg" width="30%">
+       <img src="images/l4_pic_3.jpg" width="30%">
+       <img src="images/l4_pic_5.jpg" width="30%">
+       <img src="images/l4_pic_6.jpg" width="30%">
+       <img src="images/l4_pic_7.jpg" width="30%">
+   </div>
 
 
 .. image:: images/l4_oscop1.jpg
