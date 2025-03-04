@@ -30,6 +30,14 @@ First thing I did was solder my motor controllers. I soldered them according to 
 .. csv-table::
 :header:
 :widths: 60, 60,60
+".. figure:: images/l4_pic_1.jpg
+:width: 75mm
+:height: 75mm
+:align: left", ".. images/l4_pic_1.jpg
+:width: 75mm
+:height: 75mm
+:align: right"
+
 .. image:: images/l4_pic_1.jpg
    :align: left
    :width: 25%
