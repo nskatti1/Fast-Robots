@@ -119,18 +119,23 @@ I then put the car back together and soldered the motor drivers to the motors ap
    :alt: Car Anatomy pic
 
 Then I played with the lower limit of the PWM value. After trial and error. I got __. 
-Here is a video.
 
-.. youtube:: 
-   :width: 560
-   :height: 315
-
-
-Here is a video of it moving in a straight line. I added in a calibration factor.
 
 .. youtube::
    :width: 560
    :height: 315
+
+
+Here is a video of it moving in a straight line. I added in a calibration factor of __. Here is are 2 videos side by side of before calibration and after.
+
+.. list-table::
+   :widths: auto
+   :align: center
+
+   * - .. youtube:: 
+          :width: 100%
+     - .. youtube:: 
+          :width: 100%
 
 Here is my open loop video.
 
