@@ -115,15 +115,15 @@ First thing I did was solder my motor controllers. I soldered them according to 
       .. image:: images/l4_pic_7.jpg
          :width: 100%
          :alt: Pic 7
+
+
+tezr
 .. raw:: html
 
-   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-       <img src="images/l4_pic_1.jpg" width="30%">
-       <img src="images/l4_pic_2.jpg" width="30%">
-       <img src="images/l4_pic_3.jpg" width="30%">
-       <img src="images/l4_pic_5.jpg" width="30%">
-       <img src="images/l4_pic_6.jpg" width="30%">
-       <img src="images/l4_pic_7.jpg" width="30%">
+   <div style="display: flex; justify-content: center; gap: 10px;">
+       <img src="images/l4_pic_5.jpg" width="30%" alt="Image 1">
+       <img src="images/l4_pic_6.jpg" width="30%" style="transform: rotate(90deg);" alt="Rotated Image 2">
+       <img src="images/l4_pic_7.jpg" width="30%" alt="Image 3">
    </div>
 
 
