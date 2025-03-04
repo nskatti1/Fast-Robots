@@ -34,22 +34,22 @@ First thing I did was solder my motor controllers. I soldered them according to 
    :align: center
 
    * - .. image:: images/l4_pic_1.jpg
-          :width: 200px
+          :width: 100%
      - .. image:: images/l4_pic_2.jpg
-          :width: 200px
+          :width: 100%
      - .. image:: images/l4_pic_3.jpg
-          :width: 200px
+          :width: 100%
 
 .. list-table::
    :widths: auto
    :align: center
 
    * - .. image:: images/l4_pic_5.jpg
-          :width: 200px
+          :width: 100%
      - .. image:: images/l4_pic_6.jpg
-          :width: 200px
+          :width: 100%
      - .. image:: images/l4_pic_7.jpg
-          :width: 200px
+          :width: 100%
 
 After soldering, I took my Artemis with the motor controllers, and time of flight sensor(not currently used in this lab as of this task, but still soldered on) to go hook up to an oscilloscope.
 I hooked it my wiring to an oscilloscope by probing the output pins of one motor driver. I then provided power with a power supply. I ran some code on my Artemis to produce PWM signals.
@@ -111,19 +111,40 @@ Here is a video of me testing my motor controller/motor functionality before ins
 Afterwards, I repeated this with the battery.
 
 
-Installing the Car
+Installing the Car and Testing the Car
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Testing the Car
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+I then put the car back together and soldered the motor drivers to the motors appropriately. Here is a picture.
 
+.. image:: images/l4_carpic.jpg
+   :align: center
+   :width: 50%
+   :alt: Car Anatomy pic
+
+Then I played with the lower limit of the PWM value. After trial and error. I got __. 
+Here is a video.
+
+.. youtube:: 
+   :width: 560
+   :height: 315
+
+
+Here is a video of it moving in a straight line. I added in a calibration factor.
+
+.. youtube::
+   :width: 560
+   :height: 315
+
+Here is my open loop video.
+
+.. youtube::
+   :width: 560
+   :height: 315
 
 
 Reflection
 -----------------------------
-My soldering skills definitely improved. As did my oscilloscoping skills. Fun Fact: I broke multiple oscilloscopes when I took ECE 2100. You might be thinking? How do you even do that? Professor Clifford Pollack told me I was impressive. The answer is I don't know. Anways I am happy to report no oscilloscopes were harmed during this lab! Yay!!!! Improvement. The code was overall not difficult for me.
-
-
+My soldering skills definitely improved. As did my oscilloscoping skills. Fun Fact: I broke multiple oscilloscopes when I took ECE 2100. You might be thinking? How do you even do that? Professor Clifford Pollack told me I was impressive. The answer is I don't know. Anways I am happy to report no oscilloscopes were harmed during this lab! Yay!!!! Improvement. The code was overall not difficult for me. This lab was fun.
 
 
 Acknowledgements
