@@ -50,6 +50,33 @@ First thing I did was solder my motor controllers. I soldered them according to 
      - .. image:: images/l4_pic_7.jpg
           :width: 200px
 
+.. raw:: html
+
+   <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+       <img src="images/l4_pic_1.jpg" width="30%">
+       <img src="images/l4_pic_2.jpg" width="30%">
+       <img src="images/l4_pic_3.jpg" width="30%">
+       <img src="images/l4_pic_5.jpg" width="30%">
+       <img src="images/l4_pic_6.jpg" width="30%">
+       <img src="images/l4_pic_7.jpg" width="30%">
+   </div>
+
+
+After soldering, I took 
+
+
+.. code-block:: C
+const int pwmPinA = 4;  
+const int pwmPinB = 3;  
+
+void setup() {
+    // set outputs
+    pinMode(pwmPinA, OUTPUT);
+    pinMode(pwmPinB, OUTPUT);
+}
+
+
+
 .. list-table::
    :widths: auto
    :align: center
