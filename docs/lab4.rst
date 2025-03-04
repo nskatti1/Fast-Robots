@@ -69,7 +69,7 @@ Taking the Car Apart and Powering the Motors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 I took the car apart. Here is a photo of me saving the screws. I used an old open pouch for it.
 
-l4_screw.jpg
+
 .. image:: images/l4_screw.jpg
    :align: center
    :width: 50%
