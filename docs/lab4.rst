@@ -8,7 +8,7 @@ Lab 4: Motors and Open Loop Control
 
 Prelab
 --------------------------------------------------------------------------
-Here is a diagram of my wiring for lab 4. I used analog pins A2 and A3 for one motor driver and analog pins A4 and A5 for the motor driver on the Artemis board. The ground pins below A2 and A4 grounded the motor drivers.
+Here is a diagram of my wiring for lab 4. I used analog pins A2 and A3 for one motor driver and analog pins A4 and A5 for the motor driver on the Artemis board. The ground pins below A2 and A4 grounded the motor drivers. I couldn't take a super clean photo of a spread layout because I soldered some wires intentionally short (the motor connectors to the artemis, so it fits in the car properly). Since I was not happy with any photo particularly more than the rest, I attached all of them here.
 
 .. image:: images/l4_diagram.png
    :align: center
