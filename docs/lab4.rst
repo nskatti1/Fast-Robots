@@ -65,9 +65,7 @@ I hooked it my wiring to an oscilloscope by probing the output pins of one motor
    }
 
    void loop() {
-       int speed = 200;  
-
-       analogWrite(pwmPinA, 150);
+       analogWrite(pwmPinA, 150); // this value was changed to generate different signals
        analogWrite(pwmPinB, 0);
    }
 
