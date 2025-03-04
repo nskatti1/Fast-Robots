@@ -27,7 +27,7 @@ Motor Driver Setup and Testing
 
 First thing I did was solder my motor controllers. I soldered them according to the wiring diagram above. The following pictures are all photos of what I did 
 
-. list-table:: 
+.. list-table:: 
 
     * - .. figure:: images/l4_pic_1.jpg
 
