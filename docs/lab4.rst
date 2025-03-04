@@ -101,7 +101,7 @@ I took the car apart. Here is a photo of me saving the screws. I used an old ope
 
 Here is a video of me testing my motor controller/motor functionality before installing the car.
 
-.. youtube:: https://www.youtube.com/shorts/FDdRFmgxxyc
+.. youtube:: FDdRFmgxxyc
    :width: 560
    :height: 315
 
