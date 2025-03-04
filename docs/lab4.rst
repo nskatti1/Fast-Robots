@@ -40,6 +40,7 @@ First thing I did was solder my motor controllers. I soldered them according to 
 
            pic 3
 
+test
 
 
 .. image:: images/l4_pic_1.jpg
