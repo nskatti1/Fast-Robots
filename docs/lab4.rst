@@ -81,13 +81,13 @@ Here are the different signals I generated with different speeds set.
    :align: center
 
    * - .. image:: images/l4_oscop1.jpg
-          :width: 50%
+          :width: 100%
           :alt: Oscope 1
      - .. image:: images/l4_oscop2.jpg
-          :width: 50%
+          :width: 100%
           :alt: Oscope 2
      - .. image:: images/l4_oscop3.jpg
-          :width: 50%
+          :width: 100%
           :alt: Oscope 3
 
 
