@@ -95,7 +95,7 @@ Testing the Car
 
 Reflection
 -----------------------------
-
+My soldering skills definitely improved. As did my oscilloscoping skills. Fun Fact: I broke multiple oscilloscopes when I took ECE 2100. You might be thinking? How do you even do that? Professor Clifford Pollack told me I was impressive. The answer is I don't know. Anways I am happy to report no oscilloscopes were harmed during this lab! Yay!!!! Improvement. The code was overall not difficult for me.
 
 
 
