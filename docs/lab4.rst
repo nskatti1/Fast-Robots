@@ -73,7 +73,7 @@ I hooked it my wiring to an oscilloscope by probing the output pins of one motor
    }
 
 
-Here are the different signals I generated with different speeds set.
+Here are the different signals I generated with different speeds set. The leftmost picture shows a PWM value of 50, the center picture shows 120, and the rightmost shows 250, respectively.
 
 
 .. list-table::
