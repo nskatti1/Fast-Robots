@@ -140,9 +140,13 @@ Here is a video of it moving in a straight line. I added in a calibration factor
    :align: center
 
    * - .. youtube::  pMdI8lJnH2M
-          :width: 100%
+          :width: 560
+          :height: 315
+
      - .. youtube:: PyMHi1nQnH8
           :width: 100%
+          :width: 560
+          :height: 315
 
 Here is my open loop video.  I just made it go straight, delayed it, stopped it, delayed it, and then made it turn and delayed it. I put it in a loop.
 
