@@ -144,7 +144,6 @@ Here is a video of it moving in a straight line. I added in a calibration factor
           :height: 315
 
      - .. youtube:: PyMHi1nQnH8
-          :width: 100%
           :width: 560
           :height: 315
 
