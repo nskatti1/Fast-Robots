@@ -118,10 +118,17 @@ I then put the car back together and soldered the motor drivers to the motors ap
    :width: 50%
    :alt: Car Anatomy pic
 
-Then I played with the lower limit of the PWM value. After trial and error. I got __. 
+Then I played with the lower limit of the PWM value. After trial and error. I got 40 for the the car barely moving if it goes straight and 42 if you want to see it clearly. I got 90 for turning if you want to see the wheels barely move. 
 
+Here is a video of the car clearly moving straight at the lower limit(42)
 
-.. youtube::
+.. youtube:: oQpkeGmDyzs
+   :width: 560
+   :height: 315
+
+Here is a video of the car barely turning(90)
+
+.. youtube:: zbOJk1BE8QA
    :width: 560
    :height: 315
 
@@ -137,7 +144,7 @@ Here is a video of it moving in a straight line. I added in a calibration factor
      - .. youtube:: PyMHi1nQnH8
           :width: 100%
 
-Here is my open loop video.
+Here is my open loop video.  I just made it go straight, delayed it, stopped it, delayed it, and then made it turn and delayed it. I put it in a loop.
 
 .. youtube::
    :width: 560
