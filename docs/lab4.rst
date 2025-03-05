@@ -136,7 +136,7 @@ Here is a video of the car barely turning(90)
 Here is a video of it moving in a straight line. I added in a calibration factor of 1.1. I initally used 1.2 and it completed reflected the angle, so I changed it to 1.1(average of 1 and 1.2) and it was perfect. Here is are 2 videos side by side of before calibration and after.
 
 .. list-table::
-   :widths: auto
+   :widths: 570, 570
    :align: center
 
    * - .. youtube::  pMdI8lJnH2M
