@@ -133,17 +133,18 @@ Here is a video of the car barely turning(90)
    :height: 315
 
 
-Here is a video of it moving in a straight line. I added in a calibration factor of 1.1. I initally used 1.2 and it completed reflected the angle, so I changed it to 1.1(average of 1 and 1.2) and it was perfect. Here is are 2 videos side by side of before calibration and after.
+Here is a video of it moving in a straight line. I added in a calibration factor of 1.1. I initally used 1.2 and it completed reflected the angle, so I changed it to 1.1(average of 1 and 1.2) and it was perfect. 
 
-.. list-table::
-   :widths: 570, 570
-   :align: center
 
-   * - .. youtube::  pMdI8lJnH2M
+Here is what my video looked like without calibration.
+
+ .. youtube::  pMdI8lJnH2M
           :width: 560
           :height: 315
 
-     - .. youtube:: PyMHi1nQnH8
+And here it is with calibration. 
+
+ .. youtube:: PyMHi1nQnH8
           :width: 560
           :height: 315
 
