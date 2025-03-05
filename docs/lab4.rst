@@ -70,7 +70,7 @@ I hooked it my wiring to an oscilloscope by probing the output pins of one motor
    }
 
 
-Here are the different signals I generated with different speeds set. The leftmost picture shows a PWM value of 50, the center picture shows 120, and the rightmost shows 250, respectively.
+Here are the different signals I generated with different speeds set. The leftmost picture shows a PWM value of 50, the center picture shows 120, and the rightmost shows 250, respectively. The power supply had 3.7 volts and ~ 0.8 Amps.
 
 
 .. list-table::
@@ -99,7 +99,7 @@ I took the car apart. Here is a photo of me saving the screws. I used an old ope
    :alt: Screws Storage
 
 
-Here is a video of me testing my motor controller/motor functionality before installing the car.
+Here is a video of me testing my motor controller/motor functionality before installing the car. The power supply had 3.7 V and had 1 A.
 
 .. youtube:: FDdRFmgxxyc
    :width: 560
@@ -111,7 +111,7 @@ Afterwards, I repeated this with the battery.
 Installing the Car and Testing the Car
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-I then put the car back together and soldered the motor drivers to the motors appropriately. Here is a picture.
+I then put the car back together and soldered the motor drivers to the motors appropriately. Here is a picture. 
 
 .. image:: images/l4_car_pic.png
    :align: center
