@@ -25,7 +25,7 @@ Lab
 Motor Driver Setup and Testing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-First thing I did was solder my motor controllers. I soldered them according to the wiring diagram above.  I couldn't take a super clean photo of a spread layout because I soldered some wires intentionally short (the motor connectors to the artemis, so it fits in the car properly). Since I was not happy with any photo particularly more than the rest, I attached all of them here.
+First thing I did was solder my motor controllers. I soldered them according to the wiring diagram above.  I couldn't take a super clean photo of a spread layout because I soldered some wires short (the motor connectors to the artemis, so it fits in the car properly). It was hard to make it all look nice and spreadout like the diagram I made. Since I was not happy with any photo particularly more than the rest, I attached all of them here.
 
 
 .. list-table::
@@ -151,4 +151,4 @@ My soldering skills definitely improved. As did my oscilloscoping skills. Fun Fa
 
 Acknowledgements
 -----------------------------
-Thank you to Anunth Ramaswami for sitting with me while I soldered and for bringing me a power supply for when I tested powering my motors and letting me use your lab to save walking time. Thank you to Aravind Ramaswami for bringing the power supply for when I was using the oscillosope and letting me use your lab to save walking time. Thank you to Sabian Grier, Becky Lee, Aidan McNay, Paige Shelton, and Annabel Lian for hyping me up and making sure I ate enough food to fuel me through working on this lab. I used ChatGPT to help figure grid images and edit my conf.py file in regards to my website. Turns out videos were not appearing because I did not edit my extensions.
+Thank you to Anunth Ramaswami for sitting with me while I soldered and for bringing me a power supply for when I tested powering my motors and letting me use your lab to save walking time. Thank you to Aravind Ramaswami for bringing the power supply for when I was using the oscillosope, letting me use your lab to save walking time, and also filming my straight line video so I could align my car on the line properly. Thank you to Sabian Grier, Becky Lee, Aidan McNay, Paige Shelton, and Annabel Lian for hyping me up and making sure I ate enough food to fuel me through working on this lab. I used ChatGPT to help figure grid images and edit my conf.py file in regards to my website. Turns out videos were not appearing because I did not edit my extensions.
