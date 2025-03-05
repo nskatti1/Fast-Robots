@@ -126,15 +126,15 @@ Then I played with the lower limit of the PWM value. After trial and error. I go
    :height: 315
 
 
-Here is a video of it moving in a straight line. I added in a calibration factor of __. Here is are 2 videos side by side of before calibration and after.
+Here is a video of it moving in a straight line. I added in a calibration factor of 1.1. I initally used 1.2 and it completed reflected the angle, so I changed it to 1.1(average of 1 and 1.2) and it was perfect. Here is are 2 videos side by side of before calibration and after.
 
 .. list-table::
    :widths: auto
    :align: center
 
-   * - .. youtube:: 
+   * - .. youtube::  pMdI8lJnH2M
           :width: 100%
-     - .. youtube:: 
+     - .. youtube:: PyMHi1nQnH8
           :width: 100%
 
 Here is my open loop video.
