@@ -113,7 +113,7 @@ Installing the Car and Testing the Car
 
 I then put the car back together and soldered the motor drivers to the motors appropriately. Here is a picture.
 
-.. image:: images/l4_carpic.jpg
+.. image:: images/l4_car_pic.jpg
    :align: center
    :width: 50%
    :alt: Car Anatomy pic
