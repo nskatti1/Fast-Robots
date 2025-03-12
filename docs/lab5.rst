@@ -67,6 +67,7 @@ On the flip side, I create a loop in python and set some constants.
 
 
 .. code-block:: python
+
     Kp = 0.06899 # 255 /(4000-304)
     TARGET_DISTANCE = 304  # mm
     DEADBAND = 500 # Stop the car if error is within 100 mm
