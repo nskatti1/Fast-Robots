@@ -6,15 +6,10 @@ Lab 5: Linear PID control and Linear interpolation
    :depth: 2
    :local:
 
-Prelab + Reflection Preface
+Attempt 1 
 --------------------------------------------------------------------------
-I want to preface by saying I could have been a little smarter when doing this lab. 
-My first idea was to read the measurements, send them to the python code, do calculations, 
-and then send back the pwm values and repeat. In hindsight I think it would have been better to use C instead of python.
-Although C compiles slower, I think the run time would have been a bit faster. I started my lab talking about this because that is how I ended up handling sending and receiving data.
 
-Handling Sending and Receiving Data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+I did the lab twice as I messed up the first time and collected the data in python and did the man in python instead of C. I wrote more about my thoughts below in the reflection. Since I did spend a lot of time on this, I still wanted to include it on my page. I can compare and contrast my results.
 
 In C I wrote 2 functions, one function that measured and sent the data back and the other function that took in a PWM value and wrote it to the motors.
 
@@ -77,13 +72,17 @@ On the flip side, I create a loop in python and set some constants.
 
 
 Then I create a loop that ran through the commands
-I first started with a P Controller, though it did not work the best. My loop in python stored and printed the different values of time, distance, and PWM value
+I first started with a P Controller, though it did not work the best. My loop in python stored and printed the different values of time, distance, and PWM value.
+In my PID loop, I just sent a command that requested the TOF data, calculated the PWM values, and then sent that to the Redboard Nano. Because of the nature of the loop, I sampled my TOF data once every single loop regardless of whether the data was ready or not. I recorded the times at which I sampled these values. That was the frequency at which my PID loop ran. I attached some videos of tbe P controller that I made below. I was not happy with my work and decided to redo the lab.
+
+Prelab
+--------------------------------------------------------------------------
 
 Lab
 --------------------------------------------------------------------------
-Frequency of TOF Sensor and PID Control Loop Run Speed
+Frequency of TOF Sensor and PID Loop 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In my PID loop, I just sent a command that requested the TOF data, calculated the PWM values, and then sent that to the Redboard Nano. Because of the nature of the loop, I sampled my TOF data once every single loop regardless of whether the data was ready or not. I recorded the times at which I sampled these values. That was the frequency at which my PID loop ran, which was _______. To see how fast I get updated TOF data, I ran a loop inside my C code temporarily(it ended up not being used). This frequency was _____. 
+
 
 Estimating Distance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -98,15 +97,16 @@ Positional Control Task Videos
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The following are videos of my PID loop.
 
+Graphs and Extrapolation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The following are videos of my PID loop.
+
 Reflection
 -----------------------------
-If I were to do this lab again, I would put the control loop as close to the hardware as possible.
-I intend to fix this for future labs and actually implement it in C. I believe that doing it in python takes time because I have to send the values.
-When doing this lab, interpretted as handling receiving and sending the data as something. In fact, I am going to try to redo the lab right now.
-
+I redid the lab, so I could put the control loop as close to the hardware as possible and try to make a better loop. I found that doing it in python takes time because I had to send the values. While C compiles longer, it executes faster than python. I was very unhappy with my first rersults
 
 
 Acknowledgements
 ----------------------------
 
-Credits to Mikayla Lahr for being an awesome TA . I also looked at her solutions and implemented a similar Kp Value(I ended up dividing hers by 5). This got to me a starting place when I had spent a lot of time running my car into a wall. Thanks to Aravind Ramaswami for picking up a battery for me when I battery was bad and Annabel for working along side me when I was figuring out whether I broke my TOF sensor or not(I did not - it was the wrong port). At one point, I asked ChatGPT why my code was not working and it said to check if my battery was unplugged (it was).
+Credits to Mikayla Lahr for being an awesome TA . I also looked at her solutions and implemented a similar Kp Value(I ended up dividing hers by 5). This got to me a starting place when I had spent a lot of time running my car into a wall. Thanks to Aravind Ramaswami for picking up a battery for me when I battery was bad and Annabel for working along side me when I was figuring out whether I broke my TOF sensor or not(I did not - it was the wrong port). At one point, I asked ChatGPT why my code was not working and it said to check if my battery was unplugged (it was). I used the assistance of ChatGPT for my second attempt as I was in a hurry and decided to redo it 4 hours before it was due after spending the last week trying to get my controller to produce high quality results.
