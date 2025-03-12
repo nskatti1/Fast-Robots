@@ -105,4 +105,4 @@ When doing this lab, interpretted as handling receiving and sending the data as 
 Acknowledgements
 ----------------------------
 
-Credits to Mikayla Lahr for being an awesome TA . I also looked at her solutions and implemented a similar Kp Value(I ended up dividing hers by 5). This got to me a starting place when I had spent a lot of time running my car into a wall. Thanks to Aravind Ramaswami for picking up a battery for me when I battery was bad and Annabel for working along side me when I was figuring out whether I broke my TOF sensor or not(I did not - it was the wrong port)
+Credits to Mikayla Lahr for being an awesome TA . I also looked at her solutions and implemented a similar Kp Value(I ended up dividing hers by 5). This got to me a starting place when I had spent a lot of time running my car into a wall. Thanks to Aravind Ramaswami for picking up a battery for me when I battery was bad and Annabel for working along side me when I was figuring out whether I broke my TOF sensor or not(I did not - it was the wrong port). At one point, I asked ChatGPT why my code was not working and it said to check if my battery was unplugged (it was).
