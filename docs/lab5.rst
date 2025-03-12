@@ -87,6 +87,7 @@ Estimating Distance
 My mathematical logic was 
 
 :math:`error = distance - target-distance`
+
 :math:`PWM = max(39, min(KP *error, 255))`
 
 
