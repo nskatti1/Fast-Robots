@@ -57,7 +57,7 @@ From there, I parsed the arrays:
 
 .. code-block:python
 
-        def sort(data):
+      def sort(data):
             new_data = []
             current_angle = []
             target_angle = []
