@@ -235,7 +235,7 @@ I did not, but it will be useful in the future when it comes down to following a
 
 Reflection 
 -----------------------------
-This lab improved my understanding of PID tuning. I learned a lot about sensor bias and it was a fun but sometimes demoralizing. Here are some 
+This lab improved my understanding of PID tuning. I learned a lot about sensor bias and it was a fun but sometimes demoralizing. 
 
 Acknowledgements
 -----------------------------
