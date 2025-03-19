@@ -32,6 +32,7 @@ For communication, data was sent and received via Bluetooth. I wrote a command i
 Here is where I sent it back. I implemented this function within my STOP_PID function.
 
 .. code-block:: cpp
+
     void sendStoredPIDData() {
         for (int j = 0; j < MAX_SAMPLES; j += 1) {
             tx_estring_value.clear();
