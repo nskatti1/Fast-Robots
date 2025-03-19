@@ -93,12 +93,11 @@ Graphs of the angle versus time were generated to analyze the controller’s res
    :widths: auto
    :align: center
 
-   * - .. image:: images/l6_graph1.jpg
+   * - .. image:: images/l6_pic1.png
           :width: 100%
-     - .. image:: images/l6_graph2.jpg
+     - .. image:: images/l6_pic2.png
           :width: 100%
-     - .. image:: images/l6_graph3.jpg
-          :width: 100%
+
 
 Testing and Debugging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -155,13 +154,6 @@ Here is are some videos of the robot stabilizing its orientation:
    :width: 560
    :height: 315
 
-.. youtube:: [VideoID]
-   :width: 560
-   :height: 315
-
-.. youtube:: [VideoID]
-   :width: 560
-   :height: 315
 
 
 Lab Questions /Discussion
