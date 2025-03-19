@@ -137,15 +137,15 @@ I wrote a function that calibrates my IMU and tries to deal with the drift due t
 
 .. code-block:: cpp
 
-void calibrateIMU() {
-    float bias_sum = 0;
-    for (int i = 0; i < 100; i++) {
-        imu.getAGMT();  // Read IMU data
-        bias_sum += imu.gyrZ();
-        delay(10);
+    void calibrateIMU() {
+        float bias_sum = 0;
+        for (int i = 0; i < 100; i++) {
+            imu.getAGMT();  // Read IMU data
+            bias_sum += imu.gyrZ();
+            delay(10);
+        }
+        gyro_bias = bias_sum / 100.0;
     }
-    gyro_bias = bias_sum / 100.0;
-}
 
 Here is are some videos of the robot stabilizing its orientation:
 
