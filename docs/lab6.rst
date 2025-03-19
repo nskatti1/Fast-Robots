@@ -65,25 +65,25 @@ Here is my code
 
 .. code-block:: cpp
 
-void runPIDControl() {
-    unsigned long current_time = millis();
-    dt = (current_time - last_time) / 1000.0;
-    last_time = current_time;
+    void runPIDControl() {
+        unsigned long current_time = millis();
+        dt = (current_time - last_time) / 1000.0;
+        last_time = current_time;
 
-    current_angle = getYaw();
+        current_angle = getYaw();
 
-    float error = target_angle - current_angle;
+        float error = target_angle - current_angle;
 
-    integral += error * dt;
-    integral = constrain(integral, -max_integral, max_integral); 
+        integral += error * dt;
+        integral = constrain(integral, -max_integral, max_integral); 
 
-    float derivative = (error - previous_error) / dt;
-    previous_error = error;
+        float derivative = (error - previous_error) / dt;
+        previous_error = error;
 
-    float control_signal = Kp * error + Ki * integral + Kd * derivative;
-    int motor_offset = constrain(control_signal, 0, 255);
+        float control_signal = Kp * error + Ki * integral + Kd * derivative;
+        int motor_offset = constrain(control_signal, 0, 255);
 
-    applyMotorControl(error, motor_offset);
+        applyMotorControl(error, motor_offset);
 
 Graphs of the angle versus time were generated to analyze the controller’s response.
 
