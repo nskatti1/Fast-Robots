@@ -76,6 +76,32 @@ Graphs of the angle versus time were generated to analyze the controller’s res
 
 Testing and Debugging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+I also wrote some tuning functions that could help me adjust my values without me recompiling.
+
+.. code-block:: cpp
+
+        case SET_ANGLE:
+            float angle;
+            if (!robot_cmd.get_next_value(angle)) {
+                Serial.println("ERROR: SET_ANGLE requires 1 float value.");
+                return;
+            }
+            target_angle = angle;
+            Serial.print("New target angle: ");
+            Serial.println(target_angle);
+            break;
+
+        case SET_PID:
+            float newKp, newKi, newKd;
+            if (!robot_cmd.get_next_value(newKp) || !robot_cmd.get_next_value(newKi) || !robot_cmd.get_next_value(newKd)) {
+                Serial.println("ERROR: SET_PID requires 3 float values.");
+                return;
+            }
+            Kp = newKp; Ki = newKi; Kd = newKd;
+            Serial.println("Updated PID gains.");
+            break;
+
 Fine tuning the PID values took a lot of time and care and multiple tests. Here is what I observed:
 
 - **Overshoot:** [Description]
