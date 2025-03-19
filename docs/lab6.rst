@@ -239,4 +239,6 @@ This lab improved my understanding of PID tuning. I learned a lot about sensor b
 
 Acknowledgements
 -----------------------------
-Thank you to Anunth Ramaswami for lending me his robot when mine stopped working. I based my PID values similar to his before my robot broke and continued to do so after. My code worked much more differently than his and I scaled and adjusted his values accordingly. Thank you to Aidan McNay for sitting in the same room as me and working for moral support. Thanks to course staff for their guidance.
+Thank you to Anunth Ramaswami for lending me his robot when mine stopped working. I based my PID values similar to his before my robot broke and continued to do so after. My code worked much more differently than his and I scaled my values accordinly. Thank you to Aidan McNay for sitting in the same room as me and working for moral support. Thanks to course staff for their guidance.
+
+ChatGPT was used to debug code(albeit it was not the most useful) and help also debug why my pics and videos keep glitching.
