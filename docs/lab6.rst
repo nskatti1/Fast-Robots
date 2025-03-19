@@ -55,43 +55,51 @@ Here is where I sent it back. I implemented this function within my STOP_PID fun
 I parsed the data in python later and put it into an array instead.
 From there, I parsed the arrays: 
 
-.. code-block: python
+.. code-block:: python
 
-      def sort(data):
-            new_data = []
-            current_angle = []
-            target_angle = []
-            previous_error = []
-            control_signal= []
-            motor_offset = []
-            time =[]
-            for i in range(len(data)):
-                for j in range(len(data[0])):
-                    if  j==0 :
-                        current_angle.append(data[i][j])
-                    elif j==1 :
-                        target_angle.append(data[i][j])
-                    elif j==2 :
-                        previous_error.append(data[i][j])
-                    elif j==3 :
-                        control_signal.append(data[i][j])
-                    elif j==4:
-                        motor_offset.append(data[i][j])
-                    else:
-                        time.append(data[i][j])
-            new_data.append(current_angle)
-            new_data.append(target_angle)
-            new_data.append(previous_error)
-            new_data.append(control_signal)
-            new_data.append(motor_offset)
-            new_data.append(time)
-            return new_data
-                        
-        k= sort(data)   
+    def sort_data(data):
+        new_data = []
+        current_angle = []
+        target_angle = []
+        previous_error = []
+        control_signal = []
+        motor_offset = []
+        time = []
 
-        time_a = k[5]
-        angle_arr = k[0]
-        control_sig = k[3]
+        for i in range(len(data)):
+            for j in range(len(data[0])):
+                if j == 0:
+                    current_angle.append(data[i][j])
+                elif j == 1:
+                    target_angle.append(data[i][j])
+                elif j == 2:
+                    previous_error.append(data[i][j])
+                elif j == 3:
+                    control_signal.append(data[i][j])
+                elif j == 4:
+                    motor_offset.append(data[i][j])
+                else:
+                    time.append(data[i][j])
+
+        new_data.append(current_angle)
+        new_data.append(target_angle)
+        new_data.append(previous_error)
+        new_data.append(control_signal)
+        new_data.append(motor_offset)
+        new_data.append(time)
+        return new_data
+
+    data = [
+        [10, 20, 30, 40, 50, 60],
+        [15, 25, 35, 45, 55, 65]
+    ]
+
+    k = sort_data(data)
+
+    time_a = k[5]
+    angle_arr = k[0]
+    control_sig = k[3]
+
 
 Lab
 --------------------------------------------------------------------------
