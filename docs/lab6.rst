@@ -185,7 +185,8 @@ I wrote a function that calibrates my IMU and tries to deal with the drift due t
 
 Here is a video of the robot stabilizing its orientation. I accidentally deleted some of the videos when clearing my phone storage.
 
-.. youtube:: 1A9yQ-ebz70
+
+.. youtube::   1A9yQ-ebz70
    :width: 560
    :height: 315
 
