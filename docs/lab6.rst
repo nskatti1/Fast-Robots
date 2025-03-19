@@ -14,41 +14,42 @@ For communication, data was sent and received via Bluetooth. I wrote a command i
 
 .. code-block:: cpp
 
-    float data_arr[6];
+    times[i] = millis();
 
-    data_arr[0] = millis();
-    data_arr[1] = current_angle;
-    data_arr[2] = target_angle;
-    data_arr[3] = previous_error;
-    data_arr[4] = control_signal;
-    data_arr[5] = motor_offset;
+    curr_ang_arr[i] = current_angle;
 
-    tx_estring_value.append(data_arr[0]);
-    tx_estring_value.append(" | ");
-    tx_estring_value.append(data_arr[1]);
-     tx_estring_value.append(" | ");
-    tx_estring_value.append(data_arr[2]);
-     tx_estring_value.append(" | ");
-    tx_estring_value.append(data_arr[3]);
-    tx_estring_value.append(" | ");
-    tx_estring_value.append(data_arr[4]);
-    tx_estring_value.append(" | ");
-    tx_estring_value.append(data_arr[5]);
-    tx_estring_value.append(" | ");
-    send_arr[i] = tx_estring_value.c_str();
+    target_ang_arr[i] = target_angle;
+
+    prev_err[i]= previous_error;
+
+    control_sg[i] = control_signal;
+
+    motor_o[i] = motor_offset;
+
     i=i+1;
 
 
 Here is where I sent it back. I implemented this function within my STOP_PID function.
 
 .. code-block:: cpp
-    void SendStoredPIDData() {
-        for (int i = 0; i < 500; i += 1) {
-            tx_characteristic_string.clear();
-            tx_characteristic_string.append(send_arr[i]);
+    void sendStoredPIDData() {
+        for (int j = 0; j < MAX_SAMPLES; j += 1) {
+            tx_estring_value.clear();
+            tx_estring_value.append(curr_ang_arr[j]);
+            tx_estring_value.append(" | ");
+            tx_estring_value.append(target_ang_arr[j]);
+            tx_estring_value.append(" | ");
+            tx_estring_value.append(prev_err[j]);
+            tx_estring_value.append(" | ");
+            tx_estring_value.append(control_sg[j]);
+            tx_estring_value.append(" | ");
+            tx_estring_value.append(motor_o[j]);
+            tx_estring_value.append(" | ");
+            tx_estring_value.append(times[j]);
+            tx_estring_value.append(" | ");          
+            tx_characteristic_string.writeValue(tx_estring_value.c_str());
             delay(100);
         }
-    }
 
 Lab
 --------------------------------------------------------------------------
