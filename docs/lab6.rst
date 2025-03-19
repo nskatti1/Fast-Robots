@@ -115,15 +115,19 @@ It is common for gyroscopes have a constant bias that causes the error to grow l
 Each IMU has a maximum detectable rotational velocity before saturation occurs. According to the documentation of the IMU we use, it has "a full scale range of ±250 dps, ±500 dps, ±1000 dps, and ±2000 dps". If the robot rotates faster than this limit, the sensor will clip values, leading to incorrect readings. Making sure within the code that it is not going faster that that, can prevent this.
 
 **Does it make sense to take the derivative of an integrated signal?**
+
 Since the gyroscope provides angular velocity, integration is used to obtain orientation. The derivative would just return the same original signal which is useless.
 
 **Does changing your setpoint while the robot is running cause problems with your implementation of the PID controller?**
+
 A sudden change in the setpoint can cause a sharp spike in the derivative term and this can destabilize the robot. Low-pass filters can help.
 
 **Is a lowpass filter needed before your derivative term?**
+
 Yes, it is common to use a low-pass filter on the gyroscope readings before computing the derivative term  as it reduces the effect of high-frequency noise potentially causing instability in the controller.
 
 **Can you control the orientation while the robot is driving forward or backward? Why would this be useful ? (not required)**
+
 I did not, but it will be useful in the future when it comes down to following a path as it can move forward and backwards and tune itself.
 
 Reflection 
