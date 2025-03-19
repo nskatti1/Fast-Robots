@@ -52,6 +52,47 @@ Here is where I sent it back. I implemented this function within my STOP_PID fun
             delay(100);
         }
 
+I parsed the data in python later and put it into an array instead.
+From there, I parsed the arrays: 
+
+.. code-block:python
+
+        def sort(data):
+            new_data = []
+            current_angle = []
+            target_angle = []
+            previous_error = []
+            control_signal= []
+            motor_offset = []
+            time =[]
+            for i in range(len(data)):
+                for j in range(len(data[0])):
+                    if  j==0 :
+                        current_angle.append(data[i][j])
+                    elif j==1 :
+                        target_angle.append(data[i][j])
+                    elif j==2 :
+                        previous_error.append(data[i][j])
+                    elif j==3 :
+                        control_signal.append(data[i][j])
+                    elif j==4:
+                        motor_offset.append(data[i][j])
+                    else:
+                        time.append(data[i][j])
+            new_data.append(current_angle)
+            new_data.append(target_angle)
+            new_data.append(previous_error)
+            new_data.append(control_signal)
+            new_data.append(motor_offset)
+            new_data.append(time)
+            return new_data
+                        
+        k= sort(data)   
+
+        time_a = k[5]
+        angle_arr = k[0]
+        control_sig = k[3]
+
 Lab
 --------------------------------------------------------------------------
 
@@ -87,7 +128,7 @@ Here is my code
 
         applyMotorControl(error, motor_offset);
 
-Graphs of the angle versus time were generated to analyze the controller’s response.
+Graphs of the angle versus time were generated to analyze the controller’s response and control Signal vs Time.
 
 .. list-table::
    :widths: auto
@@ -127,12 +168,6 @@ I also wrote some tuning functions that could help me adjust my values without m
             Serial.println("Updated PID gains.");
             break;
 
-Fine tuning the PID values took a lot of time and care and multiple tests. Here is what I observed:
-
-- **Overshoot:** [Description]
-- **Settling Time:** [Description]
-- **Error Reduction Techniques:** [Description]
-
 
 I wrote a function that calibrates my IMU and tries to deal with the drift due to the bias. I implemented this in the beginning during setup so I would have the constant.
 
@@ -148,9 +183,9 @@ I wrote a function that calibrates my IMU and tries to deal with the drift due t
         gyro_bias = bias_sum / 100.0;
     }
 
-Here is are some videos of the robot stabilizing its orientation:
+Here is a video of the robot stabilizing its orientation. I accidentally deleted some of the videos when clearing my phone storage.
 
-.. youtube:: [VideoID]
+.. youtube:: 1A9yQ-ebz70
    :width: 560
    :height: 315
 
