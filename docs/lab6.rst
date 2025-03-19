@@ -101,15 +101,15 @@ Lab Questions /Discussion
 --------------------------
 I answered some lab questions below? 
 
-**Are there any problems that digital integration might lead to over time? Are there ways to minimize these problems? ** 
+**Are there any problems that digital integration might lead to over time? Are there ways to minimize these problems?** 
 
 Digital integration of the gyroscope data can lead to drift due to sensor noise and small errors accumulating over time. This is often referred to as yaw drift and can result in incorrect orientation estimates. This can be minimized by using a complementary filter or Kalman filter ( haha Lab 7 lol) to fuse the IMU data with other sensors and correct drift. Resetting the orientation based off of landmarks and data collected can be useful as well (yay I did this or using the DMP, which has a built in filter can be helpful.
 
-**Does your sensor have any bias, and are there ways to fix this? How fast does your error grow as a result of this bias?  **
+**Does your sensor have any bias, and are there ways to fix this? How fast does your error grow as a result of this bias?**
 
 It is common for gyroscopes have a constant bias that causes the error to grow linearly over time. If you measure it while it is stationary, you can subtract the constant bias. Additionally, the DMP can be useful.
 
-**Are there limitations on the sensor itself to be aware of? What is the maximum rotational velocity that the gyroscope can read?  **
+**Are there limitations on the sensor itself to be aware of? What is the maximum rotational velocity that the gyroscope can read?**
 **Is this sufficient for our applications, and is there a way to configure this parameter?**
 
 Each IMU has a maximum detectable rotational velocity before saturation occurs. According to the documentation of the IMU we use, it has "a full scale range of ±250 dps, ±500 dps, ±1000 dps, and ±2000 dps". If the robot rotates faster than this limit, the sensor will clip values, leading to incorrect readings. Making sure within the code that it is not going faster that that, can prevent this.
@@ -118,7 +118,7 @@ Each IMU has a maximum detectable rotational velocity before saturation occurs. 
 
   Since the gyroscope provides angular velocity, integration is used to obtain orientation. The derivative would just return the same original signal which is useless.
 
-**Does changing your setpoint while the robot is running cause problems with your implementation of the PID controller? **
+**Does changing your setpoint while the robot is running cause problems with your implementation of the PID controller?**
   A sudden change in the setpoint can cause a sharp spike in the derivative term and this can destabilize the robot. Low-pass filters can help.
 
 **Is a lowpass filter needed before your derivative term?**
