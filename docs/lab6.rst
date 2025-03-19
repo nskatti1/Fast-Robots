@@ -115,7 +115,6 @@ It is common for gyroscopes have a constant bias that causes the error to grow l
 Each IMU has a maximum detectable rotational velocity before saturation occurs. According to the documentation of the IMU we use, it has "a full scale range of ±250 dps, ±500 dps, ±1000 dps, and ±2000 dps". If the robot rotates faster than this limit, the sensor will clip values, leading to incorrect readings. Making sure within the code that it is not going faster that that, can prevent this.
 
 **Does it make sense to take the derivative of an integrated signal?**
-
   Since the gyroscope provides angular velocity, integration is used to obtain orientation. The derivative would just return the same original signal which is useless.
 
 **Does changing your setpoint while the robot is running cause problems with your implementation of the PID controller?**
