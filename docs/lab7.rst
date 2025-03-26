@@ -69,10 +69,7 @@ Implementing and Testing KF in Jupyter
 
 I processed the collected lab data through the Kalman Filter, adjusting the process and sensor noise to improve accuracy.
 
-.. image:: images/l7_kf_results_raw.png
-   :align: center
-   :width: 70%
-   :alt: Raw KF Output
+I had to adjust Q and R when tuning. Q represents process noise covariance, which essentially models uncertainty in the dynamics of the system like disturbances or forces that are not modeled. A larger Q assumes the model is less reliable and therefore trusts the measurements more. Because of this it is particularly sensitive to changes in measurements, which can have noise. On the other hand, a smaller Q puts more confidence in the model and makes the estimates smoother. However it may lag behind if the model is not accurate enough. R represents the measurement noise covaraince and it models how noisy or uncertain the sensor readingsg are. When R is larger, it means the filter thinks the measurements are noisy so it relies on the model and tries to smooth our any fluxuations in the measurement. Smaller R values cause the filter ot respond with aggression in response to measurement updates but as it becomes more responsive, it is more sensitive to noise. I needed to balance Q and R to tune my filter
 
 .. image:: images/l7_tuned_kf.png
    :align: center
