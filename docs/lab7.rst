@@ -91,9 +91,10 @@ I implemented the Kalman Filter on the Artemis using the `BasicLinearAlgebra` li
 
 Here is a video of the robot stopping smoothly with the Kalman Filter:
 
-.. youtube::  xktYL56z2E4
+.. youtube:: xktYL56z2E4
    :width: 560
    :height: 315
+
 
 Here is a plot of raw vs filtered sensor data:
 
