@@ -84,7 +84,20 @@ Here's my KF code in Python:
 
 .. code-block:: python
 
- coe
+def kalman_filter(mu, sigma, u, y):
+    # --- Prediction ---
+    mu_p = A @ mu + B * u                   
+    sigma_p = A @ sigma @ A.T + Sigma_u    
+
+    # --- Update ---
+    sigma_m = C @ sigma_p @ C.T + Sigma_z  
+    K = sigma_p @ C.T @ np.linalg.inv(sigma_m) 
+    y_m = y - C @ mu_p                     
+    mu = mu_p + K @ y_m                     
+    sigma = (np.eye(2) - K @ C) @ sigma_p   
+
+    return mu, sigma
+
 
 I initially had issues with my covariance matrices, but that was because I was calculating them wrong. 
 
