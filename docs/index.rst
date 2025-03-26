@@ -29,4 +29,5 @@ I am studying Electrical and Computer Engineering(ECE). A couple fun facts about
    lab4.rst
    lab5.rst
    lab6.rst
+   lab7.rst
 
