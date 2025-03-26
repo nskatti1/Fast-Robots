@@ -49,12 +49,12 @@ Here are the plots of distance, computed velocity, and PWM:
 .. image:: images/l7_pwm.png
    :align: center
    :width: 70%
-   :alt: Exponential Fit
+   :alt: PWM
 
 .. image:: images/l7_fitted.png
    :align: center
    :width: 70%
-   :alt: Exponential Fit
+   :alt: Fit
 
 Steady-state velocity: ** 3110 mm/s**  
 Rise time (90%): **  1.123 s**  
