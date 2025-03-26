@@ -13,7 +13,7 @@ Lab
 Estimating Drag and Momentum
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-I applied a constant PWM signal and recorded the TOF sensor data to estimate steady-state speed and rise time. I then fit an exponential model to the velocity curve to extract the drag coefficient and effective mass.
+I applied a constant PWM signal of 200 and recorded the TOF sensor data to estimate steady-state speed and rise time. I then fit an exponential model to the velocity curve to extract the drag coefficient and effective mass. I planed the car around 2.5 m away from a wall.
 
 Here are the plots of distance, computed velocity, and PWM:
 
