@@ -108,6 +108,28 @@ And here is a zoomed-in version:
 To implement the kalman filter within my pid loop, I wrote a function update_kalman which I called within my PID loop.
 
 
+.. code-block:: cpp
+
+      void update_kalman(float measurement, float control_input) {
+        Matrix<1> u = {control_input};
+      
+        Matrix<2> x_pred = A * x + B * u;
+        Matrix<2,2> Sigma_pred = A * Sigma * ~A + Sigma_u;
+      
+        Matrix<1,1> S = C * Sigma_pred * ~C + Sigma_z;
+        Invert(S);
+      
+        Matrix<2,1> K = (Sigma_pred * ~C) * S(0,0);
+      
+        Matrix<1> y = {measurement};
+        x = x_pred + K * (y - C * x_pred);
+      
+        Matrix<2,2> I = {1, 0,
+                         0, 1};
+        Sigma = (I - K * C) * Sigma_pred;
+      }
+
+
 
 Reflection
 -----------------------------
