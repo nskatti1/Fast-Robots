@@ -38,11 +38,11 @@ Here are the plots of distance, computed velocity, and PWM:
    :alt: Fit
 
 Steady-state velocity: **3110 mm/s**  
-Rise time (90%): ** 1.123 s**  
+Rise time (90%): **1.123 s**  
 Velocity at 90% rise time: **2799 mm/s**
 
 
-Drag to Mass Coefficient Ratio: ** 2.9×10 −7**
+Drag to Mass Coefficient Ratio: **2.9×10 −7**
 
 Kalman Filter Initialization (Python)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
