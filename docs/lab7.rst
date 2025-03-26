@@ -64,7 +64,9 @@ My initial state vector and covariances:
 
 .. code-block:: python
 
-  code
+      mu = np.array([[distance[0]], [velocity[0]]]) 
+      sigma = np.eye(2)                              
+
 
 Implementing and Testing KF in Jupyter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
