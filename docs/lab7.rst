@@ -51,7 +51,14 @@ I used the discretized state-space model as follows:
 
 .. code-block:: python
 
-  code
+      A = [[1, dt],
+           [0, 1 - dt/m]]    
+      
+      B = [[0],
+           [dt/m]]           
+      
+      C = [[1, 0]]          
+
 
 My initial state vector and covariances:
 
