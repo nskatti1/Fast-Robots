@@ -99,13 +99,6 @@ Kalman Filter on the Robot
 
 I implemented the Kalman Filter on the Artemis using the `BasicLinearAlgebra` library. I updated my `run_pid_step` function from Lab 5 to integrate the filtered distance into PID control.
 
-Here is a video of my robot setup:
-
-.. image:: images/l7_robot_setup.png
-   :align: center
-   :width: 60%
-   :alt: Robot Setup
-
 Here is a video of the robot stopping smoothly with the Kalman Filter:
 
 .. youtube:: _____________
@@ -114,14 +107,14 @@ Here is a video of the robot stopping smoothly with the Kalman Filter:
 
 Here is a plot of raw vs filtered sensor data:
 
-.. image:: images/l7_kf_robot_plot.png
+.. image:: images/l7_kf_pid.png
    :align: center
    :width: 70%
    :alt: KF Robot Plot
 
 And here is a zoomed-in version:
 
-.. image:: images/l7_kf_robot_zoomed.png
+.. image:: images/l7_kf_zoom.png
    :align: center
    :width: 70%
    :alt: KF Robot Zoomed
