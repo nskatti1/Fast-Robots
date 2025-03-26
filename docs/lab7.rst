@@ -64,13 +64,6 @@ My initial state vector and covariances:
 
   code
 
-Here is a photo of my covariance tuning and KF matrix setup:
-
-.. image:: images/l7_kf_params.png
-   :align: center
-   :width: 60%
-   :alt: KF Parameters
-
 Implementing and Testing KF in Jupyter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
