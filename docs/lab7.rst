@@ -100,7 +100,7 @@ I processed the collected lab data through the Kalman Filter, adjusting the proc
    :width: 70%
    :alt: Raw KF Output
 
-.. image:: images/l7_kf_results_tuned.png
+.. image:: images/l7_tuned_kf.png
    :align: center
    :width: 70%
    :alt: Tuned KF Output
@@ -153,4 +153,4 @@ This lab was pretty fun. There were times when my kalman filter was broken and I
 Acknowledgements
 -----------------------------
 Thank you to the course staff for their help and my fellow classmates for using ed discussion. It has been very helpful.
-I used ChatGPT to help debug code and also create a barebones outline of this report before filling in all the details(it created the headers).
+I used ChatGPT to help debug code and also create a barebones outline of this report before filling in all the details(it created the headers). It also helped debug my plots.
