@@ -37,15 +37,10 @@ Here are the plots of distance, computed velocity, and PWM:
    :width: 70%
    :alt: Fit
 
-Steady-state velocity: ** 3110 mm/s**  
-Rise time (90%): **  1.123 s**  
+Steady-state velocity: **3110 mm/s**  
+Rise time (90%): ** 1.123 s**  
 Velocity at 90% rise time: **2799 mm/s**
 
-Using this, I computed drag and mass as:
-
-.. code-block:: python
-
-   code
 
 Drag to Mass Coefficient Ratio: ** 2.9×10 −7**
 
@@ -109,6 +104,9 @@ And here is a zoomed-in version:
    :align: center
    :width: 70%
    :alt: KF Robot Zoomed
+
+To implement the kalman filter within my pid loop, I wrote a function update_kalman which I called within my PID loop.
+
 
 
 Reflection
