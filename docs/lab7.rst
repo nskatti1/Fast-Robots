@@ -6,25 +6,6 @@ Lab 7: Kalman Filter
    :depth: 2
    :local:
 
-Prelab
---------------------------------------------------------------------------
-
-In this lab, I implemented a Kalman Filter to improve position estimation of my robot using TOF sensor data. The main objective was to estimate the position and velocity of the robot accurately even with noisy or delayed sensor inputs.
-
-Here is a diagram of the system model and key equations I used for estimating drag and mass:
-
-.. image:: images/l7_model_diagram.png
-   :align: center
-   :width: 60%
-   :alt: State Space Model Diagram
-
-I used a step input similar to Lab 5 to collect velocity and TOF data, and saved it for processing in Python.
-
-.. image:: images/l7_step_response.png
-   :align: center
-   :width: 60%
-   :alt: Step Response Graph
-
 
 Lab
 --------------------------------------------------------------------------
