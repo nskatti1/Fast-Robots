@@ -41,7 +41,7 @@ Here are the plots of distance, computed velocity, and PWM:
    :width: 70%
    :alt: TOF Data
 
-.. image:: images/l7_velocity_plot.png
+.. image:: images/l7_velocity.png
    :align: center
    :width: 70%
    :alt: Velocity Plot
