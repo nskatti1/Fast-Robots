@@ -96,8 +96,7 @@ This was a fun culmination of the what we have done so far in fast robots. It wa
 
 Acknowledgements
 -----------------------------
-
-Thank you to Anunth Ramaswami for carrying my batteries for me during spring break.  
+ 
 Thank you to the people's whose house I visited for letting me use your crash mat setup and letting me run my car around your house.
 Thank you to Glue for being the best cat ever(see blooper reels).
 Thanks to the class staff for your help. 
