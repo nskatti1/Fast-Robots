@@ -34,11 +34,8 @@ I edited my kalman filter code from lab 7 to gather data on my car when I use a 
    :width: 60%
    :alt: Kalman Velocity
 
-Stunt Execution
+Stunt Execution: Task A - Flip
 -----------------------------
-
-Task A: Flip
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 My robot began at the designated start line and accelerated forward. I tuned the flip trigger point based on TOF/KF estimation or hardcoded timing. I added weight to the front to help initiate the flip.
 
