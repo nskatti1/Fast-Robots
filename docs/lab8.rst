@@ -28,11 +28,6 @@ I modified my Kalman Filter code from Lab 7 to gather data on my car while using
    :width: 60%
    :alt: Kalman Distance
 
-.. image:: images/l8_kf_vel.png
-   :align: center
-   :width: 60%
-   :alt: Kalman Velocity
-
 Stunt Execution: Task B - Drift
 -----------------------------
 
