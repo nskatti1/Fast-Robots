@@ -198,7 +198,7 @@ This is how I sent data. I wrote a function for it.
 
 Reflection
 -----------------------------
-
+This lab was fun. While it did not take me long to get the car to drift or flip(it did not flip consistently so I had to switch to drift), I struggled with random bugs like my car stopping mid open loop and also my graphs looking weird. It was fun trying to figure bugs, but also a struggle.
 
 Acknowledgements
 -----------------------------
@@ -211,5 +211,5 @@ Acknowledgements
 Thanks to the friends who let me take over their hallway and crash mats.  
 Shoutout to Glue, the best cat - didn't quite make it into the blooper reel, but we still love him.  
 And thank you to the course staff for your help. I looked at Stephan Wagner and Daria Kot's websites for references on how they graphed their data.
-Also, thanks to ChatGPT for helping me debug C code and for catching syntax errors in my write-up. You over edited and started changing my text and I had to revert. 
+Also, thanks to ChatGPT for helping me debug C code and for catching syntax errors in my write-up. Chat over edited and started changing my text and I had to revert back and undo a lot.
 
