@@ -9,7 +9,7 @@ Objective
 -----------------------------
 The objective of this lab was to execute a high-speed robot stunt that combined different ideas that we have learned about in Fast Robots and I am happy to report that it was a fun successful lab.
 
-I chose to execute the drift task(Task B), but I initially wanted to do the flip, so I had reinforced my car with tape particularly to reinforce the batteries. This meant it was also prepared for drifting.
+I chose to execute the drift task(Task B), but I initially wanted to do the flip, so I had reinforced my car with tape particularly to reinforce the batteries. This meant it was also prepared for drifting. Here is a photo.
 
 Setup and Preparation
 -----------------------------
@@ -43,9 +43,7 @@ Here are three successful runs:
    :height: 315
 
 
-They took 8 seconds, 10 seconds, and 9 seconds respectively.
-
-And here are the plots of the TOF data, PWM signals, and Kalman Filter Data.
+They took 8 seconds, 10 seconds, and 9 seconds respectively. There seemed to be a flaw where the car stopped and paused even though I did not use any delays in my code. There was a bug where my code seemed to reset when my car stopped and just not append data. Here are the plots of collected data regardless.
 
 .. image:: images/l8_graph1.png
    :align: center
