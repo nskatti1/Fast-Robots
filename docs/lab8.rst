@@ -80,10 +80,10 @@ Reflection
 Acknowledgements
 -----------------------------
 
-.. image:: images/l8_cat.png
+.. image:: images/l8_cat.jpg
    :align: center
    :width: 60%
-   :alt: Kalman Distance
+   :alt: Cat Photo
 
 Thanks to the friends who let me take over their hallway and crash mats.  
 Shoutout to Glue, the best cat - didn't quite make it into the blooper reel, but we still love him.  
