@@ -43,7 +43,7 @@ Here are three successful runs:
    :height: 315
 
 
-They took 8 seconds, 10 seconds, and 9 seconds respectively. There seemed to be a flaw where the car stopped and paused even though I did not use any delays in my code. There was a bug where my code seemed to reset when my car stopped and just not append data. Here are the plots of collected data regardless. Note: my kalman filter was not tuned very well.
+They took 8 seconds, 10 seconds, and 9 seconds respectively. There seemed to be a flaw where the car stopped and paused even though I did not use any delays in my code. There was a bug where my code seemed to reset when my car stopped and just not append data. Here are the plots of collected data regardless. Note: my kalman filter was not tuned very well. Also, my plots don't always show a 180 degrees in yaw, but in the video I clearly drift 180 degrees so.
 
 .. image:: images/l8_plot1.png
    :align: center
