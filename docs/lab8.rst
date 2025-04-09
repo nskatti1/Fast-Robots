@@ -48,18 +48,17 @@ They took 8 seconds, 10 seconds, and 9 seconds respectively. There seemed to be 
 .. image:: images/l8_plot1.png
    :align: center
    :width: 60%
-   :alt: Distance and Yaw Plots
+   :alt: Distance and Yaw Plots 1
 
-.. image:: images/l8_graph2.png
+.. image:: images/l8_plot2.png
    :align: center
    :width: 60%
-   :alt: Kalman Distance
+   :alt: Distance and Yaw Plots 2
 
-.. image:: images/l8_graph3.png
+.. image:: images/l8_plot3.png
    :align: center
    :width: 60%
-   :alt: Kalman Distance
-
+   :alt: Distance and Yaw Plots 3
 
 Tuning and Control Strategy
 -----------------------------
