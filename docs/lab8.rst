@@ -43,12 +43,12 @@ Here are three successful runs:
    :height: 315
 
 
-They took 8 seconds, 10 seconds, and 9 seconds respectively. There seemed to be a flaw where the car stopped and paused even though I did not use any delays in my code. There was a bug where my code seemed to reset when my car stopped and just not append data. Here are the plots of collected data regardless.
+They took 8 seconds, 10 seconds, and 9 seconds respectively. There seemed to be a flaw where the car stopped and paused even though I did not use any delays in my code. There was a bug where my code seemed to reset when my car stopped and just not append data. Here are the plots of collected data regardless. Note: my kalman filter was not tuned very well.
 
-.. image:: images/l8_graph1.png
+.. image:: images/l8_plot1.png
    :align: center
    :width: 60%
-   :alt: Kalman Distance
+   :alt: Distance and Yaw Plots
 
 .. image:: images/l8_graph2.png
    :align: center
