@@ -40,15 +40,15 @@ I had the robot start away from the wall, and I tuned the drift trigger point ba
 
 Here are three successful runs:
 
-.. youtube:: _____________
+.. youtube::  Ki0Dn_ntjnI
    :width: 560
    :height: 315
 
-.. youtube:: _____________
+.. youtube:: OwwN-latBQM
    :width: 560
    :height: 315
 
-.. youtube:: _____________
+.. youtube:: CPaaE2tsfK8
    :width: 560
    :height: 315
 
