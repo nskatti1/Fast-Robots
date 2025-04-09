@@ -82,6 +82,6 @@ Acknowledgements
 
 Thanks to the friends who let me take over their hallway and crash mats.  
 Shoutout to Glue, the best cat - didn't quite make it into the blooper reel, but we still love him.  
-And thank you to the course staff for your help.
+And thank you to the course staff for your help. I looked at Stephan Wagner and Daria Kot's websites for references on how they graphed their data.
 Also, thanks to ChatGPT for helping me debug C code and for catching syntax errors in my write-up. You over edited and started changing my text and I had to revert. 
 
