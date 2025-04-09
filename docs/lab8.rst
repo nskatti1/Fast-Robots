@@ -47,6 +47,9 @@ Here are three successful runs:
    :width: 560
    :height: 315
 
+
+They took 8 seconds, 10 seconds, and 9 seconds respectively.
+
 And here are the plots of the TOF data, PWM signals, and Kalman Filter Data.
 
 .. image:: images/l8_graph1.png
