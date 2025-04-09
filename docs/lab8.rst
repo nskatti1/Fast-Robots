@@ -9,12 +9,7 @@ Objective
 -----------------------------
 The objective of this lab was to execute a high-speed robot stunt that combined different ideas that we have learned about in Fast Robots and I am happy to report that it was a fun successful lab.
 
-I chose to execute the drift task(Task B), but I initially wanted to do the flip, so I had reinforced my car with tape particularly to reinforce the batteries. This meant it was also prepared for drifting. Here is a pic of my car.
-
-.. image:: images/l8_robot_full.png
-   :align: center
-   :width: 60%
-   :alt: Robot Ready
+I chose to execute the drift task(Task B), but I initially wanted to do the flip, so I had reinforced my car with tape particularly to reinforce the batteries. This meant it was also prepared for drifting.
 
 Setup and Preparation
 -----------------------------
