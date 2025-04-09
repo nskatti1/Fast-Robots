@@ -49,17 +49,17 @@ Here are three successful runs:
 
 And here are the plots of the TOF data, PWM signals, and Kalman Filter Data.
 
-.. image:: images/l8_kf_dist.png
+.. image:: images/l8_graph1.png
    :align: center
    :width: 60%
    :alt: Kalman Distance
 
-.. image:: images/l8_kf_dist.png
+.. image:: images/l8_graph2.png
    :align: center
    :width: 60%
    :alt: Kalman Distance
 
-.. image:: images/l8_kf_dist.png
+.. image:: images/l8_graph3.png
    :align: center
    :width: 60%
    :alt: Kalman Distance
@@ -79,6 +79,11 @@ Reflection
 
 Acknowledgements
 -----------------------------
+
+.. image:: images/l8_cat.png
+   :align: center
+   :width: 60%
+   :alt: Kalman Distance
 
 Thanks to the friends who let me take over their hallway and crash mats.  
 Shoutout to Glue, the best cat - didn't quite make it into the blooper reel, but we still love him.  
