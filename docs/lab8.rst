@@ -66,9 +66,132 @@ And here are the plots of the TOF data, PWM signals, and Kalman Filter Data.
 Tuning and Control Strategy
 -----------------------------
 
-To make the stunt successful, I used the Kalman Filter to estimate when the robot was within 914mm of the wall, then initiated the 180-degree spin. I used two functions START_DRIFT and STOP_DRIFT.
+To make the stunt successful, I used the Kalman Filter to estimate when the robot was within 914mm of the wall, then initiated the 180-degree spin. I used two functions START_DRIFT and STOP_DRIFT.Here are snippets of the code.
 
-Here are snippets of the code that handled my drift logic and control timing:
+Here is how I implemented a Kalman filter. I initialied the matrices and wrote an update Kalman function.
+
+.. code-block:: cpp
+   :caption: Kalman Filter Code
+
+       // Kalman Filter
+         Matrix<2> x = {0, 0}; 
+         Matrix<2, 2> P = {1000, 0, 0, 1000};
+         Matrix<2, 2> Q = {1000, 0, 0, 10};
+         Matrix<2, 2> R = {1200, 0, 0, 250};
+         Matrix<2, 2> H = {1, 0, 0, 1};
+         
+         float m = 3.0;
+         float dt = 0.1;
+         Matrix<2,2> A;
+         Matrix<2,1> B;
+         
+         
+         void update_kalman(float dist, float pwm_input, float dt) {  
+           Matrix<2, 2> A = {1, dt, 0, 1 - dt/m};
+           Matrix<2, 1> B = {0, dt/m};
+         
+           Matrix<1> u = {pwm_input};
+           Matrix<2> x_pred = A * x + B * u;
+           Matrix<2,2> P_pred = A * P * ~A + Q;
+         
+           Matrix<2> z = {dist, 0}; // velocity unused here
+           Matrix<2> y = z - H * x_pred;
+           Matrix<2,2> S = H * P_pred * ~H + R;
+           Invert(S);
+           Matrix<2,2> K = P_pred * ~H * S;
+         
+           x = x_pred + K * y;
+           Matrix<2,2> I = {1, 0, 0, 1};
+           P = (I - K * H) * P_pred;
+         }
+
+
+I wrote two commands: START_DRIFT AND STOP_DRIFT. Here is START_DRIFT. They both mainly handled flags that void loop() used later to figure out what to do.
+
+.. code-block:: cpp
+   :caption: START_DRIFT
+
+      case START_DRIFT:
+         Serial.println("START_DRIFT received.");
+         drifting = true;
+         drift_triggered = false;
+         drift_complete = false;
+         log_index = 0;
+         last_sample_time = millis();
+         x = {0, 0};
+         P = {1000, 0, 0, 1000};
+         break;
+
+
+
+Here is a chunk of code I wrote in void loop for handling functions.
+
+.. code-block:: cpp
+   :caption: a chunk of loop code
+
+         if (drifting  && log_index < MAX_SAMPLES) {
+           unsigned long now = millis();
+           if (now - last_sample_time >= dt * 1000) {
+             last_sample_time = now;
+   
+             distanceSensor.startRanging();
+             while (!distanceSensor.checkForDataReady()) delay(1);
+             int dist = distanceSensor.getDistance();
+             distanceSensor.clearInterrupt();
+             distanceSensor.stopRanging();
+   
+             imu.getAGMT();
+             float gyro_z = imu.gyrZ();
+   
+             update_kalman(dist, FORWARD_PWM, dt);
+   
+             time_log[log_index] = now;
+             dist_log[log_index] = dist;
+             gyro_log[log_index] = gyro_z;
+             kalman_dist_log[log_index] = x(0);
+             kalman_vel_log[log_index] = x(1);
+             pwm_log[log_index] = drift_triggered ? TURN_PWM : FORWARD_PWM;
+             log_index++;
+   
+             if (!drift_triggered && dist < DRIFT_THRESHOLD) {
+               drift_triggered = true;
+               Serial.println("Drift initiated.");
+               drift_turn();
+             }
+   
+             if (drift_triggered && abs(gyro_z) > FLIP_THRESHOLD_DPS) {
+               drift_complete = true;
+               drifting = false;
+               stop_motors();
+               Serial.println("Drift complete.");
+               send_drift_data();
+             }
+   
+             if (!drift_triggered) move_forward();
+           }
+   
+         }
+
+This is how I sent data. I wrote a function for it.
+
+.. code-block:: cpp
+   :caption: Sending data
+
+       void send_drift_data() {
+           for (int i = 0; i < log_index; i++) {
+             tx_string.clear();
+             tx_string.append(time_log[i]); tx_string.append("|");
+             tx_string.append(dist_log[i]); tx_string.append("|");
+             tx_string.append(gyro_log[i]); tx_string.append("|");
+             tx_string.append(kalman_dist_log[i]); tx_string.append("|");
+             tx_string.append(kalman_vel_log[i]); tx_string.append("|");
+             tx_string.append(pwm_log[i]);
+             tx_characteristic_string.writeValue(tx_string.c_str());
+             delay(30);
+           }
+           Serial.println("Drift data sent.");
+         }
+
 
 
 Reflection
