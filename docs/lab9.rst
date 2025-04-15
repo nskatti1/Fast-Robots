@@ -80,7 +80,7 @@ Measurement Logging
 
 Each reading consists of:
 
-- Timestamp (`millis()`)
+- Timestamp (miliseconds)
 - Unwrapped yaw angle (in degrees)
 - ToF distance (in mm)
 
