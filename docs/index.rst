@@ -31,5 +31,6 @@ I am studying Electrical and Computer Engineering(ECE). A couple fun facts about
    lab6.rst
    lab7.rst
    lab8.rst
+   lab9.rst
 
 
