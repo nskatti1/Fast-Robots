@@ -46,7 +46,7 @@ PID gains are adjusted dynamically based on yaw error:
 
 This approach avoided overshooting at small errors and ensured faster convergence at larger angles.
 
-State Machine and Command Handling
+Command Handling
 ---------------------------------------------
 
 The robot responds to BLE commands via a `handleCommand()` function that supports:
