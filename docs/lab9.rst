@@ -135,22 +135,20 @@ If you make plots that are scaled the same and place them on the map at their lo
 Global Mapping
 -----------------------------
 
-The robot is placed at 4+ distinct positions (e.g. `(-3, -2)`, `(0, 3)`, `(5, -3)`, `(5, 3)`), and performs a full 360° scan at each. These are combined into a merged global map:
+The robot is placed at 4 distinct positions `(-3, -2)`, `(0, 3)`, `(5, -3)`, `(5, 3)`), and performs a full 360° scan at each. These are combined into a merged global map:
 
 .. image:: images/l9_global_data.png
    :align: center
    :width: 80%
    :alt: Merged Map
 
-Line-Based Map
------------------------------
+Here is the image with the map drawn on top
 
-From the scatter plot, I manually estimated walls using line segments and extracted endpoints:
+.. image:: images/l9_global_data.png
+   :align: center
+   :width: 80%
+   :alt: Merged Map
 
-- `x_start = [...]`
-- `y_start = [...]`
-- `x_end = [...]`
-- `y_end = [...]`
 
 Reflection
 -----------------------------
