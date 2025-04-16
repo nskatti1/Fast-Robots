@@ -152,18 +152,6 @@ Global Mapping
 
 The robot is placed at 4 distinct positions `(-3, -2)`, `(0, 3)`, `(5, -3)`, `(5, 3)`), and performs a full 360° scan at each. These are combined into a merged global map:
 
-.. image:: images/l9_globalmap.png
-   :align: center
-   :width: 80%
-   :alt: Merged Map
-
-Here is the image with the lines drawn on top 
-
-.. image:: images/l9_globalwlines.png
-   :align: center
-   :width: 80%
-   :alt: Merged Map with Lines
-
 
 Reflection
 -----------------------------
