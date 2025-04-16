@@ -132,7 +132,45 @@ Each point is translated into global coordinates from a known pose:
 
 Polar and Cartesian plots are generated to verify individual scans.
 
-Here is an example of an individual polar plot. 
+Here is the individual plots for (0,3)
+
+.. image:: images/l9_polar1.png
+   :align: center
+   :width: 80%
+   :alt: Polar Plot (0,3)
+
+.. image:: images/l9_polartrace1.png
+   :align: center
+   :width: 80%
+   :alt: Polar Plot with connectivity (0,3)
+
+
+Here is the individual plot for (5,3)
+
+.. image:: images/l9_polar2.png
+   :align: center
+   :width: 80%
+   :alt: Polar Plot (5,3)
+
+.. image:: images/l9_polartrace2.png
+   :align: center
+   :width: 80%
+   :alt: Polar Plot with connectivity (5,3)
+
+Here is the individual plot for (5,-3)
+
+.. image:: images/l9_polar3.png
+   :align: center
+   :width: 80%
+   :alt: Polar Plot (5,-3)
+
+.. image:: images/l9_polartrace3.png
+   :align: center
+   :width: 80%
+   :alt: Polar Plot with connectivity (5,-3)
+
+
+Here is the individual plot for (-3,2)
 
 .. image:: images/l9_polar.png
    :align: center
