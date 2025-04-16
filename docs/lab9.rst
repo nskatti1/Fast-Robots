@@ -137,7 +137,12 @@ Here is an example of an individual polar plot.
 .. image:: images/l9_polar.png
    :align: center
    :width: 80%
-   :alt: Merged Map
+   :alt: Polar Plot (-3,-2)
+
+.. image:: images/l9_polartrace.png
+   :align: center
+   :width: 80%
+   :alt: Polar Plot with connectivity (-3,-2)
 
 If you make plots that are scaled the same and place them on the map at their location, you can make a global map. See below.
 
@@ -147,17 +152,17 @@ Global Mapping
 
 The robot is placed at 4 distinct positions `(-3, -2)`, `(0, 3)`, `(5, -3)`, `(5, 3)`), and performs a full 360° scan at each. These are combined into a merged global map:
 
-.. image:: images/l9_global_data.png
+.. image:: images/l9_globalmap.png
    :align: center
    :width: 80%
    :alt: Merged Map
 
-Here is the image with the map drawn on top
+Here is the image with the lines drawn on top 
 
-.. image:: images/l9_global_data.png
+.. image:: images/l9_globalwlines.png
    :align: center
    :width: 80%
-   :alt: Merged Map
+   :alt: Merged Map with Lines
 
 
 Reflection
