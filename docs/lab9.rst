@@ -105,9 +105,12 @@ After the full scan, readings are sent back over BLE:
 Robot Video
 -----------------------------
 Here is a video of the pid loop running with the data collection.
-.. youtube::  uPCNITwPCb0
+
+
+.. youtube:: uPCNITwPCb0
    :width: 560
    :height: 315
+
 
 Post-Processing
 -----------------------------
