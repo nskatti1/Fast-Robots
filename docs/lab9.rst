@@ -173,5 +173,5 @@ I decided to use the DMP for this lab as I did not for lab 6 and getting it work
 Acknowledgements
 -----------------------------
 
-Thanks to the course staff for feedback on motor tuning.  Special thanks to Anunth Ramaswami for letting me film a video on his robot after I broke one of my motor drivers(I had to adjust my constant values). Thanks to Anunth Ramaswami, Aravind Ramaswami, and Aidan McNay for answering my random questions about the DMP. Chat GPT was used to generate a barebones template for this write up as usual and also help debug my code sometimes.
+Thanks to the course staff for feedback on motor tuning.  Special thanks to Anunth Ramaswami for letting me film a video on his robot after I broke one of my motor drivers(I had to adjust my constant values). Thanks to Anunth Ramaswami, Aravind Ramaswami, and Aidan McNay for answering my random questions about the DMP. Chat GPT was used to generate a barebones template for this write up as usual, plot points, and also help debug my code sometimes
 
