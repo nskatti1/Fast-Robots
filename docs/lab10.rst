@@ -204,35 +204,12 @@ Each run of the simulation shows, the ground truth trajectoy(green), the estimat
     :gutter: 2
 
     .. grid-item::
-        .. image:: 
+        .. image:: l9_1.png
             :width: 100%
 
     .. grid-item::
-        .. image::
+        .. image:: l9_2.png
             :width: 100%
-
-
-### Run 1 Results
-
-.. image:: images/l10_run1_final.png
-   :align: center
-   :width: 80%
-   :alt: Run 1 Final Belief Plot
-
-// - **Iterations:** 15  
-// - **Final Most Likely Pose:** (x ≈ 2.13, y ≈ 0.91, θ ≈ 60°)  
-// - **Ground Truth Pose:** (x ≈ 2.20, y ≈ 0.88, θ ≈ 55°)
-
-### Run 2 Results
-
-.. image:: images/l10_run2_final.png
-   :align: center
-   :width: 80%
-   :alt: Run 2 Final Belief Plot
-
-// - **Iterations:** 15  
-// - **Localization was robust despite early odometry drift.**  
-// - Final belief track aligned well with the true path.
 
 Tables
 ----------
