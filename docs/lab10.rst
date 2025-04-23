@@ -11,10 +11,7 @@ Introduction
 
 In this lab, I implemented a Bayes Filter in simulation to accurately localize a robot’s pose within a discretized 3D grid, even in the presence of actuator and sensor noise. This foundational work provides the building blocks for future real-world localization tasks.
 
-The Bayes Filter maintains a belief distribution over the robot’s possible states *(x, y, θ)*, which is updated at each time step through two key steps:
-
-- **Prediction Step** – Uses odometry input and a motion model (with noise) to estimate where the robot likely moved.
-- **Update Step** – Refines this estimate by comparing actual range sensor readings to expected ones at each grid cell, reducing uncertainty.
+The Bayes Filter maintains a belief distribution over the robot’s possible states *(x, y, θ)*, which is updated at each time step through two key steps: the prediction step, and the update step. The prediction step uses odometry input and a motion model (with noise) to estimate where the robot likely moved. The update step refines this estimate by comparing actual range sensor readings to expected ones at each grid cell, reducing uncertainty.
 
 These steps follow the Bayes update equations:
 
@@ -68,7 +65,7 @@ The `compute_control` function calculates the robot’s relative motion from one
 
 ### Odometry Motion Model
 
-The odometry motion model computes the probability that the robot transitioned from the  previous position the current position , given the control input `u`. It uses three independent Gaussian distributions to model noise in each motion component.
+The odometry motion model computes the probability that the robot transitioned from the  previous position the current position , given the control input u. It uses three independent Gaussian distributions to model noise in each motion component.
 
 .. code-block:: python
 
@@ -98,7 +95,7 @@ The odometry motion model computes the probability that the robot transitioned f
 
 ### Prediction Step
 
-The prediction step loops over all prior grid cells with significant belief (> 0.0001) and spreads that belief across reachable cells using the odometry motion model. Beliefs are normalized afterward to prevent underflow.
+The prediction step loops over all prior grid cells with significant belief and spreads that belief across reachable cells using the odometry motion model. Beliefs are normalized afterward to prevent underflow.
 
 .. code-block:: python
 
