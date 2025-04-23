@@ -204,11 +204,11 @@ Each run of the simulation shows, the ground truth trajectoy(green), the estimat
     :gutter: 2
 
     .. grid-item::
-        .. image:: l9_1.png
+        .. image:: images/l10_1.png
             :width: 100%
 
     .. grid-item::
-        .. image:: l9_2.png
+        .. image:: images/l10_2.png
             :width: 100%
 
 Tables
