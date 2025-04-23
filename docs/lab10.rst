@@ -182,33 +182,20 @@ Simulation Results
 ------------------
 
 Each run of the simulation shows, the ground truth trajectoy(green), the estimated trajectory from belief(blue), and the odometry only trajectory(red. The brighter the cell, the higher the beleif is. Eventually the estimated belief converges to the ground truth after many iterations. 
+  
 
-
-.. grid:: 2
-   :gutter: 2          
-
-   .. grid-item::      
-
-      .. youtube:: EiUtU0LOFPY
-         :align: center
-
-   .. grid-item::
-
-      .. youtube:: js9-ycH-V54
+  .. youtube:: EiUtU0LOFPY
          :align: center
 
 
-.. grid:: 2
-    :gutter: 2
+  .. youtube:: js9-ycH-V54
+         :align: center
 
-    .. grid-item::
 
-        .. image:: images/l10_1.png
+ .. image:: images/l10_1.png
             :width: 100%
 
-    .. grid-item::
-
-        .. image:: images/l10_2.png
+ .. image:: images/l10_2.png
             :width: 100%
 
 Tables
@@ -225,4 +212,4 @@ The Bayes filter significantly improves localization performance compared to dea
 Lab 10 References
 -----------------
 
-Thanks to the Fast Robots TAs, especially Mikayla Lahr whose webpage I took heavily inspiration from and constantly cross checked. I looked at Aravind Ramaswami's page for referencing his table and Aidan McNay's page odom_motion_model() function . I also copied the way Aidan dispalyed his videos's and images side by side because I liked it.
+Thanks to the Fast Robots TAs, especially Mikayla Lahr whose webpage I took heavily inspiration from and constantly cross checked. I looked at Aravind Ramaswami's page for referencing his table and Aidan McNay's page odom_motion_model() function.
