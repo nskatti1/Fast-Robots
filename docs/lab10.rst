@@ -298,4 +298,4 @@ The Bayes filter significantly improves localization performance compared to dea
 Lab 10 References
 -----------------
 
-Thanks to the Fast Robots TAs, especially Mikayla Lahr whose webpage I took heavily inspiration from and constantly cross checked. I looked at Aravind Ramaswami's page for referencing his table and Aidan McNay's page odom_motion_model() function.
+Thanks to the Fast Robots TAs, especially Mikayla Lahr whose webpage I took heavily inspiration from and constantly cross checked. I looked at Aravind Ramaswami's page for referencing his table and Aidan McNay's page odom_motion_model() function. ChatGPT was used to parse my data and put it in restructured text for the webpage.
