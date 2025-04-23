@@ -1,31 +1,33 @@
-Lab 10: Grid Localization Using Bayes Filter
-============================================
+Lab 10: Localization (sim)
+====================================================
 
 .. contents::
    :depth: 2
    :local:
 
-Objective
----------
 
-The objective of this lab was to implement grid localization using the Bayes Filter in a simulation. Localization determines where the robot is within its environment. In each iteration of the Bayes filter, two key steps are performed: the prediction step and the update step. The prediction step incorporates the odometry data and the noise from the actuator to predict the robot's new location. In the update step, it uses range measuremeants(the robot rotates in 360 degrees) to refine the prediction and reduce uncertainty. After each update, the belief over the robot's location is refined, and the cell with the highest belief is interpreted as the most likely orientation.
+Introduction
+------------
 
-Grid Setup
-----------
+In this lab, I implemented a Bayes Filter in simulation to accurately localize a robot’s pose within a discretized 3D grid, even in the presence of actuator and sensor noise. This foundational work provides the building blocks for future real-world localization tasks.
 
-The robot's world is discretized into a 3D grid defined as:
+The Bayes Filter maintains a belief distribution over the robot’s possible states *(x, y, θ)*, which is updated at each time step through two key steps:
 
-- **x** ∈ [-1.6764, +1.9812) meters or [-5.5, 6.5) feet  
-- **y** ∈ [-1.3716, +1.3716) meters or [-4.5, 4.5) feet  
-- **θ** ∈ [-180°, 180°)  
+- **Prediction Step** – Uses odometry input and a motion model (with noise) to estimate where the robot likely moved.
+- **Update Step** – Refines this estimate by comparing actual range sensor readings to expected ones at each grid cell, reducing uncertainty.
 
-The grid resolution is:
+These steps follow the Bayes update equations:
 
-- Δx = 0.3048 m  
-- Δy = 0.3048 m  
-- Δθ = 20°  
+.. math::
 
-This results in a grid of size **(12 × 9 × 18) = 1,944 cells**. The robot is initialized with a point-mass belief at the cell corresponding to (x=0, y=0, θ=0).
+   \overline{bel}(x_t) = \sum_{x_{t-1}} p(x_t \mid u_t, x_{t-1}) \cdot bel(x_{t-1})
+
+.. math::
+
+   bel(x_t) = \eta \cdot p(z_t \mid x_t) \cdot \overline{bel}(x_t)
+
+At every iteration, the robot performs a 360° rotation to collect distance measurements, which are used to update the belief. The grid cell with the highest resulting belief represents the most probable pose of the robot at that time step.
+
 
 Lab Tasks
 ---------
@@ -168,10 +170,49 @@ The update step multiplies the predicted belief (`bel_bar`) by the sensor likeli
    
        loc.bel = loc.bel / np.sum(loc.bel)
 
+
+Running the Filter
+------------------
+
+Each loop iteration performs the following:
+
+.. code-block:: python
+
+   for t in range(traj.total_time_steps):
+       ...
+       prediction_step(...)
+       get_observation_data()
+       update_step(...)
+
+The belief is updated using motion and sensor data, and printed for debugging/visualization.
+
 Simulation Results
 ------------------
 
 Each run of the simulation shows, the ground truth trajectoy(green), the estimated trajectory from belief(blue), and the odometry only trajectory(red. The brighter the cell, the higher the beleif is. Eventually the estimated belief converges to the ground truth after many iterations. 
+
+
+.. grid:: 2
+    :gutter: 2
+
+    .. grid-item::
+        .. youtube::
+            :align: center
+
+    .. grid-item::
+        .. youtube:: 
+            :align: center
+
+.. grid:: 2
+    :gutter: 2
+
+    .. grid-item::
+        .. image:: 
+            :width: 100%
+
+    .. grid-item::
+        .. image::
+            :width: 100%
 
 
 ### Run 1 Results
@@ -206,12 +247,14 @@ Video Demo
    :height: 315
 
 
-Conclusion
+Reflection
 ----------
 
-// The Bayes Filter successfully localized the robot by combining a probabilistic motion model with a Gaussian sensor model. Performance was accurate in structured environments and degraded slightly with ambiguous sensor readings or symmetric features. Belief maps and trajectories confirmed the method's validity, and the filter’s performance improved as more measurements were incorporated.
+The Bayes filter significantly improves localization performance compared to dead reckoning (odometry only). Somethings I noticed were that errors were lowest when the robot was near walls or corners (distinct sensor readings), and highest in open or symmetric spaces. Optimizations like skipping low-probability cells and vectorized operations allowed it to run in reasonable time.
+
+
 
 Lab 10 References
 -----------------
 
-Thanks to the Fast Robots TAs, especially Mikayla Lahr whose webpage I took heavily inspiration from and constantly cross checked.
+Thanks to the Fast Robots TAs, especially Mikayla Lahr whose webpage I took heavily inspiration from and constantly cross checked. I looked at Aravind Ramaswami's page for referencing his table. And Aidan McNay's page for a little bit of his code. I also copied the way Aidan dispalyed his videos's and images side by side because I liked it.
