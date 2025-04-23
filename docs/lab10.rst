@@ -55,7 +55,6 @@ The `compute_control` function calculates the robot’s relative motion from one
        x_comp = cur_pose[0] - prev_pose[0]
        theta_prev = prev_pose[2]
        theta_cur = cur_pose[2]
-       
        delta_1 = np.degrees(math.atan2(y_comp, x_comp)) - theta_prev
        delta_rot_1 = mapper.normalize_angle(delta_1)
        delta_trans = math.sqrt(y_comp**2 + x_comp**2)
@@ -85,7 +84,6 @@ The odometry motion model computes the probability that the robot transitioned f
    
    
        actual_u = compute_control(cur_pose, prev_pose)
-   
        prob_rot_1 = loc.gaussian(actual_u[0] - u[0], 0, loc.odom_rot_sigma)
        prob_trans = loc.gaussian(actual_u[1] - u[1], 0, loc.odom_trans_sigma)
        prob_rot_2 = loc.gaussian(actual_u[2] - u[2], 0, loc.odom_rot_sigma)
@@ -115,7 +113,6 @@ The prediction step loops over all prior grid cells with significant belief and 
        for ( x_idx, y_idx, a_idx ) in np.ndindex( loc.bel_bar.shape ):
          x_t = loc.mapper.from_map( x_idx, y_idx, a_idx )
          new_bel_bar = 0
-   
          for ( x_idx_t_1, y_idx_t_1, a_idx_t_1 ), bel in np.ndenumerate( loc.bel ):
              if bel > 0.001:
                  x_t_1 = loc.mapper.from_map( x_idx_t_1, y_idx_t_1, a_idx_t_1 )
@@ -142,7 +139,6 @@ Each observation consists of 18 distance readings. For each grid cell, the expec
            [ndarray]: Returns a 1D array of size 18 (=loc.OBS_PER_CELL) with the likelihoods of each individual sensor measurement
        """
        prob_array = np.zeros(18)
-       
        for i in range(18):
            prob_array[i] = loc.gaussian(loc.obs_range_data[i], obs[i], loc.sensor_sigma)
        
@@ -164,7 +160,6 @@ The update step multiplies the predicted belief (`bel_bar`) by the sensor likeli
                for a in range(mapper.MAX_CELLS_A):
                    prob = np.prod(sensor_model(mapper.get_views(x,y,a)))
                    loc.bel[x,y,a] = loc.bel_bar[x,y,a] * prob
-   
        loc.bel = loc.bel / np.sum(loc.bel)
 
 
