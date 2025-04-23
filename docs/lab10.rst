@@ -181,8 +181,18 @@ The belief is updated using motion and sensor data, and printed for debugging/vi
 Simulation Results
 ------------------
 
-Each run of the simulation shows, the ground truth trajectoy(green), the estimated trajectory from belief(blue), and the odometry only trajectory(red. The brighter the cell, the higher the beleif is. Eventually the estimated belief converges to the ground truth after many iterations. 
-  
+Each run of the simulation shows, the ground truth trajectoy(green), the estimated trajectory from belief(blue), and the odometry only trajectory(red). The brighter the cell, the higher the belief is. Eventually the estimated belief converges to the ground truth after many iterations.
+
+Here are photos from trial 1 and trial 2
+
+ .. image:: images/l10_1.png
+            :width: 30%
+
+ .. image:: images/l10_2.png
+            :width: 30%
+
+
+Here are videos of trial 1 and trial 2
 
   .. youtube:: EiUtU0LOFPY
          :align: center
@@ -191,12 +201,6 @@ Each run of the simulation shows, the ground truth trajectoy(green), the estimat
   .. youtube:: js9-ycH-V54
          :align: center
 
-
- .. image:: images/l10_1.png
-            :width: 100%
-
- .. image:: images/l10_2.png
-            :width: 100%
 
 Tables
 ----------
