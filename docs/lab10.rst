@@ -186,10 +186,10 @@ Each run of the simulation shows, the ground truth trajectoy(green), the estimat
 Here are photos from trial 1 and trial 2
 
  .. image:: images/l10_1.png
-            :width: 30%
+            :width: 60%
 
  .. image:: images/l10_2.png
-            :width: 30%
+            :width: 60%
 
 
 Here are videos of trial 1 and trial 2
