@@ -190,25 +190,29 @@ Each run of the simulation shows, the ground truth trajectoy(green), the estimat
 
 
 .. grid:: 2
-    :gutter: 2
+   :gutter: 2          
 
-    .. grid-item::
-        .. youtube:: EiUtU0LOFPY
-            :align: center
+   .. grid-item::      
 
-    .. grid-item::
-        .. youtube:: js9-ycH-V54
-            :align: center
+      .. youtube:: EiUtU0LOFPY
+         :align: center
+
+   .. grid-item::
+
+      .. youtube:: js9-ycH-V54
+         :align: center
 
 
 .. grid:: 2
     :gutter: 2
 
     .. grid-item::
+
         .. image:: images/l10_1.png
             :width: 100%
 
     .. grid-item::
+
         .. image:: images/l10_2.png
             :width: 100%
 
