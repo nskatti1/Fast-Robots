@@ -32,7 +32,7 @@ Lab Tasks
 Implementation
 --------------
 
- Compute Control
+Compute Control
 
 The `compute_control` function calculates the robot’s relative motion from one pose to the next. It returns `rotation1` (initial rotation), `translation` (straight-line distancee, and `rotation2` (final rotation).
 
@@ -62,7 +62,7 @@ The `compute_control` function calculates the robot’s relative motion from one
    
        return delta_rot_1, delta_trans, delta_rot_2
 
- Odometry Motion Model
+Odometry Motion Model
 
 The odometry motion model computes the probability that the robot transitioned from the  previous position the current position , given the control input u. It uses three independent Gaussian distributions to model noise in each motion component.
 
@@ -91,7 +91,7 @@ The odometry motion model computes the probability that the robot transitioned f
        return prob
 
 
- Prediction Step
+Prediction Step
 
 The prediction step loops over all prior grid cells with significant belief and spreads that belief across reachable cells using the odometry motion model. Beliefs are normalized afterward to prevent underflow.
 
@@ -122,7 +122,7 @@ The prediction step loops over all prior grid cells with significant belief and 
                  )
          loc.bel_bar[x_idx][y_idx][a_idx] = new_bel_bar
 
- Sensor Model
+Sensor Model
 
 Each observation consists of 18 distance readings. For each grid cell, the expected readings are compared to the observed readings using a Gaussian likelihood function (per reading), assuming conditional independence.
 
@@ -144,7 +144,8 @@ Each observation consists of 18 distance readings. For each grid cell, the expec
        
        return prob_array
 
- Update Step
+
+Update Step
 
 The update step multiplies the predicted belief (`bel_bar`) by the sensor likelihood and normalizes the result.
 
