@@ -237,14 +237,8 @@ Each run of the simulation shows, the ground truth trajectoy(green), the estimat
 // - **Localization was robust despite early odometry drift.**  
 // - Final belief track aligned well with the true path.
 
-Video Demo
+Tables
 ----------
-
-.. raw:: html
-
-.. youtube:: 
-   :width: 560
-   :height: 315
 
 
 Reflection
