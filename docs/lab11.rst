@@ -112,7 +112,7 @@ This worked in conjunction with the python below.
 .. code-block:: python
 
    async def perform_observation_loop(self):
-       self.ble.send_command(CMD.RUN_TURN, "")
+       self.ble.send_command(CMD.START, "")
        is_done = False
 
        def done_handler(_uid, response):
@@ -139,7 +139,7 @@ This worked in conjunction with the python below.
                is_done = True
 
        self.ble.start_notify(ble.uuid['RX_STRING'], data_handler)
-       self.ble.send_command(CMD.GET_ANGLE_DATA, "")
+       self.ble.send_command(CMD.ANGLE_DATA, "")
        while not is_done:
            await asyncio.sleep(1)
        self.ble.stop_notify(ble.uuid['RX_STRING'])
