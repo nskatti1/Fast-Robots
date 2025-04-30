@@ -188,19 +188,19 @@ The table below shows the comparison between ground truth and estimated belief (
 
 Plots of the belief distribution and scan data are shown below for each location.
 
-.. image:: imgs/l11_1_plot.png
+.. image:: images/l11_1_plot.png
    :width: 70%
    :align: center
 
-.. image:: imgs/l11_2_plot.png
+.. image:: images/l11_2_plot.png
    :width: 70%
    :align: center
 
-.. image:: imgs/l11_3_plot.png
+.. image:: images/l11_3_plot.png
    :width: 70%
    :align: center
 
-.. image:: imgs/l11_4_plot.png
+.. image:: images/l11_4_plot.png
    :width: 70%
    :align: center
 
