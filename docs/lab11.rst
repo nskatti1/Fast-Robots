@@ -1,4 +1,4 @@
-Lab 11: Real-World Localization
+Lab 11: Localization (real)
 ===============================
 
 Objective
@@ -6,10 +6,6 @@ Objective
 
 The goal of this lab was to localize the real robot using the Bayes filter's update step only based on a full 360° sweep of ToF sensor readings.
 Unlike in the simulation lab last time, no prediction step was performed due to noisy motion.
-
-
-Marked Locations
-----------------
 
 The robot was placed at the following known poses:
 
