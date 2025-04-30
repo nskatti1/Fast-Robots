@@ -218,5 +218,5 @@ It was able to maintain accuracy and robustness in localization.
 Acknowledgments
 ---------------
 
-Thank you to the Fast Robots Staff for providing files. I took heavy inspiration from my friend Aidan McNay. Thanks Aidan.
+Thank you to the Fast Robots Staff for providing the jupyter notebook files. It was useful. I took heavy inspiration from my friend Aidan McNay. Thanks Aidan.
 
