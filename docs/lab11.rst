@@ -215,6 +215,8 @@ Reflection
 This lab really demonstrated how cool the bayes filter is in the real world. The bayes filter was successfully able to infer pose from sensor readings despite sensor noise, imperfect rotation, and discretization. 
 It was able to maintain accuracy and robustness in localization.
 
+My computer graphics glitched a lot, but I was glad I was able to get plots.
+
 Acknowledgments
 ---------------
 
