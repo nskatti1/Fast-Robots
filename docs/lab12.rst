@@ -24,7 +24,7 @@ To achieve this behavior, we implemented the following steps:
 4. **Flip Code**: Implement commands to physically flip the robot up.
 5. **State Machine Integration**: Combine all components to operate in sync at the correct moments.
 
-Realistically, the actual order was Anunth making the controller, I integrating the state machine so it could go into a wheelie , and then Aravind implementing doing the math so he could implement a Kalman Filter for this system.
+Realistically, the actual order was Anunth making the controller, I integrating the state machine so it could go into a wheelie , and then Aravind doing the math so he could implement a Kalman Filter for this system.
 
 System Modeling
 ---------------
