@@ -131,7 +131,7 @@ Solving for :math:`\ddot{\theta}`:
 
    \ddot{\theta}
    = \frac{(M + m)\,m\,g\,l}{D}\,\theta
-   \;-\;\frac{m\,l}{r\,D}\,\tau,
+     - \frac{m\,l}{r\,D}\,\tau, 
    \quad
    D = (M + m)\,(m\,l^2 + I) - (m\,l)^2.
 
