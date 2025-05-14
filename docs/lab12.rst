@@ -101,8 +101,9 @@ Define the Lagrangian :math:`\mathcal{L} = T - V`, and apply Euler–Lagrange:
 
 .. math::
 
-   \frac{d}{dt}\Bigl(\pdv{\mathcal{L}}{\dot{q}_i}\Bigr)
-   - \pdv{\mathcal{L}}{q_i} = Q_i,
+   \frac{d}{dt}\Bigl(\frac{\partial \mathcal{L}}{\partial \dot{q}_i}\Bigr)
+   - \frac{\partial \mathcal{L}}{\partial q_i}
+   = Q_i,
 
 with :math:`Q_x = \tau/r` and :math:`Q_\theta = 0`. The resulting nonlinear equations are:
 
