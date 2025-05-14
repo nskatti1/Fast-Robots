@@ -200,11 +200,11 @@ Before we even added the check for 30 degrees, I wrote a function `DELAY_STOP`. 
 
 This is a blooper of it going a little more than 360 degrees, but I wanted to post it anyways because I thought it was cool
 
-https://youtube.com/shorts/dXLb_GY04mo
+.. youtube:: dXLb_GY04mo
 
 Afterwards, we decided to try breaking the motors by supplying a pwm of 255 to each pin in between going forwards and backwards so it would coast before going in reverse. It successfully flipped. Here is a video.
 
-https://youtube.com/shorts/OkugFH8zUUg
+.. youtube:: OkugFH8zUUg
 
 **This is NOT what I wanted**
 
@@ -277,7 +277,6 @@ Because of this, I rewrote the code and turned `DELAY_STOP` into a flag and cons
 
 These flags are used in the state machine below.
 
-
 .. code-block:: cpp
 
    if (flip_active){
@@ -333,7 +332,6 @@ These flags are used in the state machine below.
         }
 
       }
-
 
 
 Here is a diagram to make it easier to illustrate.
