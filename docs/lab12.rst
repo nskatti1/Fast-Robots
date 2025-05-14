@@ -170,7 +170,7 @@ with
 
 By checking the ranks of the controllability and observability matrices, we verified we could place the poles of the closed-loop system anywhere in the complex plane in discrete time. This is critical when designing a system that must recover quickly from disturbances and avoid oscillation. Both were full-rank, so the system is controllable and observable.(Shout out to ECE 6210 Linear Systems!)
 
-Controller
+Controller Math
 ----------
 
 Discrete‐Time Design
@@ -205,11 +205,8 @@ Control Law
 
 where :math:`\hat{\mathbf{x}}_r` is provided by the Kalman filter.
 
-Filter
+Filter Math
 ------
-
-Kalman Filter Design
-^^^^^^^^^^^^^^^^^^^^
 
 Process and measurement noise covariances (:math:`Q`, :math:`R`) are chosen based on sensor specs. The discrete‐time filter equations:
 
@@ -222,7 +219,7 @@ Process and measurement noise covariances (:math:`Q`, :math:`R`) are chosen base
      + K_f\,(y_k - C\,\hat{\mathbf{x}}_{k|k-1}),  \\
    P_{k|k} = (I - K_f\,C)\,P_{k|k-1}.
 
-Controller Design
+Controller Implementation
 -----------------
 
 We used MATLAB's `place()` with poles at 0.87 and 0.75. This gave:
@@ -270,7 +267,7 @@ The controller is very robust. Here is a video demonstration.
 
 .. youtube:: QNDRmvV0Qqg
 
-Kalman Filter
+Kalman Filter Implementation
 -------------
 
 We adapted the Kalman Filter from Lab 7 with updated A, B, C matrices. Process noise :math:`Q` was larger than measurement noise :math:`R` because we trusted the IMU more than the model.
