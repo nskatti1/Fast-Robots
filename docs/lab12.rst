@@ -34,9 +34,9 @@ We model our inverted RC car as a wheel of mass :math:`M` with an attached rigid
 .. math::
    :nowrap:
 
-   q = \begin{bmatrix} x \\ \theta \end{bmatrix},
+   {q}= \begin{bmatrix} x \\ \theta \end{bmatrix},
    \quad
-   x = \text{horizontal axle position},
+   {x}= \text{horizontal axle position},
    \quad
    \theta = \text{pendulum angle from vertical (CCW positive)}.
 
