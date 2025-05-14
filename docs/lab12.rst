@@ -147,6 +147,10 @@ Here is the code for the controller function:
      command_motors(u_abs, u_abs, dir_r, dir_l, 30);
    }
 
+The controller is very robust. Here is a video demonstration. 
+
+.. youtube:: QNDRmvV0Qqg
+
 Kalman Filter
 -------------
 
@@ -336,10 +340,17 @@ These flags are used in the state machine below.
 
 Here is a diagram to make it easier to illustrate.
 
+
+.. figure:: fast_robots_final_plots/statemachine.jpg
+   :align: center
+   :figwidth: 70%
+
+
+
 Controller and Kalman Filter Integration
 ----------------------------------------
 
-Once the car has flipped up past a certain angle (approximately 30°), the system engages closed-loop control. This control process uses the Kalman filter to estimate the state (angle and angular velocity) and P controller to stabilize the system.
+Once the car has flipped up past a certain angle (approximately 30°), the system engages closed-loop control. This control process uses the Kalman filter to estimate the state (angle and angular velocity) and P controller to stabilize the system. You can see that the functions implemented above are called when the flags are set.
 
 .. code-block:: cpp
 
@@ -352,7 +363,7 @@ Once the car has flipped up past a certain angle (approximately 30°), the syste
      }
    }
 
-Activation occurs when:
+Activation occurs when: 
 
 .. code-block:: cpp
 
@@ -368,6 +379,10 @@ Activation occurs when:
 Results
 -------
 
+**Example 1**
+
+.. youtube:: FdCVPBQw5X0
+
 .. figure:: fast_robots_final_plots/orientation_t2.png
    :align: center
    :figwidth: 70%
@@ -380,6 +395,10 @@ Results
 
 
 
+**Example 2**
+
+.. youtube:: WKfhfwsL8mU
+
 .. figure:: fast_robots_final_plots/orientation_t3.png
    :align: center
    :figwidth: 70%
@@ -391,9 +410,14 @@ Results
    :figwidth: 70%
 
 
-.. youtube:: FdCVPBQw5X0
-.. youtube:: WKfhfwsL8mU
-.. youtube:: QNDRmvV0Qqg
+
+
+
+Extra Videos 
+-------------
+
+More videos to show of it working. Note that in the first video, the `STOP_CONTROLLER` function that stops the controller was called, so the car falls over.
+
 .. youtube:: 5S5q_3baU6M
 .. youtube:: QAAuYinvvWo
 .. youtube:: szbKXjP3W68
