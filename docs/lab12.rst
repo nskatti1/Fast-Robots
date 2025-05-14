@@ -32,11 +32,10 @@ State Machine Model
 We model our inverted RC car as a wheel of mass :math:`M` with an attached rigid rod (chassis) of mass :math:`m` and length :math:`l`. The wheel can roll horizontally without slipping, and the rod pivots about the wheel axle. We choose the generalized coordinates:
 
 .. math::
-   :nowrap:
 
-   {q}= \begin{bmatrix} x \\ \theta \end{bmatrix},
+   q= \begin{bmatrix} x \\ \theta \end{bmatrix},
    \quad
-   {x}= \text{horizontal axle position},
+   x= \text{horizontal axle position},
    \quad
    \theta = \text{pendulum angle from vertical (CCW positive)}.
 
@@ -74,7 +73,6 @@ Kinetic and Potential Energy
 The total kinetic energy :math:`T` is:
 
 .. math::
-   :nowrap:
 
    T = \tfrac12 M \dot{x}^2
      + \tfrac12 m \bigl(\dot{x}_{\mathrm{rod}}^2 + \dot{y}_{\mathrm{rod}}^2\bigr)
