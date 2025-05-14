@@ -34,7 +34,7 @@ We model our inverted RC car as a wheel of mass :math:`M` with an attached rigid
 .. math::
    :nowrap:
 
-   \mathbf{q} = \begin{bmatrix} x \\ \theta \end{bmatrix},
+   q = \begin{bmatrix} x \\ \theta \end{bmatrix},
    \quad
    x = \text{horizontal axle position},
    \quad
@@ -45,7 +45,7 @@ The full state vector, including velocities, is:
 .. math::
    :nowrap:
 
-   \mathbf{x} = \begin{bmatrix} x & \dot{x} & \theta & \dot{\theta} \end{bmatrix}^T,
+   x = \begin{bmatrix} x & \dot{x} & \theta & \dot{\theta} \end{bmatrix}^T,
    \quad
    u = \tau,
 
