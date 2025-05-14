@@ -214,6 +214,15 @@ Afterwards, we decided to try breaking the motors by supplying a pwm of 255 to e
 
 If it flips, and lands back in its position, the controller would think that it is far from the target angle and then supply a large PWM signal. We had to write code that made it untrigger the controller if it detected that the  car was flat after the flip. 
 
+The code we added was this:
+
+..code-block:: cpp
+
+     if(abs(e)>70){
+       stop_motors();
+       return;
+     }
+
 Anyways now I needed to fine tune the values of how long it would be going forward and how long it would be going backwards. If I gave it too much acceleration for too long, it would flip over, and if I didn't give it enough time to go forward or reverse, the car wouldn't go up. 
 
 **My goal was to make the car go up**. 
@@ -282,6 +291,14 @@ Because of this, I rewrote the code and turned `DELAY_STOP` into a flag and cons
 These flags are used in the state machine below.
 
 .. code-block:: cpp
+
+   if (abs(DCM_yaw[w - 1]) < 60) {
+     start_O_controller = true;
+     start_IMU = true;
+     flip_active = false;
+     mu(0, 0) = DCM_yaw[w - 1];
+     mu(1, 0) = -omega[w - 1];
+   }
 
    if (flip_active){
         IMU_DMP_Yaw(); 
@@ -361,18 +378,6 @@ Once the car has flipped up past a certain angle (approximately 30°), the syste
        controller(mu(0, 0), 0, -mu(1, 0));
        KF_vals[w - 1] = mu(0, 0);
      }
-   }
-
-Activation occurs when: 
-
-.. code-block:: cpp
-
-   if (abs(DCM_yaw[w - 1]) < 60) {
-     start_O_controller = true;
-     start_IMU = true;
-     flip_active = false;
-     mu(0, 0) = DCM_yaw[w - 1];
-     mu(1, 0) = -omega[w - 1];
    }
 
 
