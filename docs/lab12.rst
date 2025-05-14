@@ -26,82 +26,200 @@ To achieve this behavior, we implemented the following steps:
 
 Realistically, the actual order was Anunth making the controller, I integrating the state machine so it could go into a wheelie , and then Aravind doing the math so he could implement a Kalman Filter for this system.
 
-System Modeling
----------------
+State Machine Model
+-------------------
 
-**Physical Model**
- 
-We modeled the car as a **wheel and inverted pendulum** system. The state vector:
+We model our inverted RC car as a wheel of mass :math:`M` with an attached rigid rod (chassis) of mass :math:`m` and length :math:`l`. The wheel can roll horizontally without slipping, and the rod pivots about the wheel axle. We choose the generalized coordinates:
+
+.. math::
+   :nowrap:
+
+   \mathbf{q} = \begin{bmatrix} x \\ \theta \end{bmatrix},
+   \quad
+   x = \text{horizontal axle position},
+   \quad
+   \theta = \text{pendulum angle from vertical (CCW positive)}.
+
+The full state vector, including velocities, is:
+
+.. math::
+   :nowrap:
+
+   \mathbf{x} = \begin{bmatrix} x & \dot{x} & \theta & \dot{\theta} \end{bmatrix}^T,
+   \quad
+   u = \tau,
+
+where :math:`\tau` is the torque applied by the motor to the wheel.
+
+Geometry and Velocities
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The rod’s center of mass lies at:
 
 .. math::
 
-   \mathbf{x} = \begin{bmatrix} x \\ \dot{x} \\ \theta \\ \dot{\theta} \end{bmatrix}
+   x_{\mathrm{rod}} = x + l \sin\theta,  \\
+   y_{\mathrm{rod}} = -\,l \cos\theta.
 
-Where :math:`x` is the axle position and :math:`\theta` is the angle of the pendulum from vertical.
-
-**Energy Expressions**
-
-Using Lagrangian mechanics:
+Differentiating, its linear velocities are:
 
 .. math::
 
-   T = \frac{1}{2} M \dot{x}^2 + \frac{1}{2} m (\dot{x}_{rod}^2 + \dot{y}_{rod}^2) + \frac{1}{2} I \dot{\theta}^2
+   \dot{x}_{\mathrm{rod}} = \dot{x} + l \cos\theta\,\dot{\theta},  \\
+   \dot{y}_{\mathrm{rod}} = l \sin\theta\,\dot{\theta}.
+
+Kinetic and Potential Energy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The total kinetic energy :math:`T` is:
+
+.. math::
+   :nowrap:
+
+   T = \tfrac12 M \dot{x}^2
+     + \tfrac12 m \bigl(\dot{x}_{\mathrm{rod}}^2 + \dot{y}_{\mathrm{rod}}^2\bigr)
+     + \tfrac12 I \dot{\theta}^2.
+
+Expanding:
 
 .. math::
 
-   V = -m g l \cos\theta
+   T = \tfrac12 (M + m)\dot{x}^2
+     + m\,l \cos\theta\,\dot{x}\,\dot{\theta}
+     + \tfrac12 (m\,l^2 + I)\dot{\theta}^2.
 
-Lagrangian:
-
-.. math::
-
-   L = T - V
-
-**Euler-Lagrange Equations**
-
-We applied:
+The potential energy :math:`V` (measured from upright) is:
 
 .. math::
 
-   \frac{d}{dt}\left(\frac{\partial L}{\partial \dot{q}_i}\right) - \frac{\partial L}{\partial q_i} = Q_i
+   V = -\,m g l \cos\theta.
 
-For :math:`x` and :math:`\theta`, yielding coupled nonlinear equations.
+Equations of Motion
+^^^^^^^^^^^^^^^^^^^^
 
-**Linearization**
-
-We applied small-angle approximations:
-
-.. math::
-
-   \sin\theta \approx \theta, \quad \cos\theta \approx 1
-
-Which allowed us to derive a linear state-space model:
+Define the Lagrangian :math:`\mathcal{L} = T - V`, and apply Euler–Lagrange:
 
 .. math::
 
-   \dot{\mathbf{x}} = A \mathbf{x} + B u
+   \frac{d}{dt}\Bigl(\pdv{\mathcal{L}}{\dot{q}_i}\Bigr)
+   - \pdv{\mathcal{L}}{q_i} = Q_i,
 
-With:
-
-.. math::
-
-   A = \begin{bmatrix} 0 & 1 \\ \alpha_1 & 0 \end{bmatrix}, \quad
-   B = \begin{bmatrix} 0 \\ -\alpha_2 \end{bmatrix}
-
-Where:
+with :math:`Q_x = \tau/r` and :math:`Q_\theta = 0`. The resulting nonlinear equations are:
 
 .. math::
 
-   \alpha_1 = \frac{(M + m)mgl}{D}, \quad \alpha_2 = \frac{ml}{rD}
+   (M + m)\,\ddot{x} + m\,l\cos\theta\,\ddot{\theta}
+     - m\,l\sin\theta\,\dot{\theta}^2 = \frac{\tau}{r},  \\
+   (m\,l^2 + I)\,\ddot{\theta} + m\,l\cos\theta\,\ddot{x}
+     = m\,g\,l\,\sin\theta.
 
-**Controllability and Observability**
+Linearization About Upright
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For small :math:`\theta`, use :math:`\sin\theta \approx \theta`, :math:`\cos\theta \approx 1`, and neglect :math:`\dot{\theta}^2`. Substitution yields:
 
 .. math::
 
-   \mathcal{C} = [B, AB], \quad \mathcal{O} = \begin{bmatrix} C \\ CA \end{bmatrix}
+   (M + m)\,\ddot{x} + m\,l\,\ddot{\theta} = \frac{\tau}{r},  \\
+   (m\,l^2 + I)\,\ddot{\theta} + m\,l\,\ddot{x} = m\,g\,l\,\theta.
 
+Solving for :math:`\ddot{\theta}`:
 
-By checking the ranks of the controllability and observability matrices, we verified we could place the poles of the closed-loop system anywhere in the complex plane in discrete time. This is critical when designing a system that must recover quickly from disturbances and avoid oscillation. Both were full-rank, so the system is controllable and observable.
+.. math::
+   :nowrap:
+
+   \ddot{\theta}
+   = \frac{(M + m)\,m\,g\,l}{D}\,\theta
+   \;-\;\frac{m\,l}{r\,D}\,\tau,
+   \quad
+   D = (M + m)\,(m\,l^2 + I) - (m\,l)^2.
+
+State‐Space Representation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Let
+
+.. math::
+   :nowrap:
+
+   \mathbf{x}_r = \begin{bmatrix}\theta \\ \dot{\theta}\end{bmatrix},
+   \quad
+   u = \tau.
+
+Then
+
+.. math::
+
+   \dot{\mathbf{x}}_r = A\,\mathbf{x}_r + B\,u,
+   \quad
+   y = C\,\mathbf{x}_r,
+
+with
+
+.. math::
+
+   A = \begin{bmatrix}
+         0 & 1 \\[4pt]
+         \tfrac{(M + m)m g l}{D} & 0
+       \end{bmatrix},
+   \quad
+   B = \begin{bmatrix}0 \\[4pt] -\tfrac{m l}{r D}\end{bmatrix},
+   \quad
+   C = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}.
+
+By checking the ranks of the controllability and observability matrices, we verified we could place the poles of the closed-loop system anywhere in the complex plane in discrete time. This is critical when designing a system that must recover quickly from disturbances and avoid oscillation. Both were full-rank, so the system is controllable and observable.(Shout out to ECE 6210 Linear Systems!)
+
+Controller
+----------
+
+Discrete‐Time Design
+^^^^^^^^^^^^^^^^^^^^
+
+Define parameters:
+
+.. math::
+
+   \alpha_1 = \frac{(M + m)\,m\,g\,l}{D},
+   \quad
+   \alpha_2 = \frac{m\,l}{r\,D}.
+
+With :math:`M+m \approx 1.0\,\mathrm{kg}`, :math:`l=0.127\,\mathrm{m}`, :math:`r=0.0635\,\mathrm{m}`:
+
+.. math::
+
+   \alpha_1 \approx 6.21,\quad \alpha_2 \approx 50.
+
+Using Euler discretization (:math:`\Delta t = 0.017\,\mathrm{s}`) and pole placement at 0.87 and 0.75, we obtain:
+
+.. math::
+
+   K = \begin{bmatrix}0.04 & 0.002\end{bmatrix}.
+
+Control Law
+^^^^^^^^^^^^
+
+.. math::
+
+   u = -\,K\,\hat{\mathbf{x}}_r,
+
+where :math:`\hat{\mathbf{x}}_r` is provided by the Kalman filter.
+
+Filter
+------
+
+Kalman Filter Design
+^^^^^^^^^^^^^^^^^^^^
+
+Process and measurement noise covariances (:math:`Q`, :math:`R`) are chosen based on sensor specs. The discrete‐time filter equations:
+
+.. math::
+
+   \hat{\mathbf{x}}_{k|k-1} = A_d\,\hat{\mathbf{x}}_{k-1|k-1} + B_d\,u_{k-1},  \\
+   P_{k|k-1} = A_d\,P_{k-1|k-1}\,A_d^T + Q,  \\[6pt]
+   K_f = P_{k|k-1}\,C^T\,(C\,P_{k|k-1}\,C^T + R)^{-1},  \\[6pt]
+   \hat{\mathbf{x}}_{k|k} = \hat{\mathbf{x}}_{k|k-1}
+     + K_f\,(y_k - C\,\hat{\mathbf{x}}_{k|k-1}),  \\
+   P_{k|k} = (I - K_f\,C)\,P_{k|k-1}.
 
 Controller Design
 -----------------
