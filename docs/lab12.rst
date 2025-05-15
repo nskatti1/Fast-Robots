@@ -319,7 +319,7 @@ We used MATLAB's `place()` with poles at 0.87 and 0.75. This gave:
 
    K = [0.04, 0.002]
 
-The system was discretized using Euler method with dt = 0.017. Controller was implemented as:
+The system was discretized using Euler method with dt = 0.017 because that was the average value we got between time stamps. Controller was implemented as:
 
 .. code-block:: cpp
 
