@@ -26,197 +26,289 @@ To achieve this behavior, we implemented the following steps:
 
 Realistically, the actual order was Anunth making the controller, I integrating the state machine so it could go into a wheelie , and then Aravind doing the math so he could implement a Kalman Filter for this system.
 
-State Machine Model
--------------------
 
-We model our inverted RC car as a wheel of mass :math:`M` with an attached rigid rod (chassis) of mass :math:`m` and length :math:`l`. The wheel can roll horizontally without slipping, and the rod pivots about the wheel axle. We choose the generalized coordinates:
+System Modeling and Dynamics
+------------------------------------
 
-.. math::
-    :nowrap:
-
-   q= \begin{bmatrix} x \\ \theta \end{bmatrix},
-   \quad
-   x= \text{horizontal axle position},
-   \quad
-   \theta = \text{pendulum angle from vertical (CCW positive)}.
-
-The full state vector, including velocities, is:
+We represent the inverted RC car as a single rolling wheel of mass M with a rigid rod (the chassis) of mass m and length l attached at the axle. The wheel translates along the horizontal x‑axis without slipping, while the rod pivots about the axle.  Our state includes the position and angle of the system, and the control input \(u\) is the motor torque \(\tau\).
 
 .. math::
    :nowrap:
 
-   x = \begin{bmatrix} x & \dot{x} & \theta & \dot{\theta} \end{bmatrix}^T,
-   \quad
-   u = \tau,
+   \mathbf{q} = \begin{bmatrix}
+     x \\ \dot{x} \\ \theta \\ \dot{\theta}
+   \end{bmatrix}, \quad u = \tau
 
-where :math:`\tau` is the torque applied by the motor to the wheel.
+We also introduce the following parameters:
+
+* \(x\): horizontal coordinate of the wheel axle  
+* \(\theta\): rod angle from vertical (counterclockwise positive)  
+* \(l\): distance from axle to the rod’s center of mass  
+* \(I\): moment of inertia of the rod about its center  
+* \(M\): combined mass of the wheel and motor assembly  
+* \(m\): mass of the rod plus any front-wheel mass  
+
+The derivation that follows uses Lagrangian mechanics to obtain the equations of motion.
 
 Geometry and Velocities
-^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^
 
-The rod’s center of mass lies at:
-
-.. math::
-
-   x_{\mathrm{rod}} = x + l \sin\theta,  \\
-   y_{\mathrm{rod}} = -\,l \cos\theta.
-
-Differentiating, its linear velocities are:
-
-.. math::
-
-   \dot{x}_{\mathrm{rod}} = \dot{x} + l \cos\theta\,\dot{\theta},  \\
-   \dot{y}_{\mathrm{rod}} = l \sin\theta\,\dot{\theta}.
-
-Kinetic and Potential Energy
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The total kinetic energy :math:`T` is:
-
-.. math::
-
-   T = \tfrac12 M \dot{x}^2
-     + \tfrac12 m \bigl(\dot{x}_{\mathrm{rod}}^2 + \dot{y}_{\mathrm{rod}}^2\bigr)
-     + \tfrac12 I \dot{\theta}^2.
-
-Expanding:
-
-.. math::
-
-   T = \tfrac12 (M + m)\dot{x}^2
-     + m\,l \cos\theta\,\dot{x}\,\dot{\theta}
-     + \tfrac12 (m\,l^2 + I)\dot{\theta}^2.
-
-The potential energy :math:`V` (measured from upright) is:
-
-.. math::
-
-   V = -\,m g l \cos\theta.
-
-Equations of Motion
-^^^^^^^^^^^^^^^^^^^^
-
-Define the Lagrangian :math:`\mathcal{L} = T - V`, and apply Euler–Lagrange:
-
-.. math::
-
-   \frac{d}{dt}\Bigl(\frac{\partial \mathcal{L}}{\partial \dot{q}_i}\Bigr)
-   - \frac{\partial \mathcal{L}}{\partial q_i}
-   = Q_i,
-
-with :math:`Q_x = \tau/r` and :math:`Q_\theta = 0`. The resulting nonlinear equations are:
-
-.. math::
-
-   (M + m)\,\ddot{x} + m\,l\cos\theta\,\ddot{\theta}
-     - m\,l\sin\theta\,\dot{\theta}^2 = \frac{\tau}{r},  \\
-   (m\,l^2 + I)\,\ddot{\theta} + m\,l\cos\theta\,\ddot{x}
-     = m\,g\,l\,\sin\theta.
-
-Linearization About Upright
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-For small :math:`\theta`, use :math:`\sin\theta \approx \theta`, :math:`\cos\theta \approx 1`, and neglect :math:`\dot{\theta}^2`. Substitution yields:
-
-.. math::
-
-   (M + m)\,\ddot{x} + m\,l\,\ddot{\theta} = \frac{\tau}{r},  \\
-   (m\,l^2 + I)\,\ddot{\theta} + m\,l\,\ddot{x} = m\,g\,l\,\theta.
-
-Solving for :math:`\ddot{\theta}`:
+The center of mass of the rod has coordinates:
 
 .. math::
    :nowrap:
+
+   x_{\mathrm{rod}} = x + l \sin\theta, \quad
+   y_{\mathrm{rod}} = -\,l \cos\theta
+
+Differentiating with respect to time gives:
+
+.. math::
+   :nowrap:
+
+   \dot{x}_{\mathrm{rod}} = \dot{x} + l \cos\theta\,\dot{\theta},
+   \quad
+   \dot{y}_{\mathrm{rod}} = l \sin\theta\,\dot{\theta}
+
+Kinetic and Potential Energy
+^^^^^^^^^^
+
+The wheel’s kinetic energy is
+
+.. math::
+
+   T_{\mathrm{wheel}} = \tfrac12\,M\,\dot{x}^{2}
+
+The rod’s kinetic energy comprises its translational and rotational parts:
+
+.. math::
+
+   T_{\mathrm{rod}}
+   = \tfrac12\,m\bigl(\dot{x}_{\mathrm{rod}}^{2} + \dot{y}_{\mathrm{rod}}^{2}\bigr)
+     + \tfrac12\,I\,\dot{\theta}^{2}
+
+Substituting the expressions above yields:
+
+.. math::
+
+   T_{\mathrm{rod}}
+   = \tfrac12\,m\bigl[(\dot{x} + l\cos\theta\,\dot{\theta})^{2}
+     + (l\sin\theta\,\dot{\theta})^{2}\bigr]
+     + \tfrac12\,I\,\dot{\theta}^{2}
+
+Combining wheel and rod energies gives the total kinetic energy:
+
+.. math::
+
+   T = \tfrac12\,(M + m)\,\dot{x}^{2}
+     + m\,l\,\cos\theta\,\dot{x}\,\dot{\theta}
+     + \tfrac12\,(m\,l^{2} + I)\,\dot{\theta}^{2}
+
+The potential energy of the rod (taking zero at axle height) is
+
+.. math::
+
+   V = -\,m\,g\,l\,\cos\theta
+
+Lagrangian
+^^^^^^^^^^
+
+The Lagrangian \(\mathcal{L} = T - V\) becomes
+
+.. math::
+
+   \mathcal{L}
+   = \tfrac12\,(M + m)\,\dot{x}^{2}
+     + m\,l\,\cos\theta\,\dot{x}\,\dot{\theta}
+     + \tfrac12\,(m\,l^{2} + I)\,\dot{\theta}^{2}
+     + m\,g\,l\,\cos\theta
+
+Euler–Lagrange Equations
+^^^^^^^^^^
+
+The general form is
+
+.. math::
+
+   \frac{d}{dt}\!\Bigl(\frac{\partial\mathcal{L}}{\partial\dot{q}_{i}}\Bigr)
+   - \frac{\partial\mathcal{L}}{\partial q_{i}}
+   = Q_{i}
+
+Here \(q_{i}\in\{x,\theta\}\) and the generalized forces are \(Q_{x}=\tau/r\), \(Q_{\theta}=0\).
+
+For \(x\):
+
+.. math::
+
+   \frac{d}{dt}\!\Bigl(\frac{\partial\mathcal{L}}{\partial\dot{x}}\Bigr)
+   - \frac{\partial\mathcal{L}}{\partial x}
+   = \frac{\tau}{r}
+   \;\Rightarrow\;
+   (M + m)\,\ddot{x}
+   + m\,l\,\cos\theta\,\ddot{\theta}
+   - m\,l\,\sin\theta\,\dot{\theta}^{2}
+   = \frac{\tau}{r}
+
+For \(\theta\):
+
+.. math::
+
+   \frac{d}{dt}\!\Bigl(\frac{\partial\mathcal{L}}{\partial\dot{\theta}}\Bigr)
+   - \frac{\partial\mathcal{L}}{\partial \theta}
+   = 0
+   \;\Rightarrow\;
+   (m\,l^{2} + I)\,\ddot{\theta}
+   + m\,l\,\cos\theta\,\ddot{x}
+   = m\,g\,l\,\sin\theta
+
+Nonlinear Equations of Motion
+^^^^^^^^^^
+Combining the two gives
+
+.. math::
+
+   (M + m)\,\ddot{x} + m\,l\,\cos\theta\,\ddot{\theta}
+   = \frac{\tau}{r} + m\,l\,\sin\theta\,\dot{\theta}^{2}
+
+.. math::
+
+   (m\,l^{2} + I)\,\ddot{\theta} + m\,l\,\cos\theta\,\ddot{x}
+   = m\,g\,l\,\sin\theta
+
+Linearization About the Upright Position
+^^^^^^^^^^
+
+For small \(\theta\) we approximate \(\sin\theta\approx\theta\), \(\cos\theta\approx1\), and neglect \(\dot{\theta}^{2}\).  The linearized form is
+
+.. math::
+
+   (M + m)\,\ddot{x} + m\,l\,\ddot{\theta} = \frac{\tau}{r}
+
+.. math::
+
+   (m\,l^{2} + I)\,\ddot{\theta} + m\,l\,\ddot{x} = m\,g\,l\,\theta
+
+Solving these yields
+
+.. math::
+
+   \ddot{x}
+   = \frac{1}{D}\Bigl((m\,l^{2} + I)\,\frac{\tau}{r}
+     - m^{2}\,g\,l^{2}\,\theta\Bigr),
+   \quad
+   \ddot{\theta}
+   = \frac{1}{D}\Bigl((M + m)\,m\,g\,l\,\theta
+     - m\,l\,\frac{\tau}{r}\Bigr)
+
+where
+
+.. math::
+
+   D = (M + m)\,(m\,l^{2} + I) - (m\,l)^{2}
+
+Reduced \(\theta\) Dynamics
+^^^^^^^^^^
+
+Focusing on the pendulum alone:
+
+.. math::
 
    \ddot{\theta}
    = \frac{(M + m)\,m\,g\,l}{D}\,\theta
-     - \frac{m\,l}{r\,D}\,\tau, 
-   \quad
-   D = (M + m)\,(m\,l^2 + I) - (m\,l)^2.
+     - \frac{m\,l}{r\,D}\,\tau
 
-State‐Space Representation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+State‑Space Representation
+^^^^^^^^^^
 
-Let
-
-.. math::
-   :nowrap:
-
-   \mathbf{x}_r = \begin{bmatrix}\theta \\ \dot{\theta}\end{bmatrix},
-   \quad
-   u = \tau.
-
-Then
+Define the reduced state
 
 .. math::
 
-   \dot{\mathbf{x}}_r = A\,\mathbf{x}_r + B\,u,
+   \mathbf{x}
+   = \begin{bmatrix}\theta \\ \dot{\theta}\end{bmatrix},
    \quad
-   y = C\,\mathbf{x}_r,
+   u = \tau
+
+so that
+
+.. math::
+
+   \dot{\mathbf{x}}
+   = \begin{bmatrix}\dot{\theta} \\ \ddot{\theta}\end{bmatrix}
+   = A\,\mathbf{x} + B\,u,
+   \quad
+   y = C\,\mathbf{x}
 
 with
 
 .. math::
 
-   A = \begin{bmatrix}
-         0 & 1 \\[4pt]
-         \tfrac{(M + m)m g l}{D} & 0
-       \end{bmatrix},
+   A = \begin{bmatrix}0 & 1 \\ \tfrac{(M + m)\,m\,g\,l}{D} & 0\end{bmatrix},
    \quad
-   B = \begin{bmatrix}0 \\[4pt] -\tfrac{m l}{r D}\end{bmatrix},
+   B = \begin{bmatrix}0 \\ -\tfrac{m\,l}{r\,D}\end{bmatrix},
    \quad
-   C = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}.
+   C = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}
 
-By checking the ranks of the controllability and observability matrices, we verified we could place the poles of the closed-loop system anywhere in the complex plane in discrete time. This is critical when designing a system that must recover quickly from disturbances and avoid oscillation. Both were full-rank, so the system is controllable and observable.(Shout out to ECE 6210 Linear Systems!)
+Controllability and Observability
+^^^^^^^^^^
 
-Controller Math
-----------
-
-Discrete‐Time Design
-^^^^^^^^^^^^^^^^^^^^
-
-Define parameters:
+The controllability matrix is
 
 .. math::
 
-   \alpha_1 = \frac{(M + m)\,m\,g\,l}{D},
+   \mathcal{C}
+   = \bigl[\,B\;\;A\,B\bigr]
+   = \begin{bmatrix}
+       0 & -\tfrac{m\,l}{r\,D} \\
+      -\tfrac{m\,l}{r\,D} & 0
+     \end{bmatrix}
+
+and the observability matrix is
+
+.. math::
+
+   \mathcal{O}
+   = \begin{bmatrix}C \\ C\,A\end{bmatrix}
+   = \begin{bmatrix}
+       0 & 1 \\
+       1 & 0 \\
+       0 & 0 \\
+       0 & 0
+     \end{bmatrix}
+
+Both have full rank (\(2\)), so the reduced system is controllable and observable.  We can therefore apply a Kalman filter to estimate \(\hat{\mathbf{x}}\) and a state‑feedback law
+
+.. math::
+   :nowrap:
+
+   u = -K\,\hat{\mathbf{x}}
+
+Discretization and Pole Placement
+^^^^^^^^^^
+
+Introduce
+
+.. math::
+
+   \alpha_{1} = \frac{(M + m)\,m\,g\,l}{D},
    \quad
-   \alpha_2 = \frac{m\,l}{r\,D}.
+   \alpha_{2} = \frac{m\,l}{r\,D}
 
-With :math:`M+m \approx 1.0\,\mathrm{kg}`, :math:`l=0.127\,\mathrm{m}`, :math:`r=0.0635\,\mathrm{m}`:
-
-.. math::
-
-   \alpha_1 \approx 6.21,\quad \alpha_2 \approx 50.
-
-Using Euler discretization (:math:`\Delta t = 0.017\,\mathrm{s}`) and pole placement at 0.87 and 0.75, we obtain:
+so that
 
 .. math::
 
-   K = \begin{bmatrix}0.04 & 0.002\end{bmatrix}.
+   A = \begin{bmatrix}0 & 1 \\ \alpha_{1} & 0\end{bmatrix},
+   \quad
+   B = \begin{bmatrix}0 \\ -\alpha_{2}\end{bmatrix}
 
-Control Law
-^^^^^^^^^^^^
-
-.. math::
-
-   u = -\,K\,\hat{\mathbf{x}}_r,
-
-where :math:`\hat{\mathbf{x}}_r` is provided by the Kalman filter.
-
-Filter Math
-------
-
-Process and measurement noise covariances (:math:`Q`, :math:`R`) are chosen based on sensor specs. The discrete‐time filter equations:
+For a sampling period \(\Delta t\) and desired pole locations, MATLAB’s place() yields
 
 .. math::
 
-   \hat{\mathbf{x}}_{k|k-1} = A_d\,\hat{\mathbf{x}}_{k-1|k-1} + B_d\,u_{k-1},  \\
-   P_{k|k-1} = A_d\,P_{k-1|k-1}\,A_d^T + Q,  \\[6pt]
-   K_f = P_{k|k-1}\,C^T\,(C\,P_{k|k-1}\,C^T + R)^{-1},  \\[6pt]
-   \hat{\mathbf{x}}_{k|k} = \hat{\mathbf{x}}_{k|k-1}
-     + K_f\,(y_k - C\,\hat{\mathbf{x}}_{k|k-1}),  \\
-   P_{k|k} = (I - K_f\,C)\,P_{k|k-1}.
+   K = \begin{bmatrix}2.29 & 0.34\end{bmatrix}
+
+These gains assume \(\theta\) is in radians; multiply by \(\pi/180\) if your controller uses degrees.
 
 Controller Implementation
 -----------------
@@ -495,8 +587,13 @@ Once the car has flipped up past a certain angle (approximately 30°), the syste
      }
    }
 
+Data Logging
+-------------
+As you can see in the State Machine, we appended the pwm signal values to an array and that we did the same in the controller as well with imu data.
+We also appended values in from the imu and sent it back.
 
-Results
+
+Results 
 -------
 
 **Example 1**
