@@ -179,8 +179,7 @@ Combining the two gives
 
 Linearization About the Upright Position
 ^^^^^^^^^^
-
-For small \(\theta\) we approximate \(\sin\theta\approx\theta\), \(\cos\theta\approx1\), and neglect \(\dot{\theta}^{2}\).  The linearized form is
+For small :math:`\theta` we use   :math:`\sin\theta\approx\theta`,  :math:`\cos\theta\approx1`,  and neglect :math:`\dot\theta^2`.  The linearized form is
 
 .. math::
 
