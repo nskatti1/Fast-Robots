@@ -197,7 +197,7 @@ Solving these yields
    \ddot{x}
    = \frac{1}{D}\Bigl((m\,l^{2} + I)\,\frac{\tau}{r}
      - m^{2}\,g\,l^{2}\,\theta\Bigr),
-   \quad
+   \quadu
    \ddot{\theta}
    = \frac{1}{D}\Bigl((M + m)\,m\,g\,l\,\theta
      - m\,l\,\frac{\tau}{r}\Bigr)
@@ -283,7 +283,8 @@ Both have full rank (\(2\)), so the reduced system is controllable and observabl
 .. math::
    :nowrap:
 
-   u = -K\,\hat{\mathbf{x}}
+   
+   u = K \hat{\mathbf{x}}\_r,
 
 Discretization and Pole Placement
 ^^^^^^^^^^
