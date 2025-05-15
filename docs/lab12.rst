@@ -32,6 +32,7 @@ State Machine Model
 We model our inverted RC car as a wheel of mass :math:`M` with an attached rigid rod (chassis) of mass :math:`m` and length :math:`l`. The wheel can roll horizontally without slipping, and the rod pivots about the wheel axle. We choose the generalized coordinates:
 
 .. math::
+    :nowrap:
 
    q= \begin{bmatrix} x \\ \theta \end{bmatrix},
    \quad
