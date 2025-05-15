@@ -66,9 +66,12 @@ Differentiating with respect to time gives:
 .. math::
    :nowrap:
 
-   \dot{x}_{\mathrm{rod}} = \dot{x} + l \cos\theta\,\dot{\theta},
-   \quad
-   \dot{y}_{\mathrm{rod}} = l \sin\theta\,\dot{\theta}
+   \begin{aligned}
+     \dot{x}_{\mathrm{rod}}
+       &= \dot{x} + l \cos\theta\,\dot{\theta},\\
+     \dot{y}_{\mathrm{rod}}
+       &= l \sin\theta\,\dot{\theta}.
+   \end{aligned}
 
 Kinetic and Potential Energy
 ^^^^^^^^^^
