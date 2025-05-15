@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 7: Kalman Filter &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 8: Stunts!" href="../lab8/" />
+    <link rel="prev" title="Lab 6: Orientation Control" href="../lab6/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 7: Kalman Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lab">Lab</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#estimating-drag-and-momentum">Estimating Drag and Momentum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kalman-filter-initialization-python">Kalman Filter Initialization (Python)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementing-and-testing-kf-in-jupyter">Implementing and Testing KF in Jupyter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kalman-filter-on-the-robot">Kalman Filter on the Robot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 7: Kalman Filter</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab7.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-7-kalman-filter">
+<h1>Lab 7: Kalman Filter<a class="headerlink" href="#lab-7-kalman-filter" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#lab" id="id1">Lab</a></p>
+<ul>
+<li><p><a class="reference internal" href="#estimating-drag-and-momentum" id="id2">Estimating Drag and Momentum</a></p></li>
+<li><p><a class="reference internal" href="#kalman-filter-initialization-python" id="id3">Kalman Filter Initialization (Python)</a></p></li>
+<li><p><a class="reference internal" href="#implementing-and-testing-kf-in-jupyter" id="id4">Implementing and Testing KF in Jupyter</a></p></li>
+<li><p><a class="reference internal" href="#kalman-filter-on-the-robot" id="id5">Kalman Filter on the Robot</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reflection" id="id6">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgements" id="id7">Acknowledgements</a></p></li>
+</ul>
+</nav>
+<section id="lab">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Lab</a><a class="headerlink" href="#lab" title="Link to this heading"></a></h2>
+<section id="estimating-drag-and-momentum">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">Estimating Drag and Momentum</a><a class="headerlink" href="#estimating-drag-and-momentum" title="Link to this heading"></a></h3>
+<p>I applied a constant PWM signal of 200 and recorded the TOF sensor data to estimate steady-state speed and rise time. I then fit an exponential model to the velocity curve to extract the drag coefficient and effective mass. I planed the car around 3 m away from a wall.</p>
+<p>Here are the plots of distance, computed velocity, and PWM:</p>
+<a class="reference internal image-reference" href="../_images/l7_tof_data.png"><img alt="TOF Data" class="align-center" src="../_images/l7_tof_data.png" style="width: 70%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l7_velocity.png"><img alt="Velocity Plot" class="align-center" src="../_images/l7_velocity.png" style="width: 70%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l7_pwm.png"><img alt="PWM" class="align-center" src="../_images/l7_pwm.png" style="width: 70%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l7_fitted.png"><img alt="Fit" class="align-center" src="../_images/l7_fitted.png" style="width: 70%;" />
+</a>
+<p>Steady-state velocity: <strong>3110 mm/s</strong>
+Rise time (90%): <strong>1.123 s</strong>
+Velocity at 90% rise time: <strong>2799 mm/s</strong></p>
+<p>Drag to Mass Coefficient Ratio: <strong>2.9×10 −7</strong></p>
+</section>
+<section id="kalman-filter-initialization-python">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Kalman Filter Initialization (Python)</a><a class="headerlink" href="#kalman-filter-initialization-python" title="Link to this heading"></a></h3>
+<p>I used the discretized state-space model as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">dt</span><span class="o">/</span><span class="n">m</span><span class="p">]]</span>
+
+<span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="n">dt</span><span class="o">/</span><span class="n">m</span><span class="p">]]</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>My initial state vector and covariances:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">distance</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">velocity</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="implementing-and-testing-kf-in-jupyter">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Implementing and Testing KF in Jupyter</a><a class="headerlink" href="#implementing-and-testing-kf-in-jupyter" title="Link to this heading"></a></h3>
+<p>I processed the collected lab data through the Kalman Filter, adjusting the process and sensor noise to improve accuracy.</p>
+<p>I had to adjust Q and R when tuning. Q represents process noise covariance, which essentially models uncertainty in the dynamics of the system like disturbances or forces that are not modeled. A larger Q assumes the model is less reliable and therefore trusts the measurements more. Because of this it is particularly sensitive to changes in measurements, which can have noise. On the other hand, a smaller Q puts more confidence in the model and makes the estimates smoother. However it may lag behind if the model is not accurate enough. R represents the measurement noise covaraince and it models how noisy or uncertain the sensor readingsg are. When R is larger, it means the filter thinks the measurements are noisy so it relies on the model and tries to smooth our any fluxuations in the measurement. Smaller R values cause the filter ot respond with aggression in response to measurement updates but as it becomes more responsive, it is more sensitive to noise. I needed to balance Q and R to tune my filter</p>
+<a class="reference internal image-reference" href="../_images/l7_tuned_kf.png"><img alt="Tuned KF Output" class="align-center" src="../_images/l7_tuned_kf.png" style="width: 70%;" />
+</a>
+<p>Here’s my KF code in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">kalman_filter</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># --- Prediction ---</span>
+    <span class="n">mu_p</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">u</span>
+    <span class="n">sigma_p</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">sigma</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">Sigma_u</span>
+
+    <span class="c1"># --- Update ---</span>
+    <span class="n">sigma_m</span> <span class="o">=</span> <span class="n">C</span> <span class="o">@</span> <span class="n">sigma_p</span> <span class="o">@</span> <span class="n">C</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">Sigma_z</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">sigma_p</span> <span class="o">@</span> <span class="n">C</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">sigma_m</span><span class="p">)</span>
+    <span class="n">y_m</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">C</span> <span class="o">@</span> <span class="n">mu_p</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_p</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">y_m</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">K</span> <span class="o">@</span> <span class="n">C</span><span class="p">)</span> <span class="o">@</span> <span class="n">sigma_p</span>
+
+    <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span>
+</pre></div>
+</div>
+<p>I initially had issues with my covariance matrices, but that was because I was calculating them wrong.</p>
+</section>
+<section id="kalman-filter-on-the-robot">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Kalman Filter on the Robot</a><a class="headerlink" href="#kalman-filter-on-the-robot" title="Link to this heading"></a></h3>
+<p>I implemented the Kalman Filter on the Artemis using the <cite>BasicLinearAlgebra</cite> library. I updated my <cite>run_pid_step</cite> function from Lab 5 to integrate the filtered distance into PID control.</p>
+<p>Here is a video of the robot stopping smoothly with the Kalman Filter:</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/xktYL56z2E4" style="border: 0; height: 345px; width: 560px">
+</iframe></div><p>Here is a plot of raw vs filtered sensor data:</p>
+<a class="reference internal image-reference" href="../_images/l7_kf_pid.png"><img alt="KF Robot Plot" class="align-center" src="../_images/l7_kf_pid.png" style="width: 70%;" />
+</a>
+<p>And here is a zoomed-in version:</p>
+<a class="reference internal image-reference" href="../_images/l7_kf_zoom.png"><img alt="KF Robot Zoomed" class="align-center" src="../_images/l7_kf_zoom.png" style="width: 70%;" />
+</a>
+<p>To implement the kalman filter within my pid loop, I wrote a function update_kalman which I called within my PID loop.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">update_kalman</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">measurement</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">control_input</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">control_input</span><span class="p">};</span>
+
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Sigma_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Sigma</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">A</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Sigma_u</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Sigma_pred</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">C</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Sigma_z</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Invert</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Sigma_pred</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">S</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">measurement</span><span class="p">};</span>
+<span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x_pred</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x_pred</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">                   </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
+<span class="w">  </span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Sigma_pred</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>This lab was pretty fun. There were times when my kalman filter was broken and I did not know what I was doing wrong, but I figured it out. Kalman filters are cool. I thought my robot was broken during lab 6, but it started functioning again. I think my battery had died during lab 6 because everything seemed to work this time.</p>
+</section>
+<section id="acknowledgements">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Acknowledgements</a><a class="headerlink" href="#acknowledgements" title="Link to this heading"></a></h2>
+<p>Thank you to the course staff for their help and my fellow classmates for using ed discussion. It has been very helpful.
+I used ChatGPT to help debug code and also create a barebones outline of this report before filling in all the details(it created the headers). It also helped debug my plots.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab6/" class="btn btn-neutral float-left" title="Lab 6: Orientation Control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab8/" class="btn btn-neutral float-right" title="Lab 8: Stunts!" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

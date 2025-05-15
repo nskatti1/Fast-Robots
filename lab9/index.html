@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 9: Mapping &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 10: Localization (sim)" href="../lab10/" />
+    <link rel="prev" title="Lab 8: Stunts!" href="../lab8/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 9: Mapping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#control-strategy-and-angle-wrapping">Control Strategy and Angle Wrapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dynamic-pid-tuning">Dynamic PID Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-handling">Command Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#measurement-logging">Measurement Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#robot-video">Robot Video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#post-processing">Post-Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#global-mapping">Global Mapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 9: Mapping</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab9.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-9-mapping">
+<h1>Lab 9: Mapping<a class="headerlink" href="#lab-9-mapping" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id3">Overview</a></p></li>
+<li><p><a class="reference internal" href="#control-strategy-and-angle-wrapping" id="id4">Control Strategy and Angle Wrapping</a></p></li>
+<li><p><a class="reference internal" href="#dynamic-pid-tuning" id="id5">Dynamic PID Tuning</a></p></li>
+<li><p><a class="reference internal" href="#command-handling" id="id6">Command Handling</a></p></li>
+<li><p><a class="reference internal" href="#measurement-logging" id="id7">Measurement Logging</a></p></li>
+<li><p><a class="reference internal" href="#robot-video" id="id8">Robot Video</a></p></li>
+<li><p><a class="reference internal" href="#post-processing" id="id9">Post-Processing</a></p></li>
+<li><p><a class="reference internal" href="#global-mapping" id="id10">Global Mapping</a></p></li>
+<li><p><a class="reference internal" href="#reflection" id="id11">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgements" id="id12">Acknowledgements</a></p></li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>This lab focuses on mapping a static environment by taking our robots and performing a 360° in-place rotation and collecting data from our time-of-flight (ToF) sensors.
+I used the orientation-based PID control approach via DMP yaw estimates from the ICM-20948 IMU with PID tuning.</p>
+<p>At each angular increment(for this lab it was 25°), the robot paused and collected several ToF readings. These readings were collected with timestamp and heading. After completing the scan, the data is transmitted over BLE for post-processing into a global map.</p>
+</section>
+<section id="control-strategy-and-angle-wrapping">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Control Strategy and Angle Wrapping</a><a class="headerlink" href="#control-strategy-and-angle-wrapping" title="Link to this heading"></a></h2>
+<p>To perform accurate rotations, the robot uses a PID loop around the DMP-derived yaw. The yaw is calculated from quaternions:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">siny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">qw</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">qz</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">qx</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">qy</span><span class="p">);</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">cosy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">2.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">qy</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">qy</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">qz</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">qz</span><span class="p">);</span>
+<span class="n">yaw_out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atan2</span><span class="p">(</span><span class="n">siny</span><span class="p">,</span><span class="w"> </span><span class="n">cosy</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">180.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">PI</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>To ensure the yaw does not wrap unexpectedly at ±180°, the PID loop applies this correction:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">yaw_error</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">180</span><span class="p">)</span><span class="w"> </span><span class="n">yaw_error</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">360</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">yaw_error</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">-180</span><span class="p">)</span><span class="w"> </span><span class="n">yaw_error</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">360</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This guaranteed smooth control and allows the robot to turn reliably to target angles.</p>
+</section>
+<section id="dynamic-pid-tuning">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Dynamic PID Tuning</a><a class="headerlink" href="#dynamic-pid-tuning" title="Link to this heading"></a></h2>
+<p>PID gains are adjusted dynamically based on yaw error:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="w"> </span><span class="n">abs_err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">error</span><span class="p">);</span>
+<span class="n">Kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">abs_err</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Kp</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.12</span><span class="p">)</span><span class="w"> </span><span class="n">Kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.12</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This approach avoided overshooting at small errors and ensured faster convergence at larger angles.</p>
+</section>
+<section id="command-handling">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Command Handling</a><a class="headerlink" href="#command-handling" title="Link to this heading"></a></h2>
+<p>The robot responds to BLE commands via a <cite>handleCommand()</cite> function that supports:</p>
+<ul class="simple">
+<li><p><cite>DO_MAPPING</cite> – perform a full 360° scan, collecting <cite>readings_per_angle</cite> samples at each <a href="#id1"><span class="problematic" id="id2">`</span></a>increment_deg`(I used 25 degrees for this lab as the instructions said so)</p></li>
+<li><p><cite>POINT_TO_ANGLE</cite> – rotate to a specified angle ( redoing lab 6 if you will)</p></li>
+<li><p><cite>STOP</cite> – interrupt ongoing behavior. (Sometimes when tuning, I really needed to stop, but also still exampline data).</p></li>
+</ul>
+<p>For mapping, the following loop is executed:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">360</span><span class="p">;</span><span class="w"> </span><span class="n">angle</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">increment_deg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">yaw_target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">pidYawControl</span><span class="p">(</span><span class="n">yaw_target</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">yaw_error</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">err_thresh</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">stopMotors</span><span class="p">();</span>
+<span class="w">  </span><span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">readings_per_angle</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tof</span><span class="p">.</span><span class="n">startRanging</span><span class="p">();</span>
+<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+<span class="w">    </span><span class="n">readDMPYaw</span><span class="p">(</span><span class="n">yaw</span><span class="p">);</span>
+<span class="w">    </span><span class="n">recordReading</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="measurement-logging">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Measurement Logging</a><a class="headerlink" href="#measurement-logging" title="Link to this heading"></a></h2>
+<p>Each reading consists of:</p>
+<ul class="simple">
+<li><p>Timestamp (miliseconds)</p></li>
+<li><p>Unwrapped yaw angle (in degrees)</p></li>
+<li><p>ToF distance (in mm)</p></li>
+</ul>
+<p>These are stored in arrays:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">yaw_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yaw</span><span class="p">;</span>
+<span class="n">tof_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist</span><span class="p">;</span>
+<span class="n">time_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>After the full scan, readings are sent back over BLE:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">tx_string</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">time_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">yaw_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">tof_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="n">tx_characteristic_string</span><span class="p">.</span><span class="n">writeValue</span><span class="p">(</span><span class="n">tx_string</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+</pre></div>
+</div>
+</section>
+<section id="robot-video">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Robot Video</a><a class="headerlink" href="#robot-video" title="Link to this heading"></a></h2>
+<p>Here is a video of the pid loop running with the data collection.</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/uPCNITwPCb0" style="border: 0; height: 345px; width: 560px">
+</iframe></div></section>
+<section id="post-processing">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Post-Processing</a><a class="headerlink" href="#post-processing" title="Link to this heading"></a></h2>
+<p>On the Python side, each BLE message is parsed into:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data_components</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span>
+<span class="n">yaw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data_components</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data_components</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+<p>Each point is translated into global coordinates from a known pose:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}x = x_0 + r \cos(\theta) \\
+y = y_0 - r \sin(\theta)\end{split}\]</div>
+<p>Polar and Cartesian plots are generated to verify individual scans.</p>
+<p>Here is the individual plots for (0,3)</p>
+<a class="reference internal image-reference" href="../_images/l9_polar1.png"><img alt="Polar Plot (0,3)" class="align-center" src="../_images/l9_polar1.png" style="width: 80%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l9_polartrace1.png"><img alt="Polar Plot with connectivity (0,3)" class="align-center" src="../_images/l9_polartrace1.png" style="width: 80%;" />
+</a>
+<p>Here is the individual plot for (5,3)</p>
+<a class="reference internal image-reference" href="../_images/l9_polar2.png"><img alt="Polar Plot (5,3)" class="align-center" src="../_images/l9_polar2.png" style="width: 80%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l9_polartrace2.png"><img alt="Polar Plot with connectivity (5,3)" class="align-center" src="../_images/l9_polartrace2.png" style="width: 80%;" />
+</a>
+<p>Here is the individual plot for (5,-3)</p>
+<a class="reference internal image-reference" href="../_images/l9_polar3.png"><img alt="Polar Plot (5,-3)" class="align-center" src="../_images/l9_polar3.png" style="width: 80%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l9_polartrace3.png"><img alt="Polar Plot with connectivity (5,-3)" class="align-center" src="../_images/l9_polartrace3.png" style="width: 80%;" />
+</a>
+<p>Here is the individual plot for (-3,2)</p>
+<a class="reference internal image-reference" href="../_images/l9_polar.png"><img alt="Polar Plot (-3,-2)" class="align-center" src="../_images/l9_polar.png" style="width: 80%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l9_polartrace.png"><img alt="Polar Plot with connectivity (-3,-2)" class="align-center" src="../_images/l9_polartrace.png" style="width: 80%;" />
+</a>
+<p>If you make plots that are scaled the same and place them on the map at their location, you can make a global map. See below.</p>
+</section>
+<section id="global-mapping">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Global Mapping</a><a class="headerlink" href="#global-mapping" title="Link to this heading"></a></h2>
+<p>The robot is placed at 4 distinct positions <cite>(-3, -2)</cite>, <cite>(0, 3)</cite>, <cite>(5, -3)</cite>, <cite>(5, 3)</cite>), and performs a full 360° scan at each. These are combined into a merged global map:</p>
+<a class="reference internal image-reference" href="../_images/l9_globalmap.png"><img alt="Merged Map" class="align-center" src="../_images/l9_globalmap.png" style="width: 80%;" />
+</a>
+<p>Here is the image with the lines drawn on top</p>
+<a class="reference internal image-reference" href="../_images/l9_globalwlines.png"><img alt="Merged Map with Lines" class="align-center" src="../_images/l9_globalwlines.png" style="width: 80%;" />
+</a>
+<p>Here are the segments in list form. They can be used next lab.</p>
+<p>List 1</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">-3</span><span class="p">,</span><span class="w"> </span><span class="mf">4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">6.2</span><span class="p">,</span><span class="w"> </span><span class="mf">4.5</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">-3</span><span class="p">,</span><span class="w"> </span><span class="mf">4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mi">-3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">6.2</span><span class="p">,</span><span class="w"> </span><span class="mf">4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">6.2</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">6.2</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">-2.2</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">-5.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">-5.5</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">-5.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-2.2</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">-5.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-4.5</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-2.2</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">-2.2</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">-5.5</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mi">-3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>List 2</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">4.2</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">2.2</span><span class="p">,</span><span class="w"> </span><span class="mf">1.8</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">4.2</span><span class="p">,</span><span class="w"> </span><span class="mf">1.8</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">2.2</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span><span class="w"> </span><span class="mf">1.8</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">4.2</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="p">(</span><span class="mf">4.2</span><span class="p">,</span><span class="w"> </span><span class="mf">1.8</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>I decided to use the DMP for this lab as I did not for lab 6 and getting it working and in a way redoing lab 6 was the hardest part. It was very rewarding once complete though.</p>
+</section>
+<section id="acknowledgements">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Acknowledgements</a><a class="headerlink" href="#acknowledgements" title="Link to this heading"></a></h2>
+<p>Thanks to the course staff for feedback on motor tuning.  Special thanks to Anunth Ramaswami for letting me film a video on his robot after I broke one of my motor drivers(I had to adjust my constant values). Thanks to Anunth Ramaswami, Aravind Ramaswami, and Aidan McNay for answering my random questions about the DMP. Chat GPT was used to generate a barebones template for this write up as usual, plot points, and also help debug my code sometimes</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab8/" class="btn btn-neutral float-left" title="Lab 8: Stunts!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab10/" class="btn btn-neutral float-right" title="Lab 10: Localization (sim)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

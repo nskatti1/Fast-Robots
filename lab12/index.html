@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 12: Self-Flippable Inverted Pendulum Car &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="prev" title="Lab 11: Localization (real)" href="../lab11/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 12: Self-Flippable Inverted Pendulum Car</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#approach">Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-modeling-and-dynamics">System Modeling and Dynamics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#geometry-and-velocities">Geometry and Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kinetic-and-potential-energy">Kinetic and Potential Energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lagrangian">Lagrangian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eulerlagrange-equations">Euler–Lagrange Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nonlinear-equations-of-motion">Nonlinear Equations of Motion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linearization-about-the-upright-position">Linearization About the Upright Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reduced-theta-dynamics">Reduced (theta) Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#statespace-representation">State‑Space Representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controllability-and-observability">Controllability and Observability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#discretization-and-pole-placement">Discretization and Pole Placement</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#controller-implementation">Controller Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#kalman-filter-implementation">Kalman Filter Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flip-state-machine">Flip State Machine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#controller-and-kalman-filter-integration">Controller and Kalman Filter Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-logging">Data Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extra-videos">Extra Videos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributions">Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 12: Self-Flippable Inverted Pendulum Car</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab12.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-12-self-flippable-inverted-pendulum-car">
+<h1>Lab 12: Self-Flippable Inverted Pendulum Car<a class="headerlink" href="#lab-12-self-flippable-inverted-pendulum-car" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id1">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#approach" id="id2">Approach</a></p></li>
+<li><p><a class="reference internal" href="#system-modeling-and-dynamics" id="id3">System Modeling and Dynamics</a></p>
+<ul>
+<li><p><a class="reference internal" href="#geometry-and-velocities" id="id4">Geometry and Velocities</a></p></li>
+<li><p><a class="reference internal" href="#kinetic-and-potential-energy" id="id5">Kinetic and Potential Energy</a></p></li>
+<li><p><a class="reference internal" href="#lagrangian" id="id6">Lagrangian</a></p></li>
+<li><p><a class="reference internal" href="#eulerlagrange-equations" id="id7">Euler–Lagrange Equations</a></p></li>
+<li><p><a class="reference internal" href="#nonlinear-equations-of-motion" id="id8">Nonlinear Equations of Motion</a></p></li>
+<li><p><a class="reference internal" href="#linearization-about-the-upright-position" id="id9">Linearization About the Upright Position</a></p></li>
+<li><p><a class="reference internal" href="#reduced-theta-dynamics" id="id10">Reduced (theta) Dynamics</a></p></li>
+<li><p><a class="reference internal" href="#statespace-representation" id="id11">State‑Space Representation</a></p></li>
+<li><p><a class="reference internal" href="#controllability-and-observability" id="id12">Controllability and Observability</a></p></li>
+<li><p><a class="reference internal" href="#discretization-and-pole-placement" id="id13">Discretization and Pole Placement</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#controller-implementation" id="id14">Controller Implementation</a></p></li>
+<li><p><a class="reference internal" href="#kalman-filter-implementation" id="id15">Kalman Filter Implementation</a></p></li>
+<li><p><a class="reference internal" href="#flip-state-machine" id="id16">Flip State Machine</a></p></li>
+<li><p><a class="reference internal" href="#controller-and-kalman-filter-integration" id="id17">Controller and Kalman Filter Integration</a></p></li>
+<li><p><a class="reference internal" href="#data-logging" id="id18">Data Logging</a></p></li>
+<li><p><a class="reference internal" href="#results" id="id19">Results</a></p></li>
+<li><p><a class="reference internal" href="#extra-videos" id="id20">Extra Videos</a></p></li>
+<li><p><a class="reference internal" href="#contributions" id="id21">Contributions</a></p></li>
+<li><p><a class="reference internal" href="#conclusion" id="id22">Conclusion</a></p></li>
+<li><p><a class="reference internal" href="#reflection" id="id23">Reflection</a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>When figuring out what to do for the final project. My dear classmate, Anunth Ramaswami, implemented a controller inspired by Stephen Wagner’s work the previous year. My original idea was to do the same and then get our cars to balance on top of each other, but my car would not cooperate, so we pivoted so that I would figure out how to make the car flip into the stunt. You can read  more about it below, but I essentially did this by implementing a state machine, and running trials to see the balance of how it could get into flip position. Then my classmate Aravind Ramaswami implemented a Kalman filter.</p>
+<p>Our project was to take  on the challenge of developing a car that not only balances like an inverted pendulum but also flips up autonomously from a horizontal position to achieve that balance. This required integrating nonlinear system modeling, control theory, real-time estimation, and embedded systems engineering into one complete design. Together we had a blast.</p>
+</section>
+<section id="approach">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Approach</a><a class="headerlink" href="#approach" title="Link to this heading"></a></h2>
+<p>To achieve this behavior, we implemented the following steps:</p>
+<ol class="arabic simple">
+<li><p><strong>System Modeling</strong>: Derive nonlinear equations using Lagrangian mechanics and linearize about an equilibrium point.</p></li>
+<li><p><strong>Kalman Filtering</strong>: Construct a discrete-time observer for estimating the system state.</p></li>
+<li><p><strong>State-Space Control</strong>: Use pole placement for state feedback stabilization.</p></li>
+<li><p><strong>Flip Code</strong>: Implement commands to physically flip the robot up.</p></li>
+<li><p><strong>State Machine Integration</strong>: Combine all components to operate in sync at the correct moments.</p></li>
+</ol>
+<p>Realistically, the actual order was Anunth making the controller, I integrating the state machine so it could go into a wheelie , and then Aravind doing the math so he could implement a Kalman Filter for this system.</p>
+</section>
+<section id="system-modeling-and-dynamics">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">System Modeling and Dynamics</a><a class="headerlink" href="#system-modeling-and-dynamics" title="Link to this heading"></a></h2>
+<p>We represent the inverted RC car as a single rolling wheel of mass M with a rigid rod (the chassis) of mass m and length l attached at the axle. The wheel translates along the horizontal x‑axis without slipping, while the rod pivots about the axle.  Our state includes the position and angle of the system, and the control input (u) is the motor torque (tau).</p>
+<div class="math notranslate nohighlight">
+ \mathbf{q} = \begin{bmatrix}
+   x \\ \dot{x} \\ \theta \\ \dot{\theta}
+ \end{bmatrix}, \quad u = \tau</div><p>We also introduce the following parameters:</p>
+<ul class="simple">
+<li><p>(x): horizontal coordinate of the wheel axle</p></li>
+<li><p>(theta): rod angle from vertical (counterclockwise positive)</p></li>
+<li><p>(l): distance from axle to the rod’s center of mass</p></li>
+<li><p>(I): moment of inertia of the rod about its center</p></li>
+<li><p>(M): combined mass of the wheel and motor assembly</p></li>
+<li><p>(m): mass of the rod plus any front-wheel mass</p></li>
+</ul>
+<p>The derivation that follows uses Lagrangian mechanics to obtain the equations of motion.</p>
+<section id="geometry-and-velocities">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Geometry and Velocities</a><a class="headerlink" href="#geometry-and-velocities" title="Link to this heading"></a></h3>
+<p>The center of mass of the rod has coordinates:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  x_{\mathrm{rod}} &amp;= x + l \sin\theta,\\
+  y_{\mathrm{rod}} &amp;= -\,l \cos\theta
+\end{aligned}\end{split}\]</div>
+<p>Differentiating with respect to time gives:</p>
+<div class="math notranslate nohighlight">
+\begin{aligned}
+  \dot{x}_{\mathrm{rod}}
+    &amp;= \dot{x} + l \cos\theta\,\dot{\theta},\\
+  \dot{y}_{\mathrm{rod}}
+    &amp;= l \sin\theta\,\dot{\theta}.
+\end{aligned}</div></section>
+<section id="kinetic-and-potential-energy">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Kinetic and Potential Energy</a><a class="headerlink" href="#kinetic-and-potential-energy" title="Link to this heading"></a></h3>
+<p>The wheel’s kinetic energy is</p>
+<div class="math notranslate nohighlight">
+\[T_{\mathrm{wheel}} = \tfrac12\,M\,\dot{x}^{2}\]</div>
+<p>The rod’s kinetic energy comprises its translational and rotational parts:</p>
+<div class="math notranslate nohighlight">
+\[T_{\mathrm{rod}}
+= \tfrac12\,m\bigl(\dot{x}_{\mathrm{rod}}^{2} + \dot{y}_{\mathrm{rod}}^{2}\bigr)
+  + \tfrac12\,I\,\dot{\theta}^{2}\]</div>
+<p>Substituting the expressions above yields:</p>
+<div class="math notranslate nohighlight">
+\[T_{\mathrm{rod}}
+= \tfrac12\,m\bigl[(\dot{x} + l\cos\theta\,\dot{\theta})^{2}
+  + (l\sin\theta\,\dot{\theta})^{2}\bigr]
+  + \tfrac12\,I\,\dot{\theta}^{2}\]</div>
+<p>Combining wheel and rod energies gives the total kinetic energy:</p>
+<div class="math notranslate nohighlight">
+\[T = \tfrac12\,(M + m)\,\dot{x}^{2}
+  + m\,l\,\cos\theta\,\dot{x}\,\dot{\theta}
+  + \tfrac12\,(m\,l^{2} + I)\,\dot{\theta}^{2}\]</div>
+<p>The potential energy of the rod (taking zero at axle height) is</p>
+<div class="math notranslate nohighlight">
+\[V = -\,m\,g\,l\,\cos\theta\]</div>
+</section>
+<section id="lagrangian">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Lagrangian</a><a class="headerlink" href="#lagrangian" title="Link to this heading"></a></h3>
+<p>The Lagrangian (mathcal{L} = T - V) becomes</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}
+= \tfrac12\,(M + m)\,\dot{x}^{2}
+  + m\,l\,\cos\theta\,\dot{x}\,\dot{\theta}
+  + \tfrac12\,(m\,l^{2} + I)\,\dot{\theta}^{2}
+  + m\,g\,l\,\cos\theta\]</div>
+</section>
+<section id="eulerlagrange-equations">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Euler–Lagrange Equations</a><a class="headerlink" href="#eulerlagrange-equations" title="Link to this heading"></a></h3>
+<p>The general form is</p>
+<div class="math notranslate nohighlight">
+\[\frac{d}{dt}\!\Bigl(\frac{\partial\mathcal{L}}{\partial\dot{q}_{i}}\Bigr)
+- \frac{\partial\mathcal{L}}{\partial q_{i}}
+= Q_{i}\]</div>
+<p>Here (q_{i}in{x,theta}) and the generalized forces are (Q_{x}=tau/r), (Q_{theta}=0).</p>
+<p>For (x):</p>
+<div class="math notranslate nohighlight">
+\[\frac{d}{dt}\!\Bigl(\frac{\partial\mathcal{L}}{\partial\dot{x}}\Bigr)
+- \frac{\partial\mathcal{L}}{\partial x}
+= \frac{\tau}{r}
+\;\Rightarrow\;
+(M + m)\,\ddot{x}
++ m\,l\,\cos\theta\,\ddot{\theta}
+- m\,l\,\sin\theta\,\dot{\theta}^{2}
+= \frac{\tau}{r}\]</div>
+<p>For (theta):</p>
+<div class="math notranslate nohighlight">
+\[\frac{d}{dt}\!\Bigl(\frac{\partial\mathcal{L}}{\partial\dot{\theta}}\Bigr)
+- \frac{\partial\mathcal{L}}{\partial \theta}
+= 0
+\;\Rightarrow\;
+(m\,l^{2} + I)\,\ddot{\theta}
++ m\,l\,\cos\theta\,\ddot{x}
+= m\,g\,l\,\sin\theta\]</div>
+</section>
+<section id="nonlinear-equations-of-motion">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Nonlinear Equations of Motion</a><a class="headerlink" href="#nonlinear-equations-of-motion" title="Link to this heading"></a></h3>
+<p>Combining the two gives</p>
+<div class="math notranslate nohighlight">
+\[(M + m)\,\ddot{x} + m\,l\,\cos\theta\,\ddot{\theta}
+= \frac{\tau}{r} + m\,l\,\sin\theta\,\dot{\theta}^{2}\]</div>
+<div class="math notranslate nohighlight">
+\[(m\,l^{2} + I)\,\ddot{\theta} + m\,l\,\cos\theta\,\ddot{x}
+= m\,g\,l\,\sin\theta\]</div>
+</section>
+<section id="linearization-about-the-upright-position">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Linearization About the Upright Position</a><a class="headerlink" href="#linearization-about-the-upright-position" title="Link to this heading"></a></h3>
+<p>For small <span class="math notranslate nohighlight">\(\theta\)</span> we use   <span class="math notranslate nohighlight">\(\sin\theta\approx\theta\)</span>,  <span class="math notranslate nohighlight">\(\cos\theta\approx1\)</span>,  and neglect <span class="math notranslate nohighlight">\(\dot\theta^2\)</span>.  The linearized form is</p>
+<div class="math notranslate nohighlight">
+\[(M + m)\,\ddot{x} + m\,l\,\ddot{\theta} = \frac{\tau}{r}\]</div>
+<div class="math notranslate nohighlight">
+\[(m\,l^{2} + I)\,\ddot{\theta} + m\,l\,\ddot{x} = m\,g\,l\,\theta\]</div>
+<p>Solving these yields</p>
+<div class="math notranslate nohighlight">
+\[\ddot{x}
+= \frac{1}{D}\Bigl((m\,l^{2} + I)\,\frac{\tau}{r}
+  - m^{2}\,g\,l^{2}\,\theta\Bigr),
+\quadu
+\ddot{\theta}
+= \frac{1}{D}\Bigl((M + m)\,m\,g\,l\,\theta
+  - m\,l\,\frac{\tau}{r}\Bigr)\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[D = (M + m)\,(m\,l^{2} + I) - (m\,l)^{2}\]</div>
+</section>
+<section id="reduced-theta-dynamics">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Reduced (theta) Dynamics</a><a class="headerlink" href="#reduced-theta-dynamics" title="Link to this heading"></a></h3>
+<p>Focusing on the pendulum alone:</p>
+<div class="math notranslate nohighlight">
+\[\ddot{\theta}
+= \frac{(M + m)\,m\,g\,l}{D}\,\theta
+  - \frac{m\,l}{r\,D}\,\tau\]</div>
+</section>
+<section id="statespace-representation">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">State‑Space Representation</a><a class="headerlink" href="#statespace-representation" title="Link to this heading"></a></h3>
+<p>Define the reduced state</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{x}
+= \begin{bmatrix}\theta \\ \dot{\theta}\end{bmatrix},
+\quad
+u = \tau\end{split}\]</div>
+<p>so that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\dot{\mathbf{x}}
+= \begin{bmatrix}\dot{\theta} \\ \ddot{\theta}\end{bmatrix}
+= A\,\mathbf{x} + B\,u,
+\quad
+y = C\,\mathbf{x}\end{split}\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \begin{bmatrix}0 &amp; 1 \\ \tfrac{(M + m)\,m\,g\,l}{D} &amp; 0\end{bmatrix},
+\quad
+B = \begin{bmatrix}0 \\ -\tfrac{m\,l}{r\,D}\end{bmatrix},
+\quad
+C = \begin{bmatrix}1 &amp; 0 \\ 0 &amp; 1\end{bmatrix}\end{split}\]</div>
+</section>
+<section id="controllability-and-observability">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Controllability and Observability</a><a class="headerlink" href="#controllability-and-observability" title="Link to this heading"></a></h3>
+<p>The controllability matrix is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{C}
+= \bigl[\,B\;\;A\,B\bigr]
+= \begin{bmatrix}
+    0 &amp; -\tfrac{m\,l}{r\,D} \\
+   -\tfrac{m\,l}{r\,D} &amp; 0
+  \end{bmatrix}\end{split}\]</div>
+<p>and the observability matrix is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{O}
+= \begin{bmatrix}C \\ C\,A\end{bmatrix}
+= \begin{bmatrix}
+    0 &amp; 1 \\
+    1 &amp; 0 \\
+    0 &amp; 0 \\
+    0 &amp; 0
+  \end{bmatrix}\end{split}\]</div>
+<p>Both have full rank ((2)), so the reduced system is controllable and observable.  We can therefore apply a Kalman filter to estimate (hat{mathbf{x}}) and a state‑feedback law</p>
+<div class="math notranslate nohighlight">
+u = K \hat{\mathbf{x}}\_r,</div></section>
+<section id="discretization-and-pole-placement">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Discretization and Pole Placement</a><a class="headerlink" href="#discretization-and-pole-placement" title="Link to this heading"></a></h3>
+<p>Introduce</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{1} = \frac{(M + m)\,m\,g\,l}{D},
+\quad
+\alpha_{2} = \frac{m\,l}{r\,D}\]</div>
+<p>so that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A = \begin{bmatrix}0 &amp; 1 \\ \alpha_{1} &amp; 0\end{bmatrix},
+\quad
+B = \begin{bmatrix}0 \\ -\alpha_{2}\end{bmatrix}\end{split}\]</div>
+<p>For a sampling period (Delta t) and desired pole locations, MATLAB’s place() yields</p>
+<div class="math notranslate nohighlight">
+\[K = \begin{bmatrix}2.29 &amp; 0.34\end{bmatrix}\]</div>
+<p>These gains assume (theta) is in radians; multiply by (pi/180) if your controller uses degrees.</p>
+</section>
+</section>
+<section id="controller-implementation">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Controller Implementation</a><a class="headerlink" href="#controller-implementation" title="Link to this heading"></a></h2>
+<p>We used MATLAB’s <cite>place()</cite> with poles at 0.87 and 0.75. This gave:</p>
+<div class="math notranslate nohighlight">
+\[K = [0.04, 0.002]\]</div>
+<p>The system was discretized using Euler method with dt = 0.017 because that was the average value we got between time stamps. Controller was implemented as:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k_theta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">theta</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k_omega</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">omega</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Here is the code for the controller function:</p>
+<blockquote>
+<div><p>Controller Function</p>
+</div></blockquote>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">controller</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">reading</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">desire</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">om</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.04</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.002</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reading</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">desire</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">d_term</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kd</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">om</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d_term</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">dir_r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">dir_l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">u</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">dir_r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dir_l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">u_abs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">u</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">70</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">stop_motors</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">command_motors</span><span class="p">(</span><span class="n">u_abs</span><span class="p">,</span><span class="w"> </span><span class="n">u_abs</span><span class="p">,</span><span class="w"> </span><span class="n">dir_r</span><span class="p">,</span><span class="w"> </span><span class="n">dir_l</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The controller is very robust. Here is a video demonstration.</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/QNDRmvV0Qqg" style="border: 0; height: 345px; width: 560px">
+</iframe></div></section>
+<section id="kalman-filter-implementation">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Kalman Filter Implementation</a><a class="headerlink" href="#kalman-filter-implementation" title="Link to this heading"></a></h2>
+<p>We adapted the Kalman Filter from Lab 7 with updated A, B, C matrices. Process noise <span class="math notranslate nohighlight">\(Q\)</span> was larger than measurement noise <span class="math notranslate nohighlight">\(R\)</span> because we trusted the IMU more than the model.</p>
+<p>The Kalman Filter allowed us to fuse two streams of sensor data: Angle from DMP(quaternion converted) and  Angular velocity from gyroscope. The angular velocity from gyroscope was fast but noisy and subject to bias and the angle from DMP was relatively smooth, but low-rate and could drift under dynamic conditions. The Kalman Filter was able to compensate for sensor limitations and provide reliable estimates of both angle and angular velocity, which fed into the controller.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">kalman_filter</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">y1_rad</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">y2_rad</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">u_rad</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y1_rad</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">3.14159</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">y2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y2_rad</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">3.14159</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u_rad</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">BLA</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Ad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="n">BLA</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Bd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="n">BLA</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mu_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ad</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mu</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Bd</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">;</span>
+<span class="w">  </span><span class="n">mu_p</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">mu_p</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">BLA</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sigma_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ad</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sigma</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">Ad</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sigma_u</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">new_measurement</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BLA</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sigma_m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sigma_p</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">C</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sigma_z</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Invert</span><span class="p">(</span><span class="n">sigma_m</span><span class="p">);</span>
+<span class="w">    </span><span class="n">BLA</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">kkf_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sigma_p</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">~</span><span class="n">C</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sigma_m</span><span class="p">);</span>
+<span class="w">    </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu_p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">kkf_gain</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">BLA</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="p">{</span><span class="w"> </span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">y2</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mu_p</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">kkf_gain</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sigma_p</span><span class="p">;</span>
+<span class="w">    </span><span class="n">new_measurement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu_p</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sigma_p</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">mu</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">180</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">3.14159</span><span class="p">;</span>
+<span class="w">  </span><span class="n">mu</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">180</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">3.14159</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="flip-state-machine">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">Flip State Machine</a><a class="headerlink" href="#flip-state-machine" title="Link to this heading"></a></h2>
+<p>We observed that the controller only activates well past <span class="math notranslate nohighlight">\(30^\circ\)</span>. Therefore, an open-loop sequence was implemented:</p>
+<ol class="arabic simple">
+<li><p><strong>FORWARD</strong> — 272 ms</p></li>
+<li><p><strong>BREAK</strong> — 100 ms</p></li>
+<li><p><strong>REVERSE</strong> — 270 ms</p></li>
+<li><p><strong>STOP</strong> — wait for controller handoff</p></li>
+</ol>
+<p>If the angle exceeds 30°, the controller and filter activate.</p>
+<p>Before we even added the check for 30 degrees, I wrote a function <cite>DELAY_STOP</cite>. It is not named the best, but it was called that because that because the first function I implemented made the car go for a certain length of delay, and then it would abruptly stop. This did not make the car flip; it just made it go forward and stop(go figure). So I implemented it going forward and then suddenly reversing. This made it drift beautifully. Sometimes it went 360 degrees and continued.</p>
+<p>This is a blooper of it going a little more than 360 degrees, but I wanted to post it anyways because I thought it was cool</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/dXLb_GY04mo" style="border: 0; height: 345px; width: 560px">
+</iframe></div><p>Afterwards, we decided to try breaking the motors by supplying a pwm of 255 to each pin in between going forwards and backwards so it would coast before going in reverse. It successfully flipped. Here is a video.</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/OkugFH8zUUg" style="border: 0; height: 345px; width: 560px">
+</iframe></div><p><strong>This is NOT what I wanted</strong></p>
+<p>If it flips, and lands back in its position, the controller would think that it is far from the target angle and then supply a large PWM signal. We had to write code that made it untrigger the controller if it detected that the  car was flat after the flip.</p>
+<p>The code we added was this:</p>
+<p>..code-block:: cpp</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if(abs(e)&gt;70){</dt><dd><p>stop_motors();
+return;</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>Anyways now I needed to fine tune the values of how long it would be going forward and how long it would be going backwards. If I gave it too much acceleration for too long, it would flip over, and if I didn’t give it enough time to go forward or reverse, the car wouldn’t go up.</p>
+<p><strong>My goal was to make the car go up</strong>.</p>
+<p>I eventually found that 272 ms for forward and 270 ms for backwards was perfect. Here is the code of the original sequence.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="no">DELAY_STOP</span><span class="p">:</span>
+<span class="p">{</span>
+
+<span class="w">    </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">delay_val</span><span class="p">);</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span>
+<span class="w">       </span><span class="k">return</span><span class="p">;</span>
+
+<span class="w">   </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">stop_val</span><span class="p">);</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span>
+<span class="w">       </span><span class="k">return</span><span class="p">;</span>
+<span class="w">   </span><span class="n">command_motors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+
+<span class="w">   </span><span class="n">delay</span><span class="p">(</span><span class="n">delay_val</span><span class="p">);</span>
+
+<span class="w">   </span><span class="n">break_motors</span><span class="p">();</span>
+
+<span class="w">   </span><span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+
+<span class="w">   </span><span class="n">command_motors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+
+<span class="w">   </span><span class="n">delay</span><span class="p">(</span><span class="n">stop_val</span><span class="p">);</span>
+<span class="w">   </span><span class="n">break_motors</span><span class="p">();</span>
+<span class="w">   </span><span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="w">   </span><span class="n">stop_motors</span><span class="p">();</span>
+
+
+<span class="w">  </span><span class="k">break</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>But now we wanted to implement this into Anunth’s code because his file had the controller implemented as function with flags in the main loop.
+Because of this, I rewrote the code and turned <cite>DELAY_STOP</cite> into a flag and constant setter function as you can see below.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="no">DELAY_STOP</span><span class="p">:</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">delay_val</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">stop_val</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">)</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flip_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flip0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flip1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flip2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flip3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flip_start_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+
+
+<span class="w">  </span><span class="k">break</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>These flags are used in the state machine below.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">DCM_yaw</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">start_O_controller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">start_IMU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flip_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="n">mu</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DCM_yaw</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="w">  </span><span class="n">mu</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">omega</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flip_active</span><span class="p">){</span>
+<span class="w">     </span><span class="n">IMU_DMP_Yaw</span><span class="p">();</span>
+<span class="w">     </span><span class="k">if</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">DCM_yaw</span><span class="p">[</span><span class="n">w</span><span class="mi">-1</span><span class="p">])</span><span class="o">&lt;</span><span class="mi">60</span><span class="p">){</span>
+<span class="w">       </span><span class="n">start_O_controller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">       </span><span class="n">start_IMU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">       </span><span class="n">flip_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">       </span><span class="n">mu</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DCM_yaw</span><span class="p">[</span><span class="n">w</span><span class="mi">-1</span><span class="p">];</span>
+<span class="w">       </span><span class="n">mu</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">omega</span><span class="p">[</span><span class="n">w</span><span class="mi">-1</span><span class="p">];</span>
+<span class="w">       </span><span class="c1">//Serial.println(&quot;Controller Activated&quot;);</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flip0</span><span class="p">){</span>
+<span class="w">       </span><span class="n">command_motors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">       </span><span class="n">u_O</span><span class="p">[</span><span class="n">w</span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">       </span><span class="c1">//Serial.println(&quot;state0&quot;);</span>
+<span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">flip_start_time</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">delay_val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="n">flip0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">         </span><span class="n">flip1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">         </span><span class="n">flip_start_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+<span class="w">         </span><span class="c1">//Serial.println(&quot;transition&quot;);</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flip1</span><span class="p">){</span>
+<span class="w">       </span><span class="c1">//Serial.println(&quot;state1&quot;);</span>
+<span class="w">       </span><span class="n">break_motors</span><span class="p">();</span>
+<span class="w">       </span><span class="n">u_O</span><span class="p">[</span><span class="n">w</span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">flip_start_time</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="n">flip1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">         </span><span class="n">flip2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">         </span><span class="n">flip_start_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+<span class="w">         </span><span class="c1">//Serial.println(&quot;transition&quot;);</span>
+<span class="w">       </span><span class="p">}</span>
+
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flip2</span><span class="p">){</span>
+<span class="w">       </span><span class="c1">//Serial.println(&quot;state2&quot;);</span>
+<span class="w">       </span><span class="n">command_motors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">       </span><span class="n">u_O</span><span class="p">[</span><span class="n">w</span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">flip_start_time</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">stop_val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="n">flip2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">         </span><span class="n">flip3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">         </span><span class="c1">//Serial.println(&quot;transition&quot;);</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flip3</span><span class="p">){</span>
+<span class="w">       </span><span class="n">stop_motors</span><span class="p">();</span>
+<span class="w">       </span><span class="c1">//Serial.println(&quot;state 3&quot;);</span>
+<span class="w">       </span><span class="n">flip3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">   </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Here is a diagram to make it easier to illustrate.</p>
+<figure class="align-center" style="width: 70%">
+<img alt="../_images/statemachine.jpg" src="../_images/statemachine.jpg" />
+</figure>
+</section>
+<section id="controller-and-kalman-filter-integration">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink">Controller and Kalman Filter Integration</a><a class="headerlink" href="#controller-and-kalman-filter-integration" title="Link to this heading"></a></h2>
+<p>Once the car has flipped up past a certain angle (approximately 30°), the system engages closed-loop control. This control process uses the Kalman filter to estimate the state (angle and angular velocity) and P controller to stabilize the system. You can see that the functions implemented above are called when the flags are set.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">start_IMU</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">start_O_controller</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IMU_DMP_Yaw</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">new_measurement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">kalman_filter</span><span class="p">(</span><span class="n">DCM_yaw</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="o">-</span><span class="n">omega</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">u_O</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">controller</span><span class="p">(</span><span class="n">mu</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">mu</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">    </span><span class="n">KF_vals</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="data-logging">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink">Data Logging</a><a class="headerlink" href="#data-logging" title="Link to this heading"></a></h2>
+<p>As you can see in the State Machine, we appended the pwm signal values to an array and that we did the same in the controller as well with imu data.
+We also appended values in from the imu and sent it back.</p>
+</section>
+<section id="results">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Results</a><a class="headerlink" href="#results" title="Link to this heading"></a></h2>
+<p><strong>Example 1</strong></p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/FdCVPBQw5X0" style="border: 0; height: 345px; width: 560px">
+</iframe></div><figure class="align-center" style="width: 70%">
+<img alt="../_images/orientation_t2.png" src="../_images/orientation_t2.png" />
+</figure>
+<figure class="align-center" style="width: 70%">
+<img alt="../_images/u_sig_t2.png" src="../_images/u_sig_t2.png" />
+</figure>
+<p><strong>Example 2</strong></p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/WKfhfwsL8mU" style="border: 0; height: 345px; width: 560px">
+</iframe></div><figure class="align-center" style="width: 70%">
+<img alt="../_images/orientation_t3.png" src="../_images/orientation_t3.png" />
+</figure>
+<figure class="align-center" style="width: 70%">
+<img alt="../_images/u_sig_t3.png" src="../_images/u_sig_t3.png" />
+</figure>
+</section>
+<section id="extra-videos">
+<h2><a class="toc-backref" href="#id20" role="doc-backlink">Extra Videos</a><a class="headerlink" href="#extra-videos" title="Link to this heading"></a></h2>
+<p>More videos to show of it working. Note that in the first video, the <cite>STOP_CONTROLLER</cite> function that stops the controller was called, so the car falls over.</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/5S5q_3baU6M" style="border: 0; height: 345px; width: 560px">
+</iframe></div><div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/QAAuYinvvWo" style="border: 0; height: 345px; width: 560px">
+</iframe></div><div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/szbKXjP3W68" style="border: 0; height: 345px; width: 560px">
+</iframe></div></section>
+<section id="contributions">
+<h2><a class="toc-backref" href="#id21" role="doc-backlink">Contributions</a><a class="headerlink" href="#contributions" title="Link to this heading"></a></h2>
+<p>Anunth implemented the controller, Aravind implement the Kalman filter, and I implemented the flip/state machine. We all tested together and worked on integrating the code and getting the logging system in place.</p>
+</section>
+<section id="conclusion">
+<h2><a class="toc-backref" href="#id22" role="doc-backlink">Conclusion</a><a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
+<p>This lab was a great way to bring together many concepts from the semester, modeling, control, estimation, and real-time programming into one creative robotics stunt. We’re proud to have achieved a self-flipping, self-balancing inverted pendulum car!</p>
+<p>This project offered a chance to blend theory and practice. We derived the equations of motion from first principles, implemented estimation and control in real-time on embedded hardware, and we tuned, tested, and debugged in a physical environment subject to noise, delays, and imperfect actuation. This is project represented a compelling demonstration of applying classroom concepts, and it was cool to finish off the semester with this. Balancing an inverted pendulum is a classic control problem because it involves stabilizing an unstable equilibrium point. In our case, the pendulum (the car’s chassis) starts flat on the ground and needs to flip up into a vertical pose before any feedback controller can even operate. While a PID controller sufficed for balancing a pendulum with access to accurate state measurements, we decided to implement  state estimation via a Kalman Filter due to noisy sensor readings and the lack of reliable angular velocity from just the DMP to make our design even better.</p>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id23" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>This was a cool project. It was a cool class. I will miss Cornell a lot.</p>
+<p>Shout out the Professor for being awesome and the TAs who were just as magnificent. To any future students of 4160, good luck - hope you enjoy the class as much as I did :)!!!!!!</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab11/" class="btn btn-neutral float-left" title="Lab 11: Localization (real)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

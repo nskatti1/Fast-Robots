@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 4: Motors and Open Loop Control &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 5: Linear PID control and Linear interpolation" href="../lab5/" />
+    <link rel="prev" title="Lab 3: TOF Sensor Integration and Performance Evaluation" href="../lab3/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 4: Motors and Open Loop Control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prelab">Prelab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab">Lab</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#motor-driver-setup-and-testing">Motor Driver Setup and Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#taking-the-car-apart-and-powering-the-motors">Taking the Car Apart and Powering the Motors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-car-and-testing-the-car">Installing the Car and Testing the Car</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 4: Motors and Open Loop Control</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab4.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-4-motors-and-open-loop-control">
+<h1>Lab 4: Motors and Open Loop Control<a class="headerlink" href="#lab-4-motors-and-open-loop-control" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#prelab" id="id1">Prelab</a></p></li>
+<li><p><a class="reference internal" href="#lab" id="id2">Lab</a></p>
+<ul>
+<li><p><a class="reference internal" href="#motor-driver-setup-and-testing" id="id3">Motor Driver Setup and Testing</a></p></li>
+<li><p><a class="reference internal" href="#taking-the-car-apart-and-powering-the-motors" id="id4">Taking the Car Apart and Powering the Motors</a></p></li>
+<li><p><a class="reference internal" href="#installing-the-car-and-testing-the-car" id="id5">Installing the Car and Testing the Car</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reflection" id="id6">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgements" id="id7">Acknowledgements</a></p></li>
+</ul>
+</nav>
+<section id="prelab">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Prelab</a><a class="headerlink" href="#prelab" title="Link to this heading"></a></h2>
+<p>Here is a diagram of my wiring for lab 4. I used analog pins A2 and A3 for one motor driver and analog pins A4 and A5 for the motor driver on the Artemis board. The ground pins below A2 and A4 grounded the motor drivers.</p>
+<a class="reference internal image-reference" href="../_images/l4_diagram.png"><img alt="Wiring Diagram" class="align-center" src="../_images/l4_diagram.png" style="width: 50%;" />
+</a>
+<p>I powered the motordriver/motors and the Artemis from separate batteries because one battery does not provide enough current for both the Artemis and the motors/motor drivers.</p>
+</section>
+<section id="lab">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Lab</a><a class="headerlink" href="#lab" title="Link to this heading"></a></h2>
+<section id="motor-driver-setup-and-testing">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Motor Driver Setup and Testing</a><a class="headerlink" href="#motor-driver-setup-and-testing" title="Link to this heading"></a></h3>
+<p>First thing I did was solder my motor controllers. I soldered them according to the wiring diagram above.  I couldn’t take a super clean photo of a spread layout because I soldered some wires short (the motor connectors to the artemis, so it fits in the car properly). It was hard to make it all look nice and spreadout like the diagram I made. Since I was not happy with any photo particularly more than the rest, I attached all of them here.</p>
+<table class="docutils align-center">
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../_images/l4_pic_1.jpg"><img alt="../_images/l4_pic_1.jpg" src="../_images/l4_pic_1.jpg" style="width: 100%;" />
+</a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/l4_pic_2.jpg"><img alt="../_images/l4_pic_2.jpg" src="../_images/l4_pic_2.jpg" style="width: 100%;" />
+</a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/l4_pic_3.jpg"><img alt="../_images/l4_pic_3.jpg" src="../_images/l4_pic_3.jpg" style="width: 100%;" />
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-center">
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../_images/l4_pic_5.jpg"><img alt="../_images/l4_pic_5.jpg" src="../_images/l4_pic_5.jpg" style="width: 100%;" />
+</a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/l4_pic_6.jpg"><img alt="../_images/l4_pic_6.jpg" src="../_images/l4_pic_6.jpg" style="width: 100%;" />
+</a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/l4_pic_7.jpg"><img alt="../_images/l4_pic_7.jpg" src="../_images/l4_pic_7.jpg" style="width: 100%;" />
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>After soldering, I took my Artemis with the motor controllers, and time of flight sensor(not currently used in this lab as of this task, but still soldered on) to go hook up to an oscilloscope.
+I hooked it my wiring to an oscilloscope by probing the output pins of one motor driver. I then provided power with a power supply. I ran some code on my Artemis to produce PWM signals.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pwmPinA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pwmPinB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// set outputs</span>
+<span class="w">    </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pwmPinA</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pwmPinB</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">analogWrite</span><span class="p">(</span><span class="n">pwmPinA</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p">);</span><span class="w"> </span><span class="c1">// this value was changed to generate different signals</span>
+<span class="w">    </span><span class="n">analogWrite</span><span class="p">(</span><span class="n">pwmPinB</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here are the different signals I generated with different speeds set. The leftmost picture shows a PWM value of 50, the center picture shows 120, and the rightmost shows 250, respectively. The power supply had 3.7 volts and ~ 0.8 Amps.</p>
+<table class="docutils align-center">
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../_images/l4_oscop1.jpg"><img alt="Oscope 1" src="../_images/l4_oscop1.jpg" style="width: 100%;" />
+</a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/l4_oscop2.jpg"><img alt="Oscope 2" src="../_images/l4_oscop2.jpg" style="width: 100%;" />
+</a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/l4_oscop3.jpg"><img alt="Oscope 3" src="../_images/l4_oscop3.jpg" style="width: 100%;" />
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="taking-the-car-apart-and-powering-the-motors">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Taking the Car Apart and Powering the Motors</a><a class="headerlink" href="#taking-the-car-apart-and-powering-the-motors" title="Link to this heading"></a></h3>
+<p>I took the car apart. Here is a photo of me saving the screws. I used an old open pouch for it.</p>
+<a class="reference internal image-reference" href="../_images/l4_screws.jpg"><img alt="Screws Storage" class="align-center" src="../_images/l4_screws.jpg" style="width: 50%;" />
+</a>
+<p>Here is a video of me testing my motor controller/motor functionality before installing the car. The power supply had 3.7 V and had 1 A.</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/FDdRFmgxxyc" style="border: 0; height: 345px; width: 560px">
+</iframe></div><p>Afterwards, I repeated this with the battery.</p>
+</section>
+<section id="installing-the-car-and-testing-the-car">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Installing the Car and Testing the Car</a><a class="headerlink" href="#installing-the-car-and-testing-the-car" title="Link to this heading"></a></h3>
+<p>I then put the car back together and soldered the motor drivers to the motors appropriately. Here is a picture.</p>
+<a class="reference internal image-reference" href="../_images/l4_car_pic.png"><img alt="Car Anatomy pic" class="align-center" src="../_images/l4_car_pic.png" style="width: 50%;" />
+</a>
+<p>Then I played with the lower limit of the PWM value. After trial and error. I got 40 for the the car barely moving if it goes straight and 42 if you want to see it clearly. I got 90 for turning if you want to see the wheels barely move.</p>
+<p>Here is a video of the car clearly moving straight at the lower limit(42)</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/oQpkeGmDyzs" style="border: 0; height: 345px; width: 560px">
+</iframe></div><p>Here is a video of the car barely turning(90)</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/zbOJk1BE8QA" style="border: 0; height: 345px; width: 560px">
+</iframe></div><p>Here is a video of it moving in a straight line. I added in a calibration factor of 1.1. I initally used 1.2 and it completed reflected the angle, so I changed it to 1.1(average of 1 and 1.2) and it was perfect.</p>
+<p>Here is what my video looked like without calibration.</p>
+<blockquote>
+<div><div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/pMdI8lJnH2M" style="border: 0; height: 345px; width: 560px">
+</iframe></div></div></blockquote>
+<p>And here it is with calibration.</p>
+<blockquote>
+<div><div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/PyMHi1nQnH8" style="border: 0; height: 345px; width: 560px">
+</iframe></div></div></blockquote>
+<p>Here is my open loop video.  I just made it go straight, delayed it, stopped it, delayed it, and then made it turn and delayed it. I put it in a loop.</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/jN_8m0IKsdo" style="border: 0; height: 345px; width: 560px">
+</iframe></div></section>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>My soldering skills definitely improved. As did my oscilloscoping skills. Fun Fact: I broke multiple oscilloscopes when I took ECE 2100. You might be thinking? How do you even do that? Professor Clifford Pollack told me I was impressive. The answer is I don’t know. Anways I am happy to report no oscilloscopes were harmed during this lab! Yay!!!! Improvement. The code was overall not difficult for me. This lab was fun.</p>
+</section>
+<section id="acknowledgements">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Acknowledgements</a><a class="headerlink" href="#acknowledgements" title="Link to this heading"></a></h2>
+<p>Thank you to Anunth Ramaswami for sitting with me while I soldered, bringing me a power supply for when I tested powering my motors, letting me use your lab to save walking time, and talking to me about how motors and motor controllers work. Thank you to Aravind Ramaswami for bringing the power supply for when I was using the oscillosope, letting me use your lab to save walking time, and also filming my straight line video so I could align my car on the line properly. I reused the tape setup Aravind made in his lab with blue tape as seen in the line videos. Thank you to Sabian Grier, Becky Lee, Aidan McNay, Paige Shelton, and Annabel Lian for hyping me up and making sure I ate enough food to fuel me through working on this lab. I used ChatGPT to help figure grid images and edit my conf.py file in regards to my website. Turns out videos were not appearing because I did not edit my extensions. Thank you to course staff for their help.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab3/" class="btn btn-neutral float-left" title="Lab 3: TOF Sensor Integration and Performance Evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab5/" class="btn btn-neutral float-right" title="Lab 5: Linear PID control and Linear interpolation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

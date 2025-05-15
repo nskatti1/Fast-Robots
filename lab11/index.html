@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 11: Localization (real) &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 12: Self-Flippable Inverted Pendulum Car" href="../lab12/" />
+    <link rel="prev" title="Lab 10: Localization (sim)" href="../lab10/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 11: Localization (real)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#objective">Objective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#observation-loop-implementation">Observation Loop Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#localization-results">Localization Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#observations">Observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 11: Localization (real)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab11.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-11-localization-real">
+<h1>Lab 11: Localization (real)<a class="headerlink" href="#lab-11-localization-real" title="Link to this heading"></a></h1>
+<section id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
+<p>The goal of this lab was to localize the real robot using the Bayes filter’s update step only based on a full 360° sweep of ToF sensor readings.
+Unlike in the simulation lab last time, no prediction step was performed due to noisy motion.</p>
+<p>The robot was placed at the following known poses:</p>
+<ol class="arabic simple">
+<li><p>(-3, -2, 0°)</p></li>
+<li><p>(0, 3, 0°)</p></li>
+<li><p>(5, -3, 0°)</p></li>
+<li><p>(5, 3, 0°)</p></li>
+</ol>
+<p>These correspond to:</p>
+<ol class="arabic simple">
+<li><p>(-0.914, -0.610, 0°)</p></li>
+<li><p>(0.000,  0.914, 0°)</p></li>
+<li><p>(1.524, -0.914, 0°)</p></li>
+<li><p>(1.524,  0.914, 0°)</p></li>
+</ol>
+</section>
+<section id="observation-loop-implementation">
+<h2>Observation Loop Implementation<a class="headerlink" href="#observation-loop-implementation" title="Link to this heading"></a></h2>
+<p>I implemented the <cite>perform_observation_loop()</cite> method using BLE communication and asynchronous notifications.
+The robot completed a controlled spin using PID orientation control, logged sensor readings, and transmitted them over BLE. I had to modify my lab 9 code.</p>
+<p>Previously I would just start and stop in my code. I added and modified commands.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="no">START</span><span class="p">:</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">start_IMU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">start_controller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">ang_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;RUN_TURN initiated&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">case</span><span class="w"> </span><span class="no">ANGLE_DATA</span><span class="p">:</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">DCM_time</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">r_yaw</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">d2_array</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">tx_characteristic_string</span><span class="p">.</span><span class="n">writeValue</span><span class="p">(</span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">  </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;done&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">tx_characteristic_string</span><span class="p">.</span><span class="n">writeValue</span><span class="p">(</span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+<span class="w">  </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;GET_ANGLE_DATA complete&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>I also added a wait function.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">curr_state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">WAIT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">distanceSensor_2</span><span class="p">.</span><span class="n">checkForDataReady</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">distanceSensor_2</span><span class="p">.</span><span class="n">getDistance</span><span class="p">();</span>
+<span class="w">    </span><span class="n">distanceSensor_2</span><span class="p">.</span><span class="n">clearInterrupt</span><span class="p">();</span>
+<span class="w">    </span><span class="n">distanceSensor_2</span><span class="p">.</span><span class="n">stopRanging</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">data_points</span><span class="p">[</span><span class="n">num_points</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">num_points</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">avg_dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">avg_dist</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">data_points</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="n">avg_dist</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+
+<span class="w">      </span><span class="n">d2_array</span><span class="p">[</span><span class="n">f</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">avg_dist</span><span class="p">;</span>
+<span class="w">      </span><span class="n">r_yaw</span><span class="p">[</span><span class="n">s</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DCM_yaw</span><span class="p">[</span><span class="n">w</span><span class="mi">-1</span><span class="p">];</span>
+<span class="w">      </span><span class="n">num_measurements</span><span class="o">++</span><span class="p">;</span>
+<span class="w">      </span><span class="n">num_points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">num_measurements</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">18</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compute_next</span><span class="p">(</span><span class="n">target</span><span class="p">);</span>
+<span class="w">        </span><span class="n">curr_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PID</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">stop_motors</span><span class="p">();</span>
+<span class="w">        </span><span class="n">start_controller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">start_IMU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">curr_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IDLE</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;done&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tx_characteristic_string</span><span class="p">.</span><span class="n">writeValue</span><span class="p">(</span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">        </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Observation loop complete&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This worked in conjunction with the python below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">perform_observation_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ble</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">CMD</span><span class="o">.</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">is_done</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">done_handler</span><span class="p">(</span><span class="n">_uid</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">nonlocal</span> <span class="n">is_done</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;done&quot;</span><span class="p">:</span>
+            <span class="n">is_done</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">ble</span><span class="o">.</span><span class="n">start_notify</span><span class="p">(</span><span class="n">ble</span><span class="o">.</span><span class="n">uuid</span><span class="p">[</span><span class="s1">&#39;RX_STRING&#39;</span><span class="p">],</span> <span class="n">done_handler</span><span class="p">)</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">is_done</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ble</span><span class="o">.</span><span class="n">stop_notify</span><span class="p">(</span><span class="n">ble</span><span class="o">.</span><span class="n">uuid</span><span class="p">[</span><span class="s1">&#39;RX_STRING&#39;</span><span class="p">])</span>
+
+    <span class="n">data_distance</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">data_yaw</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_handler</span><span class="p">(</span><span class="n">_uid</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">nonlocal</span> <span class="n">i</span><span class="p">,</span> <span class="n">is_done</span>
+        <span class="n">time</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">))</span>
+        <span class="n">data_yaw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">yaw</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">)</span>
+        <span class="n">data_distance</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">24</span><span class="p">:</span>
+            <span class="n">is_done</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">ble</span><span class="o">.</span><span class="n">start_notify</span><span class="p">(</span><span class="n">ble</span><span class="o">.</span><span class="n">uuid</span><span class="p">[</span><span class="s1">&#39;RX_STRING&#39;</span><span class="p">],</span> <span class="n">data_handler</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ble</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">CMD</span><span class="o">.</span><span class="n">ANGLE_DATA</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">is_done</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ble</span><span class="o">.</span><span class="n">stop_notify</span><span class="p">(</span><span class="n">ble</span><span class="o">.</span><span class="n">uuid</span><span class="p">[</span><span class="s1">&#39;RX_STRING&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_distance</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="mi">75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>The order worked like this: I would send START and used the notification handler to set is_done when it completed. Then I waited on a coroutine wait_is_done.
+This waited until is_done was set. Then I sent the ANGLE_DATA command to gather data. This was repeated for all 24 points.</p>
+</section>
+<section id="localization-results">
+<h2>Localization Results<a class="headerlink" href="#localization-results" title="Link to this heading"></a></h2>
+<p>The table below shows the comparison between ground truth and estimated belief (maximum belief cell) after each scan.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Ground Truth (ft)</p></th>
+<th class="head"><p>Ground Truth (m)</p></th>
+<th class="head"><p>Belief Estimate (m)</p></th>
+<th class="head"><p>Belief Orientation (°)</p></th>
+<th class="head"><p>Probability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p>(-3, -2)</p></th>
+<td><p>(-0.914, -0.610)</p></td>
+<td><p>(-0.914, -0.610)</p></td>
+<td><p>10</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>(0, 3)</p></th>
+<td><p>(0.000, 0.914)</p></td>
+<td><p>(0.000, 0.914)</p></td>
+<td><p>10</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>(5, 3)</p></th>
+<td><p>(1.524, 0.914)</p></td>
+<td><p>(1.524, 0.610)</p></td>
+<td><p>10</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p>(5, -3)</p></th>
+<td><p>(1.524, -0.914)</p></td>
+<td><p>(1.524, -0.914)</p></td>
+<td><p>10</p></td>
+<td><p>1.0</p></td>
+</tr>
+</tbody>
+</table>
+<p>Plots of the belief distribution and scan data are shown below for each location.</p>
+<a class="reference internal image-reference" href="../_images/l11_1_plot.png"><img alt="../_images/l11_1_plot.png" class="align-center" src="../_images/l11_1_plot.png" style="width: 70%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l11_2_plot.png"><img alt="../_images/l11_2_plot.png" class="align-center" src="../_images/l11_2_plot.png" style="width: 70%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l11_3_plot.png"><img alt="../_images/l11_3_plot.png" class="align-center" src="../_images/l11_3_plot.png" style="width: 70%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l11_4_plot.png"><img alt="../_images/l11_4_plot.png" class="align-center" src="../_images/l11_4_plot.png" style="width: 70%;" />
+</a>
+</section>
+<section id="observations">
+<h2>Observations<a class="headerlink" href="#observations" title="Link to this heading"></a></h2>
+<p>The robot localized within a grid cell in each pose, which was much fast than I thought it would.</p>
+</section>
+<section id="reflection">
+<h2>Reflection<a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>This lab really demonstrated how cool the bayes filter is in the real world. The bayes filter was successfully able to infer pose from sensor readings despite sensor noise, imperfect rotation, and discretization.
+It was able to maintain accuracy and robustness in localization.</p>
+<p>My computer graphics glitched a lot, but I was glad I was able to get plots.</p>
+</section>
+<section id="acknowledgments">
+<h2>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Link to this heading"></a></h2>
+<p>Thank you to the Fast Robots Staff for providing the jupyter notebook files. It was useful. I took heavy inspiration from my friend Aidan McNay. Thanks Aidan.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab10/" class="btn btn-neutral float-left" title="Lab 10: Localization (sim)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab12/" class="btn btn-neutral float-right" title="Lab 12: Self-Flippable Inverted Pendulum Car" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

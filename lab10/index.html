@@ -1,0 +1,534 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 10: Localization (sim) &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 11: Localization (real)" href="../lab11/" />
+    <link rel="prev" title="Lab 9: Mapping" href="../lab9/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 10: Localization (sim)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-tasks">Lab Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-filter">Running the Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulation-results">Simulation Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tables">Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-10-references">Lab 10 References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 10: Localization (sim)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab10.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-10-localization-sim">
+<h1>Lab 10: Localization (sim)<a class="headerlink" href="#lab-10-localization-sim" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id3">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#lab-tasks" id="id4">Lab Tasks</a></p></li>
+<li><p><a class="reference internal" href="#implementation" id="id5">Implementation</a></p></li>
+<li><p><a class="reference internal" href="#running-the-filter" id="id6">Running the Filter</a></p></li>
+<li><p><a class="reference internal" href="#simulation-results" id="id7">Simulation Results</a></p></li>
+<li><p><a class="reference internal" href="#tables" id="id8">Tables</a></p></li>
+<li><p><a class="reference internal" href="#reflection" id="id9">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#lab-10-references" id="id10">Lab 10 References</a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>In this lab, I implemented a Bayes Filter in simulation to accurately localize a robot’s pose within a discretized 3D grid, even in the presence of actuator and sensor noise. This foundational work provides the building blocks for future real-world localization tasks.</p>
+<p>The Bayes Filter maintains a belief distribution over the robot’s possible states <em>(x, y, θ)</em>, which is updated at each time step through two key steps: the prediction step, and the update step. The prediction step uses odometry input and a motion model (with noise) to estimate where the robot likely moved. The update step refines this estimate by comparing actual range sensor readings to expected ones at each grid cell, reducing uncertainty.</p>
+<p>These steps follow the Bayes update equations:</p>
+<div class="math notranslate nohighlight">
+\[\overline{bel}(x_t) = \sum_{x_{t-1}} p(x_t \mid u_t, x_{t-1}) \cdot bel(x_{t-1})\]</div>
+<div class="math notranslate nohighlight">
+\[bel(x_t) = \eta \cdot p(z_t \mid x_t) \cdot \overline{bel}(x_t)\]</div>
+<p>At every iteration, the robot performs a 360° rotation to collect distance measurements, which are used to update the belief. The grid cell with the highest resulting belief represents the most probable pose of the robot at that time step.</p>
+</section>
+<section id="lab-tasks">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Lab Tasks</a><a class="headerlink" href="#lab-tasks" title="Link to this heading"></a></h2>
+</section>
+<section id="implementation">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Implementation</a><a class="headerlink" href="#implementation" title="Link to this heading"></a></h2>
+<p>Compute Control</p>
+<p>The <cite>compute_control</cite> function calculates the robot’s relative motion from one pose to the next. It returns <cite>rotation1</cite> (initial rotation), <cite>translation</cite> (straight-line distancee, and <cite>rotation2</cite> (final rotation).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compute_control</span><span class="p">(</span><span class="n">cur_pose</span><span class="p">,</span> <span class="n">prev_pose</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Given the current and previous odometry poses, this function extracts</span>
+<span class="sd">    the control information based on the odometry motion model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cur_pose  ([Pose]): Current Pose</span>
+<span class="sd">        prev_pose ([Pose]): Previous Pose</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        [delta_rot_1]: Rotation 1  (degrees)</span>
+<span class="sd">        [delta_trans]: Translation (meters)</span>
+<span class="sd">        [delta_rot_2]: Rotation 2  (degrees)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y_comp</span> <span class="o">=</span> <span class="n">cur_pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">prev_pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x_comp</span> <span class="o">=</span> <span class="n">cur_pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">prev_pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">theta_prev</span> <span class="o">=</span> <span class="n">prev_pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">theta_cur</span> <span class="o">=</span> <span class="n">cur_pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">delta_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">y_comp</span><span class="p">,</span> <span class="n">x_comp</span><span class="p">))</span> <span class="o">-</span> <span class="n">theta_prev</span>
+    <span class="n">delta_rot_1</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">normalize_angle</span><span class="p">(</span><span class="n">delta_1</span><span class="p">)</span>
+    <span class="n">delta_trans</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y_comp</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x_comp</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">delta_rot_2</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">normalize_angle</span><span class="p">(</span><span class="n">theta_cur</span> <span class="o">-</span> <span class="n">theta_prev</span> <span class="o">-</span> <span class="n">delta_1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">delta_rot_1</span><span class="p">,</span> <span class="n">delta_trans</span><span class="p">,</span> <span class="n">delta_rot_2</span>
+</pre></div>
+</div>
+<p>Odometry Motion Model</p>
+<p>The odometry motion model computes the probability that the robot transitioned from the  previous position the current position , given the control input u. It uses three independent Gaussian distributions to model noise in each motion component.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">odom_motion_model</span><span class="p">(</span><span class="n">cur_pose</span><span class="p">,</span> <span class="n">prev_pose</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Odometry Motion Model</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cur_pose  ([Pose]): Current Pose</span>
+<span class="sd">        prev_pose ([Pose]): Previous Pose</span>
+<span class="sd">        (rot1, trans, rot2) (float, float, float): A tuple with control data in the format</span>
+<span class="sd">                                                   format (rot1, trans, rot2) with units (degrees, meters, degrees)</span>
+
+
+<span class="sd">    Returns:</span>
+<span class="sd">        prob [float]: Probability p(x&#39;|x, u)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="n">actual_u</span> <span class="o">=</span> <span class="n">compute_control</span><span class="p">(</span><span class="n">cur_pose</span><span class="p">,</span> <span class="n">prev_pose</span><span class="p">)</span>
+    <span class="n">prob_rot_1</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">actual_u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">loc</span><span class="o">.</span><span class="n">odom_rot_sigma</span><span class="p">)</span>
+    <span class="n">prob_trans</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">actual_u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">loc</span><span class="o">.</span><span class="n">odom_trans_sigma</span><span class="p">)</span>
+    <span class="n">prob_rot_2</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">actual_u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">loc</span><span class="o">.</span><span class="n">odom_rot_sigma</span><span class="p">)</span>
+    <span class="n">prob</span>  <span class="o">=</span> <span class="n">prob_rot_1</span> <span class="o">*</span> <span class="n">prob_trans</span> <span class="o">*</span> <span class="n">prob_rot_2</span>
+    <span class="k">return</span> <span class="n">prob</span>
+</pre></div>
+</div>
+<p>Prediction Step</p>
+<p>The prediction step loops over all prior grid cells with significant belief and spreads that belief across reachable cells using the odometry motion model. Beliefs are normalized afterward to prevent underflow.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prediction_step</span><span class="p">(</span><span class="n">cur_odom</span><span class="p">,</span> <span class="n">prev_odom</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Prediction step of the Bayes Filter.</span>
+<span class="sd">    Update the probabilities in loc.bel_bar based on loc.bel from the previous time step and the odometry motion model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cur_odom  ([Pose]): Current Pose</span>
+<span class="sd">        prev_odom ([Pose]): Previous Pose</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">compute_control</span><span class="p">(</span><span class="n">cur_odom</span><span class="p">,</span> <span class="n">prev_odom</span><span class="p">)</span>
+
+    <span class="c1"># Loop through all possible previous states</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">compute_control</span><span class="p">(</span><span class="n">cur_odom</span><span class="p">,</span> <span class="n">prev_odom</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">,</span> <span class="n">a_idx</span> <span class="p">)</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndindex</span><span class="p">(</span> <span class="n">loc</span><span class="o">.</span><span class="n">bel_bar</span><span class="o">.</span><span class="n">shape</span> <span class="p">):</span>
+      <span class="n">x_t</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">mapper</span><span class="o">.</span><span class="n">from_map</span><span class="p">(</span> <span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">,</span> <span class="n">a_idx</span> <span class="p">)</span>
+      <span class="n">new_bel_bar</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">for</span> <span class="p">(</span> <span class="n">x_idx_t_1</span><span class="p">,</span> <span class="n">y_idx_t_1</span><span class="p">,</span> <span class="n">a_idx_t_1</span> <span class="p">),</span> <span class="n">bel</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span> <span class="n">loc</span><span class="o">.</span><span class="n">bel</span> <span class="p">):</span>
+          <span class="k">if</span> <span class="n">bel</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">:</span>
+              <span class="n">x_t_1</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">mapper</span><span class="o">.</span><span class="n">from_map</span><span class="p">(</span> <span class="n">x_idx_t_1</span><span class="p">,</span> <span class="n">y_idx_t_1</span><span class="p">,</span> <span class="n">a_idx_t_1</span> <span class="p">)</span>
+              <span class="n">new_bel_bar</span> <span class="o">+=</span> <span class="p">(</span>
+                  <span class="n">odom_motion_model</span><span class="p">(</span> <span class="n">x_t</span><span class="p">,</span> <span class="n">x_t_1</span><span class="p">,</span> <span class="n">u</span> <span class="p">)</span> <span class="o">*</span>
+                  <span class="n">bel</span>
+              <span class="p">)</span>
+      <span class="n">loc</span><span class="o">.</span><span class="n">bel_bar</span><span class="p">[</span><span class="n">x_idx</span><span class="p">][</span><span class="n">y_idx</span><span class="p">][</span><span class="n">a_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_bel_bar</span>
+</pre></div>
+</div>
+<p>Sensor Model</p>
+<p>Each observation consists of 18 distance readings. For each grid cell, the expected readings are compared to the observed readings using a Gaussian likelihood function (per reading), assuming conditional independence.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sensor_model</span><span class="p">(</span><span class="n">obs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This is the equivalent of p(z|x).</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        obs ([ndarray]): A 1D array consisting of the true observations for a specific robot pose in the map</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        [ndarray]: Returns a 1D array of size 18 (=loc.OBS_PER_CELL) with the likelihoods of each individual sensor measurement</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prob_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">18</span><span class="p">):</span>
+        <span class="n">prob_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">obs_range_data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">obs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">loc</span><span class="o">.</span><span class="n">sensor_sigma</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">prob_array</span>
+</pre></div>
+</div>
+<p>Update Step</p>
+<p>The update step multiplies the predicted belief (<cite>bel_bar</cite>) by the sensor likelihood and normalizes the result.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_step</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Update step of the Bayes Filter.</span>
+<span class="sd">    Update the probabilities in loc.bel based on loc.bel_bar and the sensor model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mapper</span><span class="o">.</span><span class="n">MAX_CELLS_X</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mapper</span><span class="o">.</span><span class="n">MAX_CELLS_Y</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mapper</span><span class="o">.</span><span class="n">MAX_CELLS_A</span><span class="p">):</span>
+                <span class="n">prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">sensor_model</span><span class="p">(</span><span class="n">mapper</span><span class="o">.</span><span class="n">get_views</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">a</span><span class="p">)))</span>
+                <span class="n">loc</span><span class="o">.</span><span class="n">bel</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">bel_bar</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">a</span><span class="p">]</span> <span class="o">*</span> <span class="n">prob</span>
+    <span class="n">loc</span><span class="o">.</span><span class="n">bel</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">bel</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">bel</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-filter">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Running the Filter</a><a class="headerlink" href="#running-the-filter" title="Link to this heading"></a></h2>
+<p>Each loop iteration performs the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">total_time_steps</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="n">prediction_step</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">get_observation_data</span><span class="p">()</span>
+    <span class="n">update_step</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The belief is updated using motion and sensor data, and printed for debugging/visualization.</p>
+</section>
+<section id="simulation-results">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Simulation Results</a><a class="headerlink" href="#simulation-results" title="Link to this heading"></a></h2>
+<p>Each run of the simulation shows, the ground truth trajectoy(green), the estimated trajectory from belief(blue), and the odometry only trajectory(red). The brighter the cell, the higher the belief is. Eventually the estimated belief converges to the ground truth after many iterations.</p>
+<p>Here are photos from trial 1 and trial 2</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/l10_1.png"><img alt="../_images/l10_1.png" src="../_images/l10_1.png" style="width: 60%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l10_2.png"><img alt="../_images/l10_2.png" src="../_images/l10_2.png" style="width: 60%;" />
+</a>
+</div></blockquote>
+<p>Here are videos of trial 1 and trial 2</p>
+<blockquote>
+<div><div class="video_wrapper align-center" style="text-align: center">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/EiUtU0LOFPY" style="border: 0; height: 345px; width: 560px">
+</iframe></div><div class="video_wrapper align-center" style="text-align: center">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/js9-ycH-V54" style="border: 0; height: 345px; width: 560px">
+</iframe></div></div></blockquote>
+</section>
+<section id="tables">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Tables</a><a class="headerlink" href="#tables" title="Link to this heading"></a></h2>
+<p>Here is my table for trial 1.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Trial 1</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>GroundTruth</p></th>
+<th class="head"><p>BeliefState</p></th>
+<th class="head"><p>Probability</p></th>
+<th class="head"><p>PosError</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>(0.277,-0.086,320.657)</p></td>
+<td><p>(0.305,0.000,-50.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.028,-0.086,370.657)</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>(0.506,-0.521,657.739)</p></td>
+<td><p>(0.305,-0.610,-70.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.201,0.089,727.739)</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>(0.506,-0.521,994.819)</p></td>
+<td><p>(0.305,-0.610,-90.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.201,0.089,1084.819)</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>(0.539,-0.919,1354.819)</p></td>
+<td><p>(0.610,-0.914,-90.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.070,-0.005,1444.819)</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>(0.800,-1.057,1800.284)</p></td>
+<td><p>(0.914,-0.914,10.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.114,-0.143,1790.284)</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>(1.042,-1.271,2250.284)</p></td>
+<td><p>(0.914,-1.219,-10.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.128,-0.052,2260.284)</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>(1.210,-1.378,2700.284)</p></td>
+<td><p>(1.219,-1.219,-30.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.009,-0.159,2730.284)</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>(1.431,-1.431,3150.284)</p></td>
+<td><p>(1.524,-1.219,-50.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.093,-0.212,3200.284)</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>(1.621,-1.288,3600.284)</p></td>
+<td><p>(1.524,-0.914,-70.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.097,-0.374,3670.284)</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>(1.741,-1.047,4050.576)</p></td>
+<td><p>(1.829,-0.914,-90.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.088,-0.133,4140.576)</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>(1.748,-0.521,4500.828)</p></td>
+<td><p>(2.134,-0.610,-110.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.386,0.088,4610.828)</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>(0.517,0.897,4570.828)</p></td>
+<td><p>(0.610,0.914,-110.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.093,-0.017,4680.828)</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>(0.307,0.294,4976.674)</p></td>
+<td><p>(0.305,0.305,-70.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.002,-0.011,5046.674)</p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p>(0.043,0.002,5267.931)</p></td>
+<td><p>(0.000,0.000,-130.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.043,0.002,5397.931)</p></td>
+</tr>
+<tr class="row-even"><td><p>14</p></td>
+<td><p>(-0.333,-0.134,5605.390)</p></td>
+<td><p>(-0.305,-0.305,-150.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.028,0.171,5755.390)</p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p>(-0.726,-0.111,5942.372)</p></td>
+<td><p>(-0.610,0.000,-170.000)</p></td>
+<td><p>0.942519</p></td>
+<td><p>(-0.116,-0.111,6112.372)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Here is my table for trial 2.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Trial 2</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>GroundTruth</p></th>
+<th class="head"><p>BeliefState</p></th>
+<th class="head"><p>Probability</p></th>
+<th class="head"><p>PosError</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>(0.272,-0.084,320.275)</p></td>
+<td><p>(0.305,0.000,-50.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.033,-0.084,370.275)</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>(0.501,-0.519,657.739)</p></td>
+<td><p>(0.305,-0.610,-70.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.196,0.090,727.739)</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>(0.501,-0.519,995.583)</p></td>
+<td><p>(0.305,-0.610,-90.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.196,0.090,1085.583)</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>(0.540,-0.917,1355.583)</p></td>
+<td><p>(0.610,-0.914,-90.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.070,-0.003,1445.583)</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>(0.798,-1.050,1801.048)</p></td>
+<td><p>(0.914,-0.914,10.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.116,-0.135,1791.048)</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>(1.040,-1.258,2251.048)</p></td>
+<td><p>(0.914,-1.219,-10.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.126,-0.039,2261.048)</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>(1.208,-1.365,2701.048)</p></td>
+<td><p>(1.219,-1.219,-30.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.011,-0.146,2731.048)</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>(1.428,-1.418,3151.048)</p></td>
+<td><p>(1.524,-1.219,-50.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.096,-0.199,3201.048)</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>(1.617,-1.275,3601.048)</p></td>
+<td><p>(1.524,-0.914,-70.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(0.093,-0.361,3671.048)</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>(1.738,-1.033,4051.340)</p></td>
+<td><p>(1.829,-0.914,-90.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.091,-0.119,4141.340)</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>(1.744,-0.506,4501.592)</p></td>
+<td><p>(2.134,-0.610,-110.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.390,0.104,4611.592)</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>(0.408,0.819,4575.059)</p></td>
+<td><p>(0.610,0.914,-110.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.202,-0.095,4685.059)</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>(0.240,0.191,4980.141)</p></td>
+<td><p>(0.305,0.305,-70.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.065,-0.114,5050.141)</p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p>(-0.003,-0.126,5272.544)</p></td>
+<td><p>(0.000,-0.305,-130.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.003,0.178,5402.544)</p></td>
+</tr>
+<tr class="row-even"><td><p>14</p></td>
+<td><p>(-0.362,-0.289,5610.003)</p></td>
+<td><p>(-0.305,-0.305,-150.000)</p></td>
+<td><p>1.0</p></td>
+<td><p>(-0.057,0.016,5760.003)</p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p>(-0.748,-0.298,5947.080)</p></td>
+<td><p>(-0.610,-0.305,-170.000)</p></td>
+<td><p>0.997736</p></td>
+<td><p>(-0.139,0.007,6117.080)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>The Bayes filter significantly improves localization performance compared to dead reckoning (odometry only). Somethings I noticed were that errors were lowest when the robot was near walls or corners (distinct sensor readings), and highest in open or symmetric spaces. Optimizations like skipping low-probability cells and vectorized operations allowed it to run in reasonable time.</p>
+</section>
+<section id="lab-10-references">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Lab 10 References</a><a class="headerlink" href="#lab-10-references" title="Link to this heading"></a></h2>
+<p>Thanks to the Fast Robots TAs, especially Mikayla Lahr whose webpage I took heavily inspiration from and constantly cross checked. I looked at Aravind Ramaswami’s page for referencing his table and Aidan McNay’s page odom_motion_model() function. ChatGPT was used to parse my data and put it in restructured text for the webpage.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab9/" class="btn btn-neutral float-left" title="Lab 9: Mapping" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab11/" class="btn btn-neutral float-right" title="Lab 11: Localization (real)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

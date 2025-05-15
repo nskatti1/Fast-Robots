@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 6: Orientation Control &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 7: Kalman Filter" href="../lab7/" />
+    <link rel="prev" title="Lab 5: Linear PID control and Linear interpolation" href="../lab5/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 6: Orientation Control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prelab">Prelab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab">Lab</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pid-controller-implementation-and-testing">PID Controller Implementation and Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-and-debugging">Testing and Debugging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lab-questions-discussion">Lab Questions /Discussion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 6: Orientation Control</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab6.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-6-orientation-control">
+<h1>Lab 6: Orientation Control<a class="headerlink" href="#lab-6-orientation-control" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#prelab" id="id1">Prelab</a></p></li>
+<li><p><a class="reference internal" href="#lab" id="id2">Lab</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pid-controller-implementation-and-testing" id="id3">PID Controller Implementation and Testing</a></p></li>
+<li><p><a class="reference internal" href="#testing-and-debugging" id="id4">Testing and Debugging</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#lab-questions-discussion" id="id5">Lab Questions /Discussion</a></p></li>
+<li><p><a class="reference internal" href="#reflection" id="id6">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgements" id="id7">Acknowledgements</a></p></li>
+</ul>
+</nav>
+<section id="prelab">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Prelab</a><a class="headerlink" href="#prelab" title="Link to this heading"></a></h2>
+<p>In this lab, I implemented orientation PID using the IMU. This required integrating the gyroscope to estimate orientation and tuning a PID controller for effective control; it very tedious, but I got it done.</p>
+<p>For communication, data was sent and received via Bluetooth. I wrote a command in C for my PID loop and decided I would put communications at the end of my PID loop and append it into an array and then end all that data back using a loop at the end.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">times</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+
+<span class="n">curr_ang_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current_angle</span><span class="p">;</span>
+
+<span class="n">target_ang_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target_angle</span><span class="p">;</span>
+
+<span class="n">prev_err</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="w"> </span><span class="n">previous_error</span><span class="p">;</span>
+
+<span class="n">control_sg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">control_signal</span><span class="p">;</span>
+
+<span class="n">motor_o</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">motor_offset</span><span class="p">;</span>
+
+<span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Here is where I sent it back. I implemented this function within my STOP_PID function.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">sendStoredPIDData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MAX_SAMPLES</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_ang_arr</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot; | &quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_ang_arr</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot; | &quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_err</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot; | &quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">control_sg</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot; | &quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">motor_o</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot; | &quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot; | &quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tx_characteristic_string</span><span class="p">.</span><span class="n">writeValue</span><span class="p">(</span><span class="n">tx_estring_value</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>I parsed the data in python later and put it into an array instead.
+From there, I parsed the arrays:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sort_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">new_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">current_angle</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">target_angle</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">previous_error</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">control_signal</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">motor_offset</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">current_angle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">target_angle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">previous_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">control_signal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">motor_offset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+
+    <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_angle</span><span class="p">)</span>
+    <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_angle</span><span class="p">)</span>
+    <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">previous_error</span><span class="p">)</span>
+    <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">control_signal</span><span class="p">)</span>
+    <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">motor_offset</span><span class="p">)</span>
+    <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_data</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">65</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">k</span> <span class="o">=</span> <span class="n">sort_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">time_a</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">angle_arr</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">control_sig</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="lab">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Lab</a><a class="headerlink" href="#lab" title="Link to this heading"></a></h2>
+<section id="pid-controller-implementation-and-testing">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">PID Controller Implementation and Testing</a><a class="headerlink" href="#pid-controller-implementation-and-testing" title="Link to this heading"></a></h3>
+<p>The first step was implementing the PID controller to stabilize the robot’s yaw using the IMU data. Below are the initial PID values I used:</p>
+<ul class="simple">
+<li><p>Kp = 7.65</p></li>
+<li><p>Ki = 1.53</p></li>
+<li><p>Kd = 20.4</p></li>
+</ul>
+<p>Here is my code</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">runPIDControl</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">current_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+<span class="w">    </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">current_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">last_time</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">last_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current_time</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">current_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getYaw</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">target_angle</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">current_angle</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">integral</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dt</span><span class="p">;</span>
+<span class="w">    </span><span class="n">integral</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">constrain</span><span class="p">(</span><span class="n">integral</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">max_integral</span><span class="p">,</span><span class="w"> </span><span class="n">max_integral</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">derivative</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">previous_error</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dt</span><span class="p">;</span>
+<span class="w">    </span><span class="n">previous_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">control_signal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Kp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Ki</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">integral</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Kd</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">derivative</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">motor_offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">constrain</span><span class="p">(</span><span class="n">control_signal</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">applyMotorControl</span><span class="p">(</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">motor_offset</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Graphs of the angle versus time were generated to analyze the controller’s response and control Signal vs Time.</p>
+<table class="docutils align-center">
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../_images/l6_pic1.png"><img alt="../_images/l6_pic1.png" src="../_images/l6_pic1.png" style="width: 100%;" />
+</a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/l6_pic2.png"><img alt="../_images/l6_pic2.png" src="../_images/l6_pic2.png" style="width: 100%;" />
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="testing-and-debugging">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Testing and Debugging</a><a class="headerlink" href="#testing-and-debugging" title="Link to this heading"></a></h3>
+<p>I also wrote some tuning functions that could help me adjust my values without me recompiling.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span><span class="no">SET_ANGLE</span><span class="p">:</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;ERROR: SET_ANGLE requires 1 float value.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">target_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">angle</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;New target angle: &quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">target_angle</span><span class="p">);</span>
+<span class="w">    </span><span class="k">break</span><span class="p">;</span>
+
+<span class="k">case</span><span class="w"> </span><span class="no">SET_PID</span><span class="p">:</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">newKp</span><span class="p">,</span><span class="w"> </span><span class="n">newKi</span><span class="p">,</span><span class="w"> </span><span class="n">newKd</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">newKp</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">newKi</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">robot_cmd</span><span class="p">.</span><span class="n">get_next_value</span><span class="p">(</span><span class="n">newKd</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;ERROR: SET_PID requires 3 float values.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Kp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newKp</span><span class="p">;</span><span class="w"> </span><span class="n">Ki</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newKi</span><span class="p">;</span><span class="w"> </span><span class="n">Kd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newKd</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Updated PID gains.&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">break</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>I wrote a function that calibrates my IMU and tries to deal with the drift due to the bias. I implemented this in the beginning during setup so I would have the constant.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">calibrateIMU</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">bias_sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">imu</span><span class="p">.</span><span class="n">getAGMT</span><span class="p">();</span><span class="w">  </span><span class="c1">// Read IMU data</span>
+<span class="w">        </span><span class="n">bias_sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">imu</span><span class="p">.</span><span class="n">gyrZ</span><span class="p">();</span>
+<span class="w">        </span><span class="n">delay</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">gyro_bias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bias_sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">100.0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here is a video of the robot stabilizing its orientation. I accidentally deleted some of the videos when clearing my phone storage.</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/1A9yQ-ebz70" style="border: 0; height: 345px; width: 560px">
+</iframe></div></section>
+</section>
+<section id="lab-questions-discussion">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Lab Questions /Discussion</a><a class="headerlink" href="#lab-questions-discussion" title="Link to this heading"></a></h2>
+<p>I answered some lab questions below?</p>
+<p><strong>Are there any problems that digital integration might lead to over time? Are there ways to minimize these problems?</strong></p>
+<p>Digital integration of the gyroscope data can lead to drift due to sensor noise and small errors accumulating over time. This is often referred to as yaw drift and can result in incorrect orientation estimates. This can be minimized by using a complementary filter or Kalman filter ( haha Lab 7 lol) to fuse the IMU data with other sensors and correct drift. Resetting the orientation based off of landmarks and data collected can be useful as well (yay I did this or using the DMP, which has a built in filter can be helpful.</p>
+<p><strong>Does your sensor have any bias, and are there ways to fix this? How fast does your error grow as a result of this bias?</strong></p>
+<p>It is common for gyroscopes have a constant bias that causes the error to grow linearly over time. If you measure it while it is stationary, you can subtract the constant bias. Additionally, the DMP can be useful.</p>
+<p><strong>Are there limitations on the sensor itself to be aware of? What is the maximum rotational velocity that the gyroscope can read?</strong>
+<strong>Is this sufficient for our applications, and is there a way to configure this parameter?</strong></p>
+<p>Each IMU has a maximum detectable rotational velocity before saturation occurs. According to the documentation of the IMU we use, it has “a full scale range of ±250 dps, ±500 dps, ±1000 dps, and ±2000 dps”. If the robot rotates faster than this limit, the sensor will clip values, leading to incorrect readings. Making sure within the code that it is not going faster that that, can prevent this.</p>
+<p><strong>Does it make sense to take the derivative of an integrated signal?</strong></p>
+<p>Since the gyroscope provides angular velocity, integration is used to obtain orientation. The derivative would just return the same original signal which is useless.</p>
+<p><strong>Does changing your setpoint while the robot is running cause problems with your implementation of the PID controller?</strong></p>
+<p>A sudden change in the setpoint can cause a sharp spike in the derivative term and this can destabilize the robot. Low-pass filters can help.</p>
+<p><strong>Is a lowpass filter needed before your derivative term?</strong></p>
+<p>Yes, it is common to use a low-pass filter on the gyroscope readings before computing the derivative term  as it reduces the effect of high-frequency noise potentially causing instability in the controller.</p>
+<p><strong>Can you control the orientation while the robot is driving forward or backward? Why would this be useful ? (not required)</strong></p>
+<p>I did not, but it will be useful in the future when it comes down to following a path as it can move forward and backwards and tune itself.</p>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>This lab improved my understanding of PID tuning. I learned a lot about sensor bias and it was a fun but sometimes demoralizing.</p>
+</section>
+<section id="acknowledgements">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Acknowledgements</a><a class="headerlink" href="#acknowledgements" title="Link to this heading"></a></h2>
+<p>Thank you to Anunth Ramaswami for lending me his robot when mine stopped working. I based my PID values similar to his before my robot broke and continued to do so after. My code worked much more differently than his and I scaled my values accordinly. Thank you to Aidan McNay for sitting in the same room as me and working for moral support. Thanks to course staff for their guidance.</p>
+<p>ChatGPT was used to debug code(albeit it was not the most useful) and help also debug why my pics and videos keep glitching.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab5/" class="btn btn-neutral float-left" title="Lab 5: Linear PID control and Linear interpolation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab7/" class="btn btn-neutral float-right" title="Lab 7: Kalman Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

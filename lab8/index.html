@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 8: Stunts! &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 9: Mapping" href="../lab9/" />
+    <link rel="prev" title="Lab 7: Kalman Filter" href="../lab7/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 8: Stunts!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#objective">Objective</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-and-preparation">Setup and Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stunt-execution-task-b-drift">Stunt Execution: Task B - Drift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tuning-and-control-strategy">Tuning and Control Strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 8: Stunts!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab8.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-8-stunts">
+<h1>Lab 8: Stunts!<a class="headerlink" href="#lab-8-stunts" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#objective" id="id5">Objective</a></p></li>
+<li><p><a class="reference internal" href="#setup-and-preparation" id="id6">Setup and Preparation</a></p></li>
+<li><p><a class="reference internal" href="#stunt-execution-task-b-drift" id="id7">Stunt Execution: Task B - Drift</a></p></li>
+<li><p><a class="reference internal" href="#tuning-and-control-strategy" id="id8">Tuning and Control Strategy</a></p></li>
+<li><p><a class="reference internal" href="#reflection" id="id9">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgements" id="id10">Acknowledgements</a></p></li>
+</ul>
+</nav>
+<section id="objective">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Objective</a><a class="headerlink" href="#objective" title="Link to this heading"></a></h2>
+<p>The objective of this lab was to execute a high-speed robot stunt that combined different ideas that we have learned about in Fast Robots and I am happy to report that it was a fun successful lab.</p>
+<p>I chose to execute the drift task(Task B), but I initially wanted to do the flip, so I had reinforced my car with tape particularly to reinforce the batteries. This meant it was also prepared for drifting. Here is a photo.</p>
+<a class="reference internal image-reference" href="../_images/l8_robot.jpg"><img alt="Robot Photo" class="align-center" src="../_images/l8_robot.jpg" style="width: 60%;" />
+</a>
+</section>
+<section id="setup-and-preparation">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Setup and Preparation</a><a class="headerlink" href="#setup-and-preparation" title="Link to this heading"></a></h2>
+<p>Before attempting the stunt, I ensured all components were working properly — including the Artemis board, TOF sensors, IMU, and motor drivers. I also reviewed and tested my Kalman Filter and PID code from previous labs.</p>
+<p>I modified my Kalman Filter code from Lab 7 to gather data on my car while using a PWM signal of 250. In Lab 7 I had used a lower PWM signal, so I wanted to understand how my robot behaved at higher speeds approaching a wall. Below is the data I collected. I did NOT tune my filter very well. I am disclosing this honestly, but at the end of the day my code still excuted and it still used this kalman filter so, I am showing the work I did for this lab on my website.</p>
+<a class="reference internal image-reference" href="../_images/l8_kf_dist.png"><img alt="Kalman Distance" class="align-center" src="../_images/l8_kf_dist.png" style="width: 60%;" />
+</a>
+</section>
+<section id="stunt-execution-task-b-drift">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Stunt Execution: Task B - Drift</a><a class="headerlink" href="#stunt-execution-task-b-drift" title="Link to this heading"></a></h2>
+<p>I had the robot start away from the wall, and I tuned the drift trigger point based on TOF/KF estimation to begin the 180-degree turn approximately 914mm (3 floor tiles) from the wall.</p>
+<p>Here are three successful runs:</p>
+<div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/Ki0Dn_ntjnI" style="border: 0; height: 345px; width: 560px">
+</iframe></div><div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/OwwN-latBQM" style="border: 0; height: 345px; width: 560px">
+</iframe></div><div class="video_wrapper" style="">
+<iframe allowfullscreen="true" src="https://www.youtube.com/embed/CPaaE2tsfK8" style="border: 0; height: 345px; width: 560px">
+</iframe></div><p>They took 8 seconds, 10 seconds, and 9 seconds respectively. There seemed to be a flaw where the car stopped and paused even though I did not use any delays in my code. There was a bug where my code seemed to reset when my car stopped and just not append data. Here are the plots of collected data regardless. Note: my kalman filter was not tuned very well. Also, my plots looked a little weird. I did some investigating and also asked a TA, but we couldn’t seem to diagnose the issue of why they looked so funky.</p>
+<a class="reference internal image-reference" href="../_images/l8_plot1.png"><img alt="Distance and Yaw Plots 1" class="align-center" src="../_images/l8_plot1.png" style="width: 60%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l8_pwm1.png"><img alt="PWM Plot 1" class="align-center" src="../_images/l8_pwm1.png" style="width: 60%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l8_plot2.png"><img alt="Distance and Yaw Plots 2" class="align-center" src="../_images/l8_plot2.png" style="width: 60%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l8_pwm2.png"><img alt="PWM Plot 2" class="align-center" src="../_images/l8_pwm2.png" style="width: 60%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l8_plot3.png"><img alt="Distance and Yaw Plots 3" class="align-center" src="../_images/l8_plot3.png" style="width: 60%;" />
+</a>
+<a class="reference internal image-reference" href="../_images/l8_pwm3.png"><img alt="PWM Plot 3" class="align-center" src="../_images/l8_pwm3.png" style="width: 60%;" />
+</a>
+</section>
+<section id="tuning-and-control-strategy">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Tuning and Control Strategy</a><a class="headerlink" href="#tuning-and-control-strategy" title="Link to this heading"></a></h2>
+<p>To make the stunt successful, I used the Kalman Filter to estimate when the robot was within 914mm of the wall, then initiated the 180-degree spin. I used two functions START_DRIFT and STOP_DRIFT.Here are snippets of the code.</p>
+<p>Here is how I implemented a Kalman filter. I initialied the matrices and wrote an update Kalman function.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Kalman Filter Code</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1">// Kalman Filter</span>
+<span class="w">      </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">      </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">P</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">};</span>
+<span class="w">      </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">};</span>
+<span class="w">      </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1200</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">250</span><span class="p">};</span>
+<span class="w">      </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
+
+<span class="w">      </span><span class="kt">float</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.0</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">float</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span>
+<span class="w">      </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="p">;</span>
+<span class="w">      </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">B</span><span class="p">;</span>
+
+
+<span class="w">      </span><span class="kt">void</span><span class="w"> </span><span class="nf">update_kalman</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">dist</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">pwm_input</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">dt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dt</span><span class="o">/</span><span class="n">m</span><span class="p">};</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="o">/</span><span class="n">m</span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">pwm_input</span><span class="p">};</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">P_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">P</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">A</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Q</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">dist</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span><span class="w"> </span><span class="c1">// velocity unused here</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x_pred</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">P_pred</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">H</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">R</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Invert</span><span class="p">(</span><span class="n">S</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">P_pred</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">~</span><span class="n">H</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">S</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x_pred</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
+<span class="w">        </span><span class="n">P</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">H</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">P_pred</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>I wrote two commands: START_DRIFT AND STOP_DRIFT. Here is START_DRIFT. They both mainly handled flags that void loop() used later to figure out what to do.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">START_DRIFT</span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="k">case</span><span class="w"> </span><span class="no">START_DRIFT</span><span class="p">:</span>
+<span class="w">      </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;START_DRIFT received.&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">drifting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">      </span><span class="n">drift_triggered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">      </span><span class="n">drift_complete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">      </span><span class="n">log_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">last_sample_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+<span class="w">      </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">      </span><span class="n">P</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">};</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<p>Here is a chunk of code I wrote in void loop for handling functions.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">a chunk of loop code</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">drifting</span><span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">log_index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">MAX_SAMPLES</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">now</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">last_sample_time</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">last_sample_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">;</span>
+
+<span class="w">          </span><span class="n">distanceSensor</span><span class="p">.</span><span class="n">startRanging</span><span class="p">();</span>
+<span class="w">          </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">distanceSensor</span><span class="p">.</span><span class="n">checkForDataReady</span><span class="p">())</span><span class="w"> </span><span class="n">delay</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">          </span><span class="kt">int</span><span class="w"> </span><span class="n">dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">distanceSensor</span><span class="p">.</span><span class="n">getDistance</span><span class="p">();</span>
+<span class="w">          </span><span class="n">distanceSensor</span><span class="p">.</span><span class="n">clearInterrupt</span><span class="p">();</span>
+<span class="w">          </span><span class="n">distanceSensor</span><span class="p">.</span><span class="n">stopRanging</span><span class="p">();</span>
+
+<span class="w">          </span><span class="n">imu</span><span class="p">.</span><span class="n">getAGMT</span><span class="p">();</span>
+<span class="w">          </span><span class="kt">float</span><span class="w"> </span><span class="n">gyro_z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">imu</span><span class="p">.</span><span class="n">gyrZ</span><span class="p">();</span>
+
+<span class="w">          </span><span class="n">update_kalman</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class="w"> </span><span class="n">FORWARD_PWM</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="p">);</span>
+
+<span class="w">          </span><span class="n">time_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">;</span>
+<span class="w">          </span><span class="n">dist_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist</span><span class="p">;</span>
+<span class="w">          </span><span class="n">gyro_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gyro_z</span><span class="p">;</span>
+<span class="w">          </span><span class="n">kalman_dist_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">          </span><span class="n">kalman_vel_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">          </span><span class="n">pwm_log</span><span class="p">[</span><span class="n">log_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">drift_triggered</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">TURN_PWM</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">FORWARD_PWM</span><span class="p">;</span>
+<span class="w">          </span><span class="n">log_index</span><span class="o">++</span><span class="p">;</span>
+
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">drift_triggered</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dist</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">DRIFT_THRESHOLD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">drift_triggered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Drift initiated.&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">drift_turn</span><span class="p">();</span>
+<span class="w">          </span><span class="p">}</span>
+
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">drift_triggered</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">gyro_z</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">FLIP_THRESHOLD_DPS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">drift_complete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">            </span><span class="n">drifting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">            </span><span class="n">stop_motors</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Drift complete.&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">send_drift_data</span><span class="p">();</span>
+<span class="w">          </span><span class="p">}</span>
+
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">drift_triggered</span><span class="p">)</span><span class="w"> </span><span class="n">move_forward</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">      </span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>This is how I sent data. I wrote a function for it.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Sending data</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">send_drift_data</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">log_index</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">tx_string</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">          </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">time_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="w">          </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">dist_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="w">          </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">gyro_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="w">          </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">kalman_dist_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="w">          </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">kalman_vel_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;|&quot;</span><span class="p">);</span>
+<span class="w">          </span><span class="n">tx_string</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">pwm_log</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">          </span><span class="n">tx_characteristic_string</span><span class="p">.</span><span class="n">writeValue</span><span class="p">(</span><span class="n">tx_string</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">          </span><span class="n">delay</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Drift data sent.&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>This lab was fun. While it did not take me long to get the car to drift or flip(it did not flip consistently so I had to switch to drift), I struggled with random bugs like my car stopping mid open loop and also my graphs looking weird. It was fun trying to figure bugs, but also a struggle.</p>
+</section>
+<section id="acknowledgements">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Acknowledgements</a><a class="headerlink" href="#acknowledgements" title="Link to this heading"></a></h2>
+<a class="reference internal image-reference" href="../_images/l8_cat.jpg"><img alt="Cat Photo" class="align-center" src="../_images/l8_cat.jpg" style="width: 60%;" />
+</a>
+<p>Thanks to the friends who let me take over their hallway and crash mats.
+Shoutout to Glue, the best cat - didn’t quite make it into the blooper reel, but we still love him.
+And thank you to the course staff for your help. I looked at Stephan Wagner and Daria Kot’s websites for references on how they graphed their data.
+Also, thanks to ChatGPT for helping me debug C code and for catching syntax errors in my write-up. Chat over edited and started changing my text and I had to revert back and undo a lot.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab7/" class="btn btn-neutral float-left" title="Lab 7: Kalman Filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab9/" class="btn btn-neutral float-right" title="Lab 9: Mapping" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

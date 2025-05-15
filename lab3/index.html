@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 3: TOF Sensor Integration and Performance Evaluation &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 4: Motors and Open Loop Control" href="../lab4/" />
+    <link rel="prev" title="Lab 2: Sensor Fusion and High-Speed Data Sampling" href="../lab2/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab2/">Lab 2: Sensor Fusion and High-Speed Data Sampling</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 3: TOF Sensor Integration and Performance Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prelab">Prelab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lab">Lab</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#task-1-power-up-your-artemis-with-a-battery">Task 1: Power up your Artemis with a battery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-2-using-the-arduino-library-manager-install-the-sparkfun-vl53l1x-4m-laser-distance-sensor-library">Task 2:  Using the Arduino library manager, install the SparkFun VL53L1X 4m laser distance sensor library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-3-4-connect-the-qwiic-breakout-board-to-the-artemis-connect-the-first-tof-sensor-to-the-qwiic-breakout-board">Task 3/4: Connect the QWIIC breakout board to the Artemis/Connect the first ToF sensor to the QWIIC breakout board</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-5-scan-the-i2c-channel-to-find-the-sensor">Task 5: Scan the I2C channel to find the sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-6-the-tof-sensor-has-three-modes-short-medium-and-long">Task 6: The ToF sensor has three modes (Short, Medium, and Long)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-7-test-your-chosen-mode-evaluate-performance">Task 7: Test your chosen mode &amp; Evaluate Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-8-using-notes-from-the-pre-lab-hook-up-both-tof-sensors-simultaneously-and-demonstrate-that-both-work">Task 8: Using notes from the pre-lab, hook up both ToF sensors simultaneously and demonstrate that both work</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-9-in-future-labs-the-code-must-run-quickly-no-hanging">Task 9: In future labs, the code must run quickly (no hanging)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-10-finally-edit-your-work-from-lab-1">Task 10: Finally, edit your work from Lab 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-11-plot-of-tof-data-against-time">Task 11: Plot of ToF data against Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-12-plot-of-imu-data-against-time">Task 12: Plot of IMU data against Time</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 3: TOF Sensor Integration and Performance Evaluation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab3.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-3-tof-sensor-integration-and-performance-evaluation">
+<h1>Lab 3: TOF Sensor Integration and Performance Evaluation<a class="headerlink" href="#lab-3-tof-sensor-integration-and-performance-evaluation" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#prelab" id="id1">Prelab</a></p></li>
+<li><p><a class="reference internal" href="#lab" id="id2">Lab</a></p>
+<ul>
+<li><p><a class="reference internal" href="#task-1-power-up-your-artemis-with-a-battery" id="id3">Task 1: Power up your Artemis with a battery</a></p></li>
+<li><p><a class="reference internal" href="#task-2-using-the-arduino-library-manager-install-the-sparkfun-vl53l1x-4m-laser-distance-sensor-library" id="id4">Task 2:  Using the Arduino library manager, install the SparkFun VL53L1X 4m laser distance sensor library</a></p></li>
+<li><p><a class="reference internal" href="#task-3-4-connect-the-qwiic-breakout-board-to-the-artemis-connect-the-first-tof-sensor-to-the-qwiic-breakout-board" id="id5">Task 3/4: Connect the QWIIC breakout board to the Artemis/Connect the first ToF sensor to the QWIIC breakout board</a></p></li>
+<li><p><a class="reference internal" href="#task-5-scan-the-i2c-channel-to-find-the-sensor" id="id6">Task 5: Scan the I2C channel to find the sensor</a></p></li>
+<li><p><a class="reference internal" href="#task-6-the-tof-sensor-has-three-modes-short-medium-and-long" id="id7">Task 6: The ToF sensor has three modes (Short, Medium, and Long)</a></p></li>
+<li><p><a class="reference internal" href="#task-7-test-your-chosen-mode-evaluate-performance" id="id8">Task 7: Test your chosen mode &amp; Evaluate Performance</a></p></li>
+<li><p><a class="reference internal" href="#task-8-using-notes-from-the-pre-lab-hook-up-both-tof-sensors-simultaneously-and-demonstrate-that-both-work" id="id9">Task 8: Using notes from the pre-lab, hook up both ToF sensors simultaneously and demonstrate that both work</a></p></li>
+<li><p><a class="reference internal" href="#task-9-in-future-labs-the-code-must-run-quickly-no-hanging" id="id10">Task 9: In future labs, the code must run quickly (no hanging)</a></p></li>
+<li><p><a class="reference internal" href="#task-10-finally-edit-your-work-from-lab-1" id="id11">Task 10: Finally, edit your work from Lab 1</a></p></li>
+<li><p><a class="reference internal" href="#task-11-plot-of-tof-data-against-time" id="id12">Task 11: Plot of ToF data against Time</a></p></li>
+<li><p><a class="reference internal" href="#task-12-plot-of-imu-data-against-time" id="id13">Task 12: Plot of IMU data against Time</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reflection" id="id14">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgments" id="id15">Acknowledgments</a></p></li>
+</ul>
+</nav>
+<section id="prelab">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Prelab</a><a class="headerlink" href="#prelab" title="Link to this heading"></a></h2>
+<p>I began by planning the overall circuit for my sensors. I had two long and two short I2C cables. I figured the TOF sensors would be mounted outside the car, so I used the long I2C cables for them.
+These cables connect to a SparkFun Qwiic MultiPort, which then links to the Artemis with a short I2C cable. I used th second short I2C cable to connect the IMU to the Qwiic MultiPort. All the sensors were wired together :)</p>
+<a class="reference internal image-reference" href="../_images/l3_diagram.png"><img alt="Wiring Diagram (1)" class="align-center" src="../_images/l3_diagram.png" style="width: 50%;" />
+</a>
+<p>Both I2C sensors have a default address of 0x52. To handle multiple sensors, I wired the XSHUT pin for one sensor to the Artemis’s A2 pin, allowing me to disable that sensor and change its I2C address.
+I think I am going to place one TOF sensor at the front of the car and another on the side for better obstacle coverage in later labs.</p>
+</section>
+<section id="lab">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Lab</a><a class="headerlink" href="#lab" title="Link to this heading"></a></h2>
+<section id="task-1-power-up-your-artemis-with-a-battery">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Task 1: Power up your Artemis with a battery</a><a class="headerlink" href="#task-1-power-up-your-artemis-with-a-battery" title="Link to this heading"></a></h3>
+<p>To allow the robot to move freely, the Artemis should powered independently; if not, the wire will limit its movement.</p>
+<dl class="simple">
+<dt><strong>Battery Setup:</strong></dt><dd><p>I removed the standard connector from a 750 mAh battery and soldered on a JST connector.
+Then I ensurer each wire is cut separately to avoid shorting the battery. I use heat shrink for insulation as electric tape
+can come off easier and leaves sticky residue. I actually had to solder black to positive and red to negative since that was
+what the connector coonnected to.</p>
+</dd>
+<dt><strong>Verification:</strong></dt><dd><p>Afterwards, I powered up the Artemis solely from the battery and confirmed connection vs BLE messages.</p>
+</dd>
+</dl>
+<a class="reference internal image-reference" href="../_images/l3_battery.jpg"><img alt="Battery-Powered Artemis" class="align-center" src="../_images/l3_battery.jpg" style="width: 50%;" />
+</a>
+</section>
+<section id="task-2-using-the-arduino-library-manager-install-the-sparkfun-vl53l1x-4m-laser-distance-sensor-library">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Task 2:  Using the Arduino library manager, install the SparkFun VL53L1X 4m laser distance sensor library</a><a class="headerlink" href="#task-2-using-the-arduino-library-manager-install-the-sparkfun-vl53l1x-4m-laser-distance-sensor-library" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>I followed the directions opened <strong>Sketch → Include Library → Manage Libraries</strong> in the Arduino IDE and
+searched for <strong>SparkFun VL53L1X 4m</strong> to install it</p>
+</div></blockquote>
+<a class="reference internal image-reference" href="../_images/l3_library.png"><img alt="Library Look Up" class="align-center" src="../_images/l3_library.png" style="width: 50%;" />
+</a>
+</section>
+<section id="task-3-4-connect-the-qwiic-breakout-board-to-the-artemis-connect-the-first-tof-sensor-to-the-qwiic-breakout-board">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Task 3/4: Connect the QWIIC breakout board to the Artemis/Connect the first ToF sensor to the QWIIC breakout board</a><a class="headerlink" href="#task-3-4-connect-the-qwiic-breakout-board-to-the-artemis-connect-the-first-tof-sensor-to-the-qwiic-breakout-board" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Here is a photo of my soldering work for the TOF sensor.</p>
+</div></blockquote>
+<a class="reference internal image-reference" href="../_images/l3_tof_pic.jpg"><img alt="Soldering TOF Sensors and XSHUT Connection" class="align-center" src="../_images/l3_tof_pic.jpg" style="width: 50%;" />
+</a>
+</section>
+<section id="task-5-scan-the-i2c-channel-to-find-the-sensor">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Task 5: Scan the I2C channel to find the sensor</a><a class="headerlink" href="#task-5-scan-the-i2c-channel-to-find-the-sensor" title="Link to this heading"></a></h3>
+<p>I opened <strong>File → Examples → Apollo3 → Wire → Example1_wire_I2C</strong>.</p>
+<p>The TOF sensor showed up at 0x29, which is the 7-bit representation of 0x52.</p>
+<a class="reference internal image-reference" href="../_images/l3_scanner.png"><img alt="I2C Scan Output" class="align-center" src="../_images/l3_scanner.png" style="width: 50%;" />
+</a>
+</section>
+<section id="task-6-the-tof-sensor-has-three-modes-short-medium-and-long">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Task 6: The ToF sensor has three modes (Short, Medium, and Long)</a><a class="headerlink" href="#task-6-the-tof-sensor-has-three-modes-short-medium-and-long" title="Link to this heading"></a></h3>
+<p>These modes optimize performance given the expected range:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">setDistanceModeShort</span><span class="p">();</span><span class="w">   </span><span class="c1">// 1.3m</span>
+<span class="p">.</span><span class="n">setDistanceModeMedium</span><span class="p">();</span><span class="w">  </span><span class="c1">// 3m (available only with the Polulu VL53L1X Library)</span>
+<span class="p">.</span><span class="n">setDistanceModeLong</span><span class="p">();</span><span class="w">    </span><span class="c1">// 4m, Default</span>
+</pre></div>
+</div>
+<p>I chose <strong>Short Mode</strong> for close-range obstacle avoidance, though it sacrifices maximum range.</p>
+</section>
+<section id="task-7-test-your-chosen-mode-evaluate-performance">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Task 7: Test your chosen mode &amp; Evaluate Performance</a><a class="headerlink" href="#task-7-test-your-chosen-mode-evaluate-performance" title="Link to this heading"></a></h3>
+<dl>
+<dt><strong>Testing the Mode:</strong></dt><dd><dl class="simple">
+<dt>I use the SparkFun library’s example:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">...\SparkFun_VL53L1X_4m_Laser_Distance_Sensor\examples\Example1_ReadDistance</span></code>
+to verify distance readings in short mode.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>Performance Experiments:</strong></dt><dd><blockquote>
+<div><p>I tested distances from 0 in to 150 cm, collecting samples around every 10 cm.</p>
+</div></blockquote>
+<a class="reference internal image-reference" href="../_images/l3_true_act.png"><img alt="Experimental Setup" class="align-center" src="../_images/l3_true_act.png" style="width: 50%;" />
+</a>
+</dd>
+</dl>
+</section>
+<section id="task-8-using-notes-from-the-pre-lab-hook-up-both-tof-sensors-simultaneously-and-demonstrate-that-both-work">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Task 8: Using notes from the pre-lab, hook up both ToF sensors simultaneously and demonstrate that both work</a><a class="headerlink" href="#task-8-using-notes-from-the-pre-lab-hook-up-both-tof-sensors-simultaneously-and-demonstrate-that-both-work" title="Link to this heading"></a></h3>
+<p>I modified the code to disable one sensor using the XSHUT pin and changed its I2C address to 0x54. This way I could
+read from both sensors without dealing with conflicts. I messed up due to a minor typo during this part and it took me a really long time to find it.
+Here is a code block of how I changed the address of a TOF sensor.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">pinMode</span><span class="p">(</span><span class="n">XSHUT_PIN</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="n">digitalWrite</span><span class="p">(</span><span class="n">XSHUT_PIN</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span><span class="w"> </span><span class="c1">// low =&gt; off</span>
+
+
+<span class="n">distanceSensor</span><span class="p">.</span><span class="n">setI2CAddress</span><span class="p">(</span><span class="n">tof_0_addr</span><span class="p">);</span><span class="w"> </span><span class="c1">// change addr</span>
+<span class="n">digitalWrite</span><span class="p">(</span><span class="n">XSHUT_PIN</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span><span class="w"> </span><span class="c1">//high =&gt; on</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/l3_serial.png"><img alt="Dual TOF Sensor Setup" class="align-center" src="../_images/l3_serial.png" style="width: 50%;" />
+</a>
+</section>
+<section id="task-9-in-future-labs-the-code-must-run-quickly-no-hanging">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Task 9: In future labs, the code must run quickly (no hanging)</a><a class="headerlink" href="#task-9-in-future-labs-the-code-must-run-quickly-no-hanging" title="Link to this heading"></a></h3>
+<p>I wrote code to continuously print the Artemis clock to Serial and only print new data from each sensor when it’s availablem utilizing the distanceSensor.checkForDataReady().</p>
+<blockquote>
+<div><p>In terms of sampling speed findings, it took around 15 ms between loop iterations, 110 ms between sensor measurements, and the sensor’s effective ranging time is ~70 ms, giving a max sampling rate of ~15 Hz.</p>
+</div></blockquote>
+</section>
+<section id="task-10-finally-edit-your-work-from-lab-1">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Task 10: Finally, edit your work from Lab 1</a><a class="headerlink" href="#task-10-finally-edit-your-work-from-lab-1" title="Link to this heading"></a></h3>
+<dl>
+<dt><strong>Time-Stamped Data &amp; Bluetooth:</strong></dt><dd><blockquote>
+<div><p>I added a couple functions to my lab1 framework, but I did not update my notification handler, since I made it vague enought splice the first time around.</p>
+</div></blockquote>
+<dl class="simple">
+<dt><strong>Bluetooth Transmission:</strong></dt><dd><p>Similar to Lab 2, I implemeted start and stop commands to start/stop data collection and transmit over BLE.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="task-11-plot-of-tof-data-against-time">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Task 11: Plot of ToF data against Time</a><a class="headerlink" href="#task-11-plot-of-tof-data-against-time" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="../_images/l3_tof.png"><img alt="../_images/l3_tof.png" class="align-center" src="../_images/l3_tof.png" style="width: 50%;" />
+</a>
+<p>I decided not to do anything fancy with my TOF sensors and just focused on collected data at the same time. I placed them away from one another facing a wall.</p>
+</section>
+<section id="task-12-plot-of-imu-data-against-time">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Task 12: Plot of IMU data against Time</a><a class="headerlink" href="#task-12-plot-of-imu-data-against-time" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="../_images/l3_imu.png"><img alt="../_images/l3_imu.png" class="align-center" src="../_images/l3_imu.png" style="width: 50%;" />
+</a>
+<p>I decided not to do anything fancy with my IMU and just focused on collected data at the same time.</p>
+</section>
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>I learned a lot about soldering this lab mainly because I soldered for the first time in 4 years. I feel like I lack confidence, but I definitely have a lot more thanks to this lab. I messed up at least 3 times and had to redo it. I worry that some of my wires may be short now :(we will see how that impacts me as the labs progress.</p>
+<p>Sometimes the wires I soldered on to the TOF sensors got in the way and I had to redo data. I initially did not change the address of the one of the TOF sensors properly and it caused me some issues when debugging.</p>
+</section>
+<section id="acknowledgments">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Acknowledgments</a><a class="headerlink" href="#acknowledgments" title="Link to this heading"></a></h2>
+<p>I would to thank Aidan McNay for lending me his person wire stripper for a day and letting me keep it for 5. I would also like to thank
+Anunth Ramaswami for the emotional support while soldering and advising me when I accidentally got the one of the wires stuck to the structure that was holding it up.
+Thank you to the course staff for supporting me in open hours as well:)</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab2/" class="btn btn-neutral float-left" title="Lab 2: Sensor Fusion and High-Speed Data Sampling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab4/" class="btn btn-neutral float-right" title="Lab 4: Motors and Open Loop Control" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

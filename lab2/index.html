@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 2: Sensor Fusion and High-Speed Data Sampling &mdash; Fast Robots ECE 4160  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Lab 3: TOF Sensor Integration and Performance Evaluation" href="../lab3/" />
+    <link rel="prev" title="Lab 1: The Artemis Board and Bluetooth" href="../lab1/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Fast Robots ECE 4160
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../lab1/">Lab 1: The Artemis Board and Bluetooth</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lab 2: Sensor Fusion and High-Speed Data Sampling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-1-initial-setup">Task 1: Initial Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-2-accelerometer-data-processing">Task 2: Accelerometer Data Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-3-gyroscope-integration-and-fusion">Task 3: Gyroscope Integration and Fusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-4-high-speed-data-sampling">Task 4: High-Speed Data Sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#robot-video">Robot Video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reflection">Reflection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../lab3/">Lab 3: TOF Sensor Integration and Performance Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab4/">Lab 4: Motors and Open Loop Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab5/">Lab 5: Linear PID control and Linear interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab6/">Lab 6: Orientation Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab7/">Lab 7: Kalman Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab8/">Lab 8: Stunts!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab9/">Lab 9: Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab10/">Lab 10: Localization (sim)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab11/">Lab 11: Localization (real)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lab12/">Lab 12: Self-Flippable Inverted Pendulum Car</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fast Robots ECE 4160</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Lab 2: Sensor Fusion and High-Speed Data Sampling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/lab2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lab-2-sensor-fusion-and-high-speed-data-sampling">
+<h1>Lab 2: Sensor Fusion and High-Speed Data Sampling<a class="headerlink" href="#lab-2-sensor-fusion-and-high-speed-data-sampling" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id1">Overview</a></p></li>
+<li><p><a class="reference internal" href="#task-1-initial-setup" id="id2">Task 1: Initial Setup</a></p></li>
+<li><p><a class="reference internal" href="#task-2-accelerometer-data-processing" id="id3">Task 2: Accelerometer Data Processing</a></p></li>
+<li><p><a class="reference internal" href="#task-3-gyroscope-integration-and-fusion" id="id4">Task 3: Gyroscope Integration and Fusion</a></p></li>
+<li><p><a class="reference internal" href="#task-4-high-speed-data-sampling" id="id5">Task 4: High-Speed Data Sampling</a></p></li>
+<li><p><a class="reference internal" href="#robot-video" id="id6">Robot Video</a></p></li>
+<li><p><a class="reference internal" href="#reflection" id="id7">Reflection</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgements" id="id8">Acknowledgements</a></p></li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>In this lab, we integrated data from an Inertial Measurement Unit (IMU) to estimate orientation by fusing accelerometer and gyroscope readings. Techniques such as noise analysis via FFT, low-pass filtering, and complementary filtering were used to refine the sensor data. We also optimized our code to achieve a high sampling rate, enabling robust real-time data acquisition.</p>
+</section>
+<section id="task-1-initial-setup">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Task 1: Initial Setup</a><a class="headerlink" href="#task-1-initial-setup" title="Link to this heading"></a></h2>
+<p>To begin, the necessary libraries for the IMU were installed and the sensor was connected directly to the Artemis board. The IMU was first verified by running a basic tutorial that confirmed its ability to measure acceleration, angular rate, and magnetic fields. A simple blink sequence was added after initialization to provide a visual indicator of proper startup.</p>
+<img alt="IMU Setup Confirmation" src="insert_image_here.png" />
+</section>
+<section id="task-2-accelerometer-data-processing">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Task 2: Accelerometer Data Processing</a><a class="headerlink" href="#task-2-accelerometer-data-processing" title="Link to this heading"></a></h2>
+<p>The accelerometer outputs data along the x, y, and z axes. In order to calculate pitch (<code class="docutils literal notranslate"><span class="pre">theta_a</span></code>) and roll (<code class="docutils literal notranslate"><span class="pre">phi_a</span></code>) from these values, calibration equations incorporating a correction factor (1.03) were applied—this factor was determined using a two-point calibration. Although the raw data was accurate, it contained significant high-frequency noise.</p>
+<p>To analyze this noise, data was collected during controlled rotations and subjected to a Fast Fourier Transform (FFT). The FFT results indicated that the useful signal was mostly below 6 Hz, which led to the design of a low-pass filter using a recursive algorithm. With a sampling period of 10 ms and a cutoff frequency of 5 Hz, the filter coefficient (alpha) was computed to be 0.266.</p>
+<p>Filtered accelerometer data for pitch and roll demonstrated a substantial reduction in high-frequency noise:</p>
+<ul>
+<li><p><strong>FFT Analysis:</strong></p>
+<img alt="FFT Analysis of Accelerometer Data" src="insert_image_here.png" />
+</li>
+<li><p><strong>Filtered Pitch:</strong></p>
+<img alt="Filtered Pitch Data" src="insert_image_here.png" />
+</li>
+<li><p><strong>Filtered Roll:</strong></p>
+<img alt="Filtered Roll Data" src="insert_image_here.png" />
+</li>
+</ul>
+</section>
+<section id="task-3-gyroscope-integration-and-fusion">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Task 3: Gyroscope Integration and Fusion</a><a class="headerlink" href="#task-3-gyroscope-integration-and-fusion" title="Link to this heading"></a></h2>
+<p>Orientation was also computed by integrating the gyroscope’s angular rate measurements over time. While the gyroscope data was inherently smoother than the accelerometer readings, it suffered from drift over extended periods. To address this, a complementary filter was implemented to merge the gyroscope data with the filtered accelerometer values. After experimentation, a fusion parameter (gamma) of 0.8 was found to yield the most stable results.</p>
+<p>Key results from this task include:</p>
+<ul>
+<li><p><strong>Gyroscope Drift:</strong></p>
+<img alt="Gyroscope Drift in Pitch and Roll" src="insert_image_here.png" />
+</li>
+<li><p><strong>Fused Orientation Data:</strong></p>
+<img alt="Fused Sensor Data Combining Gyro and Accel" src="insert_image_here.png" />
+</li>
+</ul>
+</section>
+<section id="task-4-high-speed-data-sampling">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Task 4: High-Speed Data Sampling</a><a class="headerlink" href="#task-4-high-speed-data-sampling" title="Link to this heading"></a></h2>
+<p>For rapid data acquisition, all IMU functionalities were encapsulated in a single function, <code class="docutils literal notranslate"><span class="pre">get_imu_data()</span></code>. This function is invoked in the main loop as soon as new data becomes available and a collection flag is set. By eliminating unnecessary delays, the system achieved a sampling rate of 367 Hz over a 5-second period.</p>
+<p>Data is stored in three float arrays representing pitch, roll, and yaw, which offers a good compromise between precision and memory usage. Additional Bluetooth commands were implemented to start, stop, and transmit the collected data seamlessly.</p>
+<img alt="High-Speed Sampling Output" src="insert_image_here.png" />
+</section>
+<section id="robot-video">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Robot Video</a><a class="headerlink" href="#robot-video" title="Link to this heading"></a></h2>
+<p>Below is a snapshot from a video showing the robot in action. The video demonstrates how the robust motors are capable of driving the robot—even to the point of flipping the car—highlighting the power and agility of the design.</p>
+<img alt="Robot Video Screenshot" src="insert_image_here.png" />
+</section>
+<section id="reflection">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Reflection</a><a class="headerlink" href="#reflection" title="Link to this heading"></a></h2>
+<p>This lab provided valuable insights into sensor fusion and high-speed data acquisition. The process of combining noisy accelerometer data with drift-prone gyroscope measurements to produce a stable, fused orientation signal was both challenging and rewarding. The techniques learned here will be instrumental in future robotics projects where accurate and rapid sensor data processing is essential.</p>
+</section>
+<section id="acknowledgements">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Acknowledgements</a><a class="headerlink" href="#acknowledgements" title="Link to this heading"></a></h2>
+<p>I would like to thank the lab TAs for their support throughout this project. Their insights and guidance were essential in overcoming the challenges encountered during the development of the sensor fusion and data sampling techniques.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../lab1/" class="btn btn-neutral float-left" title="Lab 1: The Artemis Board and Bluetooth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../lab3/" class="btn btn-neutral float-right" title="Lab 3: TOF Sensor Integration and Performance Evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Nita Kattimani.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
