@@ -34,6 +34,7 @@ We represent the inverted RC car as a single rolling wheel of mass M with a rig
 
 .. math::
   :nowrap:
+
    \mathbf{q} = \begin{bmatrix}
      x \\ \dot{x} \\ \theta \\ \dot{\theta}
    \end{bmatrix}, \quad u = \tau
