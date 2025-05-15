@@ -33,12 +33,10 @@ System Modeling and Dynamics
 We represent the inverted RC car as a single rolling wheel of mass M with a rigid rod (the chassis) of mass m and length l attached at the axle. The wheel translates along the horizontal x‑axis without slipping, while the rod pivots about the axle.  Our state includes the position and angle of the system, and the control input \(u\) is the motor torque \(\tau\).
 
 .. math::
-   :nowrap:
 
    \mathbf{q} = \begin{bmatrix}
      x \\ \dot{x} \\ \theta \\ \dot{\theta}
    \end{bmatrix}, \quad u = \tau
-
 We also introduce the following parameters:
 
 * \(x\): horizontal coordinate of the wheel axle  
@@ -56,10 +54,11 @@ Geometry and Velocities
 The center of mass of the rod has coordinates:
 
 .. math::
-   :nowrap:
 
-   x_{\mathrm{rod}} = x + l \sin\theta, \quad
-   y_{\mathrm{rod}} = -\,l \cos\theta
+   \begin{aligned}
+     x_{\mathrm{rod}} &= x + l \sin\theta,\\
+     y_{\mathrm{rod}} &= -\,l \cos\theta
+   \end{aligned}
 
 Differentiating with respect to time gives:
 
