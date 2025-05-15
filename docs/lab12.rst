@@ -33,7 +33,7 @@ System Modeling and Dynamics
 We represent the inverted RC car as a single rolling wheel of mass M with a rigid rod (the chassis) of mass m and length l attached at the axle. The wheel translates along the horizontal x‑axis without slipping, while the rod pivots about the axle.  Our state includes the position and angle of the system, and the control input \(u\) is the motor torque \(\tau\).
 
 .. math::
-
+  :nowrap:
    \mathbf{q} = \begin{bmatrix}
      x \\ \dot{x} \\ \theta \\ \dot{\theta}
    \end{bmatrix}, \quad u = \tau
